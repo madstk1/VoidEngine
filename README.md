@@ -28,16 +28,16 @@ As of now, the building process has only been tested on Linux.
 
 Start by making a build-folder, where the compiled code will end up.
 
-    `mkdir build && cd build`
+    mkdir build && cd build
 
 Configure the build with CMake
 
-    `cmake ../ -DCMAKE_BUILD_TYPE=Debug -DVOID_ENABLE_EXAMPLES=ON`
+    cmake ../ -DCMAKE_BUILD_TYPE=Debug -DVOID_ENABLE_EXAMPLES=ON
 
 This is configure the build to compile examples, as well as the library itself. Now run make.
 
-    `make`
+    make
 
 Now, the build folder will contain both the static-library `libvoid.a`, as well as the `Examples`-folder, which will contain executable examples.
 
-    `./Examples/01-Core/Example01`
+    ./Examples/01-Core/Example01
