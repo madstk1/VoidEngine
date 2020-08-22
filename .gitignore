@@ -1,0 +1,5 @@
+build/
+VoidEngine/compile_commands.json
+VoidEngine/.clangd/
+
+Examples/01-Core/a.out
