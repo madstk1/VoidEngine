@@ -22,7 +22,7 @@ As of now, the building process has only been tested on Linux.
 ## Dependencies
 * C++11 compatible compiler.
 * CMake v3.11+
-* OpenGL, can be acquired from Mesa or from your GPU-driver
+* OpenGL 4.5+, can be acquired from Mesa or from your GPU-driver
 
 ## Building Void
 
