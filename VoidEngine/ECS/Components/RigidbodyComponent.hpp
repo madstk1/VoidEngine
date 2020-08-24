@@ -9,6 +9,8 @@ namespace VOID_NS {
     private:
     protected:
     public:
+        RigidbodyComponent() : Component(true) {}
+
         float mass = 1.0f;
         float gravity = -9.81f;
         bool  useGravity = true;
