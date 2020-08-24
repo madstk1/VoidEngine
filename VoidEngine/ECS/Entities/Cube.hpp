@@ -4,6 +4,7 @@
 #include <vector>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
+#include <VoidEngine/ECS/Components/MeshComponent.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
 
 namespace VOID_NS {
@@ -12,21 +13,23 @@ namespace VOID_NS {
     protected:
     public:
         Cube() : Entity() {
+            this->name = "Cube"; 
             this->renderable = true;
+            MeshComponent *mc = AddComponent(new MeshComponent());
 
             /* Front */
-            vertices.push_back(Vertex(glm::vec3(0.0f, 0.0f, 0.0f), Color::Red()));    // 0
-            vertices.push_back(Vertex(glm::vec3(1.0f, 0.0f, 0.0f), Color::Green()));  // 1
-            vertices.push_back(Vertex(glm::vec3(1.0f, 1.0f, 0.0f), Color::Blue()));   // 2
-            vertices.push_back(Vertex(glm::vec3(0.0f, 1.0f, 0.0f), Color::Yellow())); // 3
+            mc->vertices.push_back(Vertex(glm::vec3(0.0f, 0.0f, 0.0f), Color::Red()));    // 0
+            mc->vertices.push_back(Vertex(glm::vec3(1.0f, 0.0f, 0.0f), Color::Green()));  // 1
+            mc->vertices.push_back(Vertex(glm::vec3(1.0f, 1.0f, 0.0f), Color::Blue()));   // 2
+            mc->vertices.push_back(Vertex(glm::vec3(0.0f, 1.0f, 0.0f), Color::Yellow())); // 3
 
             /* Back */
-            vertices.push_back(Vertex(glm::vec3(0.0f, 0.0f, 1.0f), Color::Black()));   // 4
-            vertices.push_back(Vertex(glm::vec3(1.0f, 0.0f, 1.0f), Color::Cyan()));    // 5
-            vertices.push_back(Vertex(glm::vec3(1.0f, 1.0f, 1.0f), Color::Magenta())); // 6
-            vertices.push_back(Vertex(glm::vec3(0.0f, 1.0f, 1.0f), Color::White()));   // 7
+            mc->vertices.push_back(Vertex(glm::vec3(0.0f, 0.0f, 1.0f), Color::Black()));   // 4
+            mc->vertices.push_back(Vertex(glm::vec3(1.0f, 0.0f, 1.0f), Color::Cyan()));    // 5
+            mc->vertices.push_back(Vertex(glm::vec3(1.0f, 1.0f, 1.0f), Color::Magenta())); // 6
+            mc->vertices.push_back(Vertex(glm::vec3(0.0f, 1.0f, 1.0f), Color::White()));   // 7
 
-            indices.insert(indices.begin(), {
+            mc->indices.insert(mc->indices.begin(), {
                 /* Front */
                 0, 1, 2, 2, 3, 0,
 

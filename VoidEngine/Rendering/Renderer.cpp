@@ -1,6 +1,7 @@
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/ECS/Components/CameraComponent.hpp>
+#include <VoidEngine/ECS/Components/MeshComponent.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
@@ -83,11 +84,14 @@ namespace VOID_NS {
         indexExtension = 0;
         indexCount = 0;
 
+        MeshComponent *mc; 
+
         for(Entity *e : g_World->GetEntities()) {
-            if(!e->renderable) { continue; }
+            mc = e->GetComponent<MeshComponent>();
+            if(!e->renderable || mc == nullptr) { continue; }
             
-            tempIndices = e->indices;
-            tempVertices = e->vertices;
+            tempIndices = mc->indices;
+            tempVertices = mc->vertices;
 
             for(Vertex &v : tempVertices) {
                 v.position += e->position;

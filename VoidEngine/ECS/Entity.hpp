@@ -25,9 +25,6 @@ namespace VOID_NS {
         bool isStatic = false;
         bool renderable = false;
 
-        std::vector<Vertex> vertices;
-        std::vector<u32>    indices;
-
         Entity();
         Entity(std::string);
         ~Entity();
@@ -90,9 +87,7 @@ namespace VOID_NS {
                 return (T *) c_.second;
             }
         }
-
-        Logger::LogError("No component of type %s was found on %s.", Logger::GetClassName<T>(), this->name.c_str());
-        return NULL;
+        return nullptr;
     }
 
     template<class T>
