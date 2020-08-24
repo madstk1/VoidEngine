@@ -1,4 +1,5 @@
 #include <VoidEngine/Core/Application.hpp>
+#include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/ECS/Components/CameraComponent.hpp>
 #include <VoidEngine/ECS/Components/MeshComponent.hpp>
@@ -17,8 +18,7 @@ namespace VOID_NS {
     u32 indexCount = 0;
 
     Renderer::Renderer(ApplicationInfo info) {
-        m_Window = new Window(info);
-        g_Window = m_Window;
+        g_Window = Allocator::Allocate<Window>(info);
 
         SetRefreshRate(info.RefreshRate);
         SetSampling(info.Sampling);
@@ -39,17 +39,17 @@ namespace VOID_NS {
     }
 
     Renderer::~Renderer() {
-        delete m_Window;
+        Allocator::Free(g_Window);
     }
 
     void Renderer::Begin() {
         /* Clear screen. */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(
-            m_Window->m_Background.r,
-            m_Window->m_Background.g,
-            m_Window->m_Background.b,
-            m_Window->m_Background.a
+            g_Window->m_Background.r,
+            g_Window->m_Background.g,
+            g_Window->m_Background.b,
+            g_Window->m_Background.a
         );
 
         /* Calculate camera MVP. */
@@ -135,7 +135,7 @@ namespace VOID_NS {
 
     void Renderer::End() {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window->m_Window);
+        glfwSwapBuffers(g_Window->m_Window);
     }
 
     void Renderer::SetRefreshRate(i32 rate) {
@@ -167,6 +167,6 @@ namespace VOID_NS {
     }
 
     bool Renderer::IsRunning() {
-        return !glfwWindowShouldClose(m_Window->m_Window);
+        return !glfwWindowShouldClose(g_Window->m_Window);
     }
 };

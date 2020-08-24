@@ -11,8 +11,6 @@ namespace VOID_NS {
     protected:
         static const u32 s_MaxTriangles = 10000;
 
-        Window         *m_Window;
-
         i32             m_RefreshRate   = 144;
         MultiSampling   m_Sampling      = MultiSampling::x4;
         SwapInterval    m_Buffering     = SwapInterval::SingleBuffer;
