@@ -1,4 +1,5 @@
 #include <VoidEngine/Core/Application.hpp>
+#include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/Core/World.hpp>
 #include <VoidEngine/ECS/Entities/FirstPersonCamera.hpp>
@@ -9,14 +10,14 @@ namespace VOID_NS {
 
     Application::Application(ApplicationInfo info) {
         g_FixedUpdateInterval = info.FixedUpdateInterval;
-        g_World = new World(info);
-        g_Renderer = new Renderer(info);
+        g_World     = Allocator::Allocate<World>(info);
+        g_Renderer  = Allocator::Allocate<Renderer>(info);
 
         ShaderLibrary::CreateDefaultShaders();
     }
 
     Application::~Application() {
-        delete g_Renderer;
+        Allocator::Free(g_Renderer);
     }
 
     Application     *g_Application;
@@ -42,10 +43,11 @@ int main(int argc, char **argv) {
     Logger::LogInfo("GLFW, v%s", glfwGetVersionString());
 #endif
 
+    /* This will create a CameraComponent, and assign g_Camera. */ 
     if(!Void::g_Camera) {
-        /* NOTE(max): This will create a CameraComponent, and assign g_Camera. */ 
-        new FirstPersonCamera();
+        Allocator::Allocate<FirstPersonCamera>();
     }
+
     VOID_ASSERT(Void::g_Camera != nullptr, "g_Camera is nullptr.");
 
     Void::g_Application->Start();
@@ -62,6 +64,6 @@ int main(int argc, char **argv) {
         Void::g_Renderer->End();
     }
 
-    delete Void::g_Application;
+    Allocator::Free(g_Application);
     return 0;
 }

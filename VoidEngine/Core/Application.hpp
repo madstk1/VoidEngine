@@ -2,6 +2,7 @@
 #define VOID_CORE_APPLICATION_H__
 
 #include <VoidEngine/Core/ApplicationInfo.hpp>
+#include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/World.hpp>
 #include <VoidEngine/Rendering/Renderer.hpp>
@@ -11,12 +12,11 @@ namespace VOID_NS {
     class CameraComponent;
 
     class Application {
-    protected:
+    public:
         Application();
         Application(ApplicationInfo);
         virtual ~Application();
 
-    public:
         virtual void Start() {}
         virtual void Update() {}
         virtual void FixedUpdate() {}
