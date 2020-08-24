@@ -39,6 +39,7 @@ namespace VOID_NS {
         static void SetLogLevel(LogLevel);
 
         static f32 GetFramesPerSecond();
+        static u64 GetMemoryAllocations();
         
         static void LogFatal(const char *fmt, ...)   __attribute__ ((format(printf, 1, 2), noreturn));
         static void LogError(const char *fmt, ...)   __attribute__ ((format(printf, 1, 2)));
