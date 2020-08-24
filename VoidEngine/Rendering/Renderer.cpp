@@ -20,9 +20,9 @@ namespace VOID_NS {
         m_Window = new Window(info);
         g_Window = m_Window;
 
-        m_RefreshRate   = info.RefreshRate;
-        m_Sampling      = info.Sampling;
-        m_Buffering     = info.Buffering;
+        SetRefreshRate(info.RefreshRate);
+        SetSampling(info.Sampling);
+        SetSwapInterval(info.Buffering);
 
         /* Initialize buffers. */
         glCreateBuffers(1, &m_VertexBuffer);
@@ -156,8 +156,10 @@ namespace VOID_NS {
 
     void Renderer::SetSwapInterval(SwapInterval buffering) {
         m_Buffering = buffering;
-        glfwWindowHint(GLFW_DOUBLEBUFFER, buffering == SwapInterval::DoubleBuffer);
-        glfwSwapInterval(buffering);
+        glfwWindowHint(GLFW_DOUBLEBUFFER, m_Buffering == SwapInterval::DoubleBuffer);
+        glfwSwapInterval(m_Buffering);
+
+        Logger::LogWarning("Set swap interval: %d", m_Buffering);
     }
 
     f64 Renderer::GetRenderTime() {

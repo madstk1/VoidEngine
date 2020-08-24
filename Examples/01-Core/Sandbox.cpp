@@ -20,7 +20,7 @@ public:
     }
 
     void FixedUpdate() override {
-        float speed = 0.05f;
+        float speed = 5.00f;
         Logger::LogInfo("FPS: %f", Logger::GetFramesPerSecond());
 
         if(Input::GetKeyDown(Keycode::KeyW)) {

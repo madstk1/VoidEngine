@@ -71,8 +71,6 @@ namespace VOID_NS {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,  5);
         glfwWindowHint(GLFW_OPENGL_PROFILE,         GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_RESIZABLE,              m_Resizable);
-        glfwWindowHint(GLFW_DOUBLEBUFFER,           info.Buffering == SwapInterval::DoubleBuffer);
-        glfwWindowHint(GLFW_SAMPLES,                info.Sampling);
 
 #if defined(VOID_ENABLE_DEBUG)
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT,   GLFW_TRUE);
@@ -130,8 +128,6 @@ namespace VOID_NS {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        glfwSwapInterval(60);
 
         Logger::LogInfo("Finished intializing GLFW.");
     }
