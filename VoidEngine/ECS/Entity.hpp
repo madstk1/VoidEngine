@@ -52,10 +52,7 @@ namespace VOID_NS {
     T *Entity::AddComponent(T *comp) {
         std::type_index tindex = std::type_index(typeid(*comp));
 
-        if(!std::is_base_of<Component, T>()) {
-            Logger::LogError("Can't add %s to %s: component is not derived from Void::Component", Logger::GetClassName<T>(), this->name.c_str());
-            return NULL;
-        }
+        static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
         for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
             if(c_.first.name() == tindex.name()) {
@@ -77,10 +74,7 @@ namespace VOID_NS {
     T *Entity::GetComponent() {
         std::type_index tindex = std::type_index(typeid(T));
 
-        if(!std::is_base_of<Component, T>()) {
-            Logger::LogError("Can't get %s from %s: component is not derived from Void::Component", Logger::GetClassName<T>(), this->name.c_str());
-            return NULL;
-        }
+        static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
         for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
             if(c_.first.name() == tindex.name()) {
@@ -94,10 +88,7 @@ namespace VOID_NS {
     void Entity::DestroyComponent() {
         std::type_index tindex = std::type_index(typeid(T));
 
-        if(!std::is_base_of<Component, T>()) {
-            Logger::LogError("Can't remove %s from %s: component is not derived from Void::Component", Logger::GetClassName<T>(), this->name.c_str());
-            return;
-        }
+        static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
         u32 i = 0;
         for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
