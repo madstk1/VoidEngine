@@ -65,6 +65,11 @@ namespace VOID_NS {
         std::ifstream file(path);
         std::string content;
 
+        if(!file.is_open() || file.fail()) {
+            Logger::LogError("Failed to open file: %s", path.c_str());
+            return nullptr;
+        }
+
         while(std::getline(file, content)) {
             std::string cmd = GetCommand(content);
 
