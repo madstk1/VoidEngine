@@ -3,12 +3,14 @@ ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 
 SET(VOID_SOURCES
     "Core/Application.cpp"
+    "Core/Allocator.cpp"
     "Core/Time.cpp"
     "Core/World.cpp"
     "Debug/Log.cpp"
     "ECS/Entity.cpp"
     "Math/Color.cpp"
     "Misc/File.cpp"
+    "Misc/ObjLoader.cpp"
     "Input/InputManager.cpp"
     "Rendering/Renderer.cpp"
     "Rendering/Shader.cpp"

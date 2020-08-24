@@ -3,8 +3,9 @@
 
 #include <cstddef>
 #include <cstdint>
-
 #include <glm/glm.hpp>
+
+#include <VoidEngine/Core/Errors.hpp>
 
 #define VOID_NS     Void
 

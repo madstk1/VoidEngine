@@ -3,6 +3,7 @@
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/ApplicationInfo.hpp>
+#include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/Core/World.hpp>
@@ -24,6 +25,7 @@
 #include <VoidEngine/Math/Vectors.hpp>
 
 #include <VoidEngine/Misc/File.hpp>
+#include <VoidEngine/Misc/ObjLoader.hpp>
 
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
