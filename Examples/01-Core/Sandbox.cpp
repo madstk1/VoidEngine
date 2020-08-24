@@ -21,7 +21,7 @@ public:
 
     void FixedUpdate() override {
         float speed = 5.00f;
-        Logger::LogInfo("FPS: %f", Logger::GetFramesPerSecond());
+        Logger::LogInfo("FPS: %f, memory: %ld bytes", Logger::GetFramesPerSecond(), Logger::GetMemoryAllocations());
 
         if(Input::GetKeyDown(Keycode::KeyW)) {
             g_Camera->GameObject()->position += g_Camera->Forward() * speed * Time::GetFixedDeltaTime();
