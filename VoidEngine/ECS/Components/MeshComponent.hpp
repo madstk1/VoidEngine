@@ -8,13 +8,12 @@
 
 namespace VOID_NS {
     class MeshComponent : Component {
-    private:
-    protected:
     public:
         MeshComponent() : Component(true) {}
 
-        std::vector<Vertex> vertices;
-        std::vector<u32>    indices;
+        std::vector<Vertex>  vertices;
+        std::vector<u32>     indices;
+        std::vector<Vector3> normals;
     };
 };
 
