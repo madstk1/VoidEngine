@@ -159,8 +159,6 @@ namespace VOID_NS {
         m_Buffering = buffering;
         glfwWindowHint(GLFW_DOUBLEBUFFER, m_Buffering == SwapInterval::DoubleBuffer);
         glfwSwapInterval(m_Buffering);
-
-        Logger::LogWarning("Set swap interval: %d", m_Buffering);
     }
 
     f64 Renderer::GetRenderTime() {

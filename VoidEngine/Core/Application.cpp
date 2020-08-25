@@ -12,8 +12,6 @@ namespace VOID_NS {
         g_FixedUpdateInterval = info.FixedUpdateInterval;
         g_World     = Allocator::Allocate<World>(info);
         g_Renderer  = Allocator::Allocate<Renderer>(info);
-
-        ShaderLibrary::CreateDefaultShaders();
     }
 
     Application::~Application() {
@@ -41,7 +39,10 @@ int main(int argc, char **argv) {
     );
 
     Logger::LogInfo("GLFW, v%s", glfwGetVersionString());
+    Logger::LogInfo("OpenGL v%d.%d", GLVersion.major, GLVersion.minor);
 #endif
+
+    ShaderLibrary::CreateDefaultShaders();
 
     /* This will create a CameraComponent, and assign g_Camera. */ 
     if(!Void::g_Camera) {
