@@ -8,7 +8,9 @@
 namespace VOID_NS {
     class CameraComponent : public Component {
     public:
-        float fieldOfView = 80.0f;
+        f32 fieldOfView = 80.0f;
+        f32 zNear = 0.1f;
+        f32 zFar  = 100.0f;
 
         CameraComponent() : Component(true) {
             if(g_Camera == nullptr) {
