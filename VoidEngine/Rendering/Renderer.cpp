@@ -56,8 +56,8 @@ namespace VOID_NS {
         glm::mat4 proj = glm::perspective(
             glm::radians(g_Camera->fieldOfView),
             (float) g_Window->m_Size.x / (float) g_Window->m_Size.y,
-            0.1f,
-            100.0f
+            g_Camera->zNear,
+            g_Camera->zFar
         );
 
         glm::vec3 camUp = glm::vec3(0, 1, 0);
@@ -94,6 +94,7 @@ namespace VOID_NS {
             tempVertices = mc->vertices;
 
             for(Vertex &v : tempVertices) {
+                v.position *= e->scale;
                 v.position += e->position;
             }
 

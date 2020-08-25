@@ -19,8 +19,9 @@ namespace VOID_NS {
     public:
         std::string name = "Void Entity";
 
-        glm::vec3 position = glm::vec3(0, 0, 0);
-        glm::vec3 rotation = glm::vec3(0, 0, 0);
+        Vector3 position = Vector3(0, 0, 0);
+        Vector3 rotation = Vector3(0, 0, 0);
+        Vector3 scale    = Vector3(1, 1, 1);
 
         bool isStatic = false;
         bool renderable = false;
