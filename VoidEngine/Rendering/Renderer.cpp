@@ -89,13 +89,19 @@ namespace VOID_NS {
         for(Entity *e : g_World->GetEntities()) {
             mc = e->GetComponent<MeshComponent>();
             if(!e->renderable || mc == nullptr) { continue; }
+
+            Mat4 transform = Mat4(1.0f)
+                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.x), { 1.0f, 0.0f, 0.0f })
+                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.y), { 0.0f, 1.0f, 0.0f })
+                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.z), { 0.0f, 0.0f, 1.0f })
+                * glm::scale(Mat4(1.0f), {e->scale.x, e->scale.y, e->scale.z});
             
             tempIndices = mc->indices;
             tempVertices = mc->vertices;
 
             for(Vertex &v : tempVertices) {
-                v.position *= e->scale;
-                v.position += e->position;
+                Vector4 v4 = Vector4(v.position, 1.0f) * transform;
+                v.position = Vector3(v4.x, v4.y, v4.z) + e->position;
             }
 
             glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
