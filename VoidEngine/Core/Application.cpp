@@ -27,6 +27,8 @@ namespace VOID_NS {
 };
 
 int main(int argc, char **argv) {
+    Void::Logger::Initialize();
+
     Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
     Void::g_Application = Void::CreateApplication(k_DefaultInfo);
 
@@ -66,5 +68,6 @@ int main(int argc, char **argv) {
     }
 
     Allocator::Free(g_Application);
+    Void::Logger::Free();
     return 0;
 }

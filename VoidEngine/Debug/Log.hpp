@@ -32,9 +32,15 @@ namespace VOID_NS {
 
     class Logger {
     protected:
+        static FILE *s_Output;
         static LogLevel level_;
 
+        static void Log(const char *, const char *, va_list);
+
     public:
+        static void Initialize();
+        static void Free();
+
         static LogLevel GetLogLevel();
         static void SetLogLevel(LogLevel);
 
