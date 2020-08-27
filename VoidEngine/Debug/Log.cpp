@@ -1,16 +1,22 @@
 #include <cstdarg>
-#include <sstream>
-#include <iomanip>
+#include <cstring>
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/Debug/Log.hpp>
-
 
 namespace VOID_NS {
     LogLevel Logger::level_ = LogLevel::VOID_LOG_LEVEL_WARNING;
     FILE *Logger::s_Output;
 
+    struct tm *Logger::GetTime() {
+        static time_t now = time(0);
+        return gmtime(&now);
+    }
+
     void Logger::Log(const char *prefix, const char *fmt, va_list args) {
+        struct tm *time = GetTime();
+
+        fprintf(s_Output, "[%02d:%02d:%02d] ", time->tm_hour, time->tm_min, time->tm_sec);
         fprintf(s_Output, "[%s] ", prefix);
         vfprintf(s_Output, fmt, args);
         fprintf(s_Output, "\n");
@@ -36,19 +42,23 @@ namespace VOID_NS {
 #if defined(VOID_ENABLE_DEBUG)
     s_Output = stdout;
 #else
-    time_t now = time(0);
-    struct tm *time = gmtime(&now);;
-    
-    std::stringstream fmt;
-    fmt << std::setfill('0') << std::setw(2) << time->tm_mday;
-    fmt << std::setfill('0') << std::setw(2) << time->tm_mon;
-    fmt << time->tm_year - 100;
-    fmt << "_";
-    fmt << std::setfill('0') << std::setw(2) << time->tm_hour;
-    fmt << std::setfill('0') << std::setw(2) << time->tm_min;
-    fmt << std::setfill('0') << std::setw(2) << time->tm_sec;
+    char fmt[23];
+    struct tm *time = GetTime();
 
-    s_Output = fopen(("void_" + fmt.str() + ".log").c_str(), "w");
+    // Format: void_DDMMYY_HHMMSS.log
+    snprintf(
+        fmt,
+        23,
+        "void_%02d%02d%02d_%02d%02d%02d.log",
+        time->tm_mday,
+        time->tm_mon,
+        time->tm_year - 100,
+        time->tm_hour,
+        time->tm_min,
+        time->tm_sec
+    );
+    
+    s_Output = fopen(fmt, "w");
 #endif
     }
 

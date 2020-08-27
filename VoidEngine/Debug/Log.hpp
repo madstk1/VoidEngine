@@ -35,6 +35,7 @@ namespace VOID_NS {
         static FILE *s_Output;
         static LogLevel level_;
 
+        static struct tm *GetTime();
         static void Log(const char *, const char *, va_list);
 
     public:
