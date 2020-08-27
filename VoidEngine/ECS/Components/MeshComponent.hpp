@@ -5,15 +5,14 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/ECS/Component.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
+#include <VoidEngine/Misc/Mesh.hpp>
 
 namespace VOID_NS {
     class MeshComponent : Component {
     public:
         MeshComponent() : Component(true) {}
 
-        std::vector<Vertex>  vertices;
-        std::vector<u32>     indices;
-        std::vector<Vector3> normals;
+        Mesh *mesh = nullptr;
     };
 };
 

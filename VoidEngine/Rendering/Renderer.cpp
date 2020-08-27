@@ -88,7 +88,7 @@ namespace VOID_NS {
 
         for(Entity *e : g_World->GetEntities()) {
             mc = e->GetComponent<MeshComponent>();
-            if(!e->renderable || mc == nullptr) { continue; }
+            if(!e->renderable || mc == nullptr || mc->mesh == nullptr) { continue; }
 
             Mat4 transform = Mat4(1.0f)
                 * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.x), { 1.0f, 0.0f, 0.0f })
@@ -96,8 +96,8 @@ namespace VOID_NS {
                 * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.z), { 0.0f, 0.0f, 1.0f })
                 * glm::scale(Mat4(1.0f), {e->scale.x, e->scale.y, e->scale.z});
             
-            tempIndices = mc->indices;
-            tempVertices = mc->vertices;
+            tempIndices = mc->mesh->indices;
+            tempVertices = mc->mesh->vertices;
 
             for(Vertex &v : tempVertices) {
                 Vector4 v4 = Vector4(v.position, 1.0f) * transform;

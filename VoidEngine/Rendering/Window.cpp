@@ -108,26 +108,26 @@ namespace VOID_NS {
 #if defined(VOID_ENABLE_DEBUG)
         i32 flags;
         glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-        if(!(flags & GL_CONTEXT_FLAG_DEBUG_BIT)) {
-            Logger::LogFatal("Debugging is enabled, but the GL-context does not support it.");
+        if(!(flags & GL_CONTEXT_FLAG_DEBUG_BIT) || !GLAD_GL_ARB_debug_output) {
+            Logger::LogError("Debugging is enabled, but the GL-context does not support it.");
+        } else {
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    
+            glDebugMessageCallback(GLDebugCallback, nullptr);
+            glDebugMessageControl(
+                GL_DONT_CARE,
+                GL_DONT_CARE,
+                GL_DEBUG_SEVERITY_NOTIFICATION,
+                0, nullptr,
+                GL_FALSE
+            );
         }
-
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-
-        glDebugMessageCallback(GLDebugCallback, nullptr);
-        glDebugMessageControl(
-            GL_DONT_CARE,
-            GL_DONT_CARE,
-            GL_DEBUG_SEVERITY_NOTIFICATION,
-            0, nullptr,
-            GL_FALSE
-        );
 #endif
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
-        glFrontFace(GL_CW);
+        glFrontFace(GL_CCW);
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
