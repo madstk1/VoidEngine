@@ -7,7 +7,7 @@
 
 namespace VOID_NS {
 #if defined(VOID_ENABLE_DEBUG)
-    static void GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
+    void Window::GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
         switch(severity) {
             case GL_DEBUG_SEVERITY_HIGH:         Logger::LogFatal   ("GL: %s", msg); break;
             case GL_DEBUG_SEVERITY_MEDIUM:       Logger::LogError   ("GL: %s", msg); break;
@@ -17,11 +17,11 @@ namespace VOID_NS {
     }
 #endif
 
-    static void GLFWErrorCallback(i32 code, const char *msg) {
+    void Window::ErrorCallback(i32 code, const char *msg) {
         Logger::LogError("GLFW: %d, %s", code, msg);
     }
 
-    static void GLFWResizeCallback(GLFWwindow *win, i32 w, i32 h) {
+    void Window::ResizeCallback(GLFWwindow *win, i32 w, i32 h) {
         glViewport(0, 0, w, h);
     }
 
@@ -36,7 +36,9 @@ namespace VOID_NS {
         }
     }
 
-    static void GLFWMouseCallback(GLFWwindow *win, f64 xpos, f64 ypos) {
+    /* TODO: */
+    /* Add this to a separate FirstPersonCamera controller. */
+    void Window::MouseCallback(GLFWwindow *win, f64 xpos, f64 ypos) {
         static float lastX = g_Window->GetSize().x;
         static float lastY = g_Window->GetSize().y;
 
@@ -63,7 +65,7 @@ namespace VOID_NS {
         m_Resizable     = info.Resizable;
         m_Fullscreen    = info.Fullscreen;
 
-        glfwSetErrorCallback(GLFWErrorCallback);
+        glfwSetErrorCallback(ErrorCallback);
 
         VOID_ASSERT(glfwInit(), "Failed to initialize GLFW.");
 
@@ -97,9 +99,9 @@ namespace VOID_NS {
         glfwSetWindowPos(this->m_Window, m_Position.x, m_Position.y);
 
         /* NOTE(max): GLFW callbacks */
-        glfwSetFramebufferSizeCallback(this->m_Window, GLFWResizeCallback);
+        glfwSetFramebufferSizeCallback(this->m_Window, ResizeCallback);
         glfwSetKeyCallback(this->m_Window, KeyCallback);
-        glfwSetCursorPosCallback(this->m_Window, GLFWMouseCallback);
+        glfwSetCursorPosCallback(this->m_Window, MouseCallback);
         glfwSetInputMode(this->m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         VOID_ASSERT(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress), "Failed to bind GLAD to GLFW.");

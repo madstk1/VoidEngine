@@ -23,6 +23,13 @@ namespace VOID_NS {
         GLFWwindow *m_Window;
         GLFWmonitor *m_Monitor;
 
+        /* Callbacks */
+#if defined(VOID_ENABLE_DEBUG)
+        static void GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *);
+#endif
+        static void ErrorCallback(i32, const char *);
+        static void ResizeCallback(GLFWwindow *, i32, i32);
+        static void MouseCallback(GLFWwindow *, f64, f64);
         static void KeyCallback(GLFWwindow *, i32, i32, i32, i32);
 
     public:
