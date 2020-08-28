@@ -9,8 +9,9 @@
 namespace VOID_NS {
     class Mesh {
     public:
-        std::vector<Vertex> vertices;
-        std::vector<u32>    indices;
+        std::vector<Vertex>  vertices;
+        std::vector<u32>     indices;
+        std::vector<Vector3> normals;
 
         Mesh() {}
 
@@ -22,6 +23,12 @@ namespace VOID_NS {
             std::vector<Vertex> vertices,
             std::vector<u32> indices
         ) : vertices(vertices), indices(indices) {}
+
+        Mesh(
+            std::vector<Vertex> vertices,
+            std::vector<u32> indices,
+            std::vector<Vector3> normals
+        ) : vertices(vertices), indices(indices), normals(normals) {}
 
         virtual ~Mesh() = default;
 
