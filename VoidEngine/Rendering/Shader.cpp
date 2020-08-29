@@ -40,22 +40,69 @@ namespace VOID_NS {
         glUseProgram(0);
     }
 
+    void Shader::SetUniform1f(std::string identifier, f32 val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform1f(loc, val);
+        }
+    }
+
+    void Shader::SetUniform2f(std::string identifier, Vector2 val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform2f(loc, val.x, val.y);
+        }
+    }
+
+    void Shader::SetUniform3f(std::string identifier, Vector3 val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform3f(loc, val.x, val.y, val.z);
+        }
+    }
+
+    void Shader::SetUniform4f(std::string identifier, Vector4 val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform4f(loc, val.x, val.y, val.z, val.w);
+        }
+    }
+
     void Shader::SetUniformMat2f(std::string identifier, Mat2 mat) {
-    
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniformMatrix2fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
+        }
     }
 
     void Shader::SetUniformMat3f(std::string identifier, Mat3 mat) {
-    
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
+        }
     }
 
     void Shader::SetUniformMat4f(std::string identifier, Mat4 mat) {
-        i32 loc = glGetUniformLocation(m_Program, identifier.c_str());
-        if(loc != -1) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
             glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
-        } else {
-            Logger::LogError("Invalid uniform identifier '%s'", identifier.c_str());
         }
     }
+
+    /**
+     *  Private/protected methods
+     */
+
+    i32 Shader::GetUniform(std::string identifier) {
+        i32 loc = glGetUniformLocation(m_Program, identifier.c_str());
+        if(loc != -1) {
+            return loc;
+        }
+
+        Logger::LogError("Invalid uniform identifier '%s'", identifier.c_str());
+        return -1;
+    }
+
 
     void Shader::Compile(ShaderCreationInfo info) {
         for(std::pair<ShaderStage, std::string> src : info.sources) {
