@@ -11,9 +11,11 @@
 
 namespace VOID_NS {
     static void ReadBytes(FILE *fp, void *dest, u64 size, u64 n) {
-        u32 bytesRead = fread(dest, size, n, fp);
-        if(bytesRead != size * n) {
-            Logger::LogError("Invalid STL-file: failed to read bytes.");
+        u64 bytesRead = fread(dest, size, n, fp);
+        
+        /* NOTE(max): fread only returns the correct byte-count, when SIZE is 1. */
+        if(bytesRead != n) {
+            Logger::LogFatal("Invalid STL-file: failed to read bytes.");
         }
     }
 
@@ -29,7 +31,7 @@ namespace VOID_NS {
         uchar header[STL_HEADER_SIZE] = {0};
         u32 nTriangles = 0;
 
-        ReadBytes(fp, header,      sizeof(uchar), 1);
+        ReadBytes(fp, header,      sizeof(uchar), STL_HEADER_SIZE);
         ReadBytes(fp, &nTriangles, sizeof(u32), 1);
 
         for(u32 i = 0; i < nTriangles; i++) {
@@ -43,14 +45,14 @@ namespace VOID_NS {
             ReadBytes(fp, &nAttr,  sizeof(u16),     1);
 
             /* Vertices */
-            mesh->vertices.push_back(Vertex(v1, Color::White()));
-            mesh->vertices.push_back(Vertex(v2, Color::White()));
             mesh->vertices.push_back(Vertex(v3, Color::White()));
+            mesh->vertices.push_back(Vertex(v2, Color::White()));
+            mesh->vertices.push_back(Vertex(v1, Color::White()));
 
             /* Indices */
-            mesh->indices.push_back(3 * nTriangles + 0);
-            mesh->indices.push_back(3 * nTriangles + 1);
-            mesh->indices.push_back(3 * nTriangles + 2);
+            mesh->indices.push_back(3 * i + 0);
+            mesh->indices.push_back(3 * i + 1);
+            mesh->indices.push_back(3 * i + 2);
 
             /* Normals */
             mesh->normals.push_back(normal);
