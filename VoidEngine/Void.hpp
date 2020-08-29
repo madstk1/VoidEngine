@@ -17,6 +17,7 @@
 #include <VoidEngine/ECS/Entities/Cube.hpp>
 #include <VoidEngine/ECS/Entities/FirstPersonCamera.hpp>
 #include <VoidEngine/ECS/Entities/Light.hpp>
+#include <VoidEngine/ECS/Entities/Quad.hpp>
 
 #include <VoidEngine/Input/InputManager.hpp>
 #include <VoidEngine/Input/Keycodes.hpp>
