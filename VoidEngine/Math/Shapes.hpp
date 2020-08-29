@@ -19,24 +19,6 @@ namespace VOID_NS {
         Vertex(Vector3 pos, Color col) : position(pos), color(col) {}
         Vertex(Vector3 pos, Color col, Vector3 normal) : position(pos), color(col), normal(normal) {}
     };
-
-    template<size_t N>
-    class Shape {
-    public:
-        Vertex vertices[N];
-    };
-
-    class Triangle : Shape<3> {
-    private:
-    protected:
-    public:
-    };
-
-    class Quad : Shape<4> {
-    private:
-    protected:
-    public:
-    };
 };
 
 #endif /* VOID_MATH_SHAPES_H__ */
