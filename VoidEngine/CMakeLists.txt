@@ -10,6 +10,7 @@ SET(VOID_SOURCES
     "ECS/Entity.cpp"
     "Math/Color.cpp"
     "Misc/File.cpp"
+    "Misc/StlLoader.cpp"
     "Misc/ObjLoader.cpp"
     "Input/InputManager.cpp"
     "Rendering/Renderer.cpp"
