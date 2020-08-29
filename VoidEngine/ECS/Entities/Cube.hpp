@@ -24,7 +24,7 @@ namespace VOID_NS {
         Cube() : Entity() {
             this->name = "Cube"; 
             this->renderable = true;
-            MeshComponent *mc = AddComponent(new MeshComponent());
+            MeshComponent *mc = AddComponent<MeshComponent>();
             Mesh *mesh = mc->mesh = new Mesh();
 
             mesh->vertices.push_back(Vector3(-1.000000, -1.000000, -1.000000));

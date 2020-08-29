@@ -12,7 +12,7 @@ namespace VOID_NS {
     public:
         Quad() : Entity("Quad") {
             this->renderable = true;
-            MeshComponent *mc = AddComponent(new MeshComponent());
+            MeshComponent *mc = AddComponent<MeshComponent>();
             Mesh *mesh = mc->mesh = new Mesh();
 
             mesh->vertices.push_back(Vertex(Vector3(-1.0f, 0.0f, -1.0f), Color::White()));

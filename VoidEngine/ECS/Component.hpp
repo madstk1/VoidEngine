@@ -3,7 +3,6 @@
 
 #include <VoidEngine/Core/Common.hpp>
 
-
 namespace VOID_NS {
     class Entity;
 

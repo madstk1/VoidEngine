@@ -35,7 +35,7 @@ namespace VOID_NS {
         virtual void FixedUpdate() {}
 
         template<typename T>
-        T *AddComponent(T *comp);
+        T *AddComponent();
 
         template<typename T>
         T *GetComponent();
@@ -50,8 +50,8 @@ namespace VOID_NS {
  */
 namespace VOID_NS {
     template<class T>
-    T *Entity::AddComponent(T *comp) {
-        std::type_index tindex = std::type_index(typeid(*comp));
+    T *Entity::AddComponent() {
+        std::type_index tindex = std::type_index(typeid(T));
 
         static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
@@ -62,13 +62,12 @@ namespace VOID_NS {
             }
         }
 
-        Component *c = (Component *) comp;
-        c->m_GameObject = this;
+        T *c = new T();
+        ((Component *) c)->m_GameObject = this;
 
-        this->m_Components.push_back(std::make_pair(tindex, c));
-        Logger::LogInfo("Added component of type %s to %s.", Logger::GetClassName<T>(), this->name.c_str());
+        this->m_Components.push_back(std::make_pair(tindex, (Component *) c));
 
-        return comp;
+        return c;
     }
 
     template<class T>
@@ -95,7 +94,6 @@ namespace VOID_NS {
         for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
             if(c_.first.name() == tindex.name()) {
                 this->m_Components.erase(this->m_Components.begin() + i);
-                Logger::LogInfo("Removed component of type %s from %s.", Logger::GetClassName<T>(), this->name.c_str());
                 return;
             }
             i++;
