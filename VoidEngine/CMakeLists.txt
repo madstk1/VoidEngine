@@ -44,7 +44,7 @@ ADD_LIBRARY("${CMAKE_PROJECT_NAME}" STATIC ${VOID_SOURCES})
 TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PUBLIC
     glad
     glfw
-    pthread
+    glm
     ${OPENGL_LIBRARIES}
 )
 
@@ -63,5 +63,4 @@ INSTALL(
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/VoidEngine
     FILES_MATCHING
         REGEX   ".*\.hpp$"
-        REGEX   ".*\.h$"
 )
