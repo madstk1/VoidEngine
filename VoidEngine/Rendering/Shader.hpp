@@ -2,6 +2,7 @@
 #define VOID_RENDERING_SHADER_H__
 
 #include <vector>
+#include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 #include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
@@ -16,9 +17,13 @@ namespace VOID_NS {
         void Enable();
         void Disable();
 
-        void SetUniformMat2f(std::string, glm::mat2);
-        void SetUniformMat3f(std::string, glm::mat3);
-        void SetUniformMat4f(std::string, glm::mat4);
+        void SetUniform1fv(std::string, f32);
+        void SetUniform2fv(std::string, Vector2);
+        void SetUniform3fv(std::string, Vector3);
+        void SetUniform4fv(std::string, Vector4);
+        void SetUniformMat2f(std::string, Mat2);
+        void SetUniformMat3f(std::string, Mat3);
+        void SetUniformMat4f(std::string, Mat4);
 
         inline std::string GetName() { return m_Name; }
 

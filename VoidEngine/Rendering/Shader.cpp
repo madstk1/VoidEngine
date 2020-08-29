@@ -29,24 +29,26 @@ namespace VOID_NS {
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, position));
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, color));
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, normal));
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
     }
 
     void Shader::Disable() {
         glUseProgram(0);
     }
 
-    void Shader::SetUniformMat2f(std::string identifier, glm::mat2 mat) {
+    void Shader::SetUniformMat2f(std::string identifier, Mat2 mat) {
     
     }
 
-    void Shader::SetUniformMat3f(std::string identifier, glm::mat3 mat) {
+    void Shader::SetUniformMat3f(std::string identifier, Mat3 mat) {
     
     }
 
-    void Shader::SetUniformMat4f(std::string identifier, glm::mat4 mat) {
+    void Shader::SetUniformMat4f(std::string identifier, Mat4 mat) {
         i32 loc = glGetUniformLocation(m_Program, identifier.c_str());
         if(loc != -1) {
             glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
