@@ -3,6 +3,7 @@
 #include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/ECS/Components/CameraComponent.hpp>
 #include <VoidEngine/ECS/Components/MeshComponent.hpp>
+#include <VoidEngine/ECS/Entities/Light.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
@@ -39,6 +40,10 @@ namespace VOID_NS {
     }
 
     Renderer::~Renderer() {
+        glDeleteVertexArrays(1, &m_VertexArray);
+        glDeleteBuffers(1, &m_IndexBuffer);
+        glDeleteBuffers(1, &m_VertexBuffer);
+
         Allocator::Free(g_Window);
     }
 
@@ -74,6 +79,18 @@ namespace VOID_NS {
         shader->SetUniformMat4f("u_Model",      model);
         shader->SetUniformMat4f("u_View",       view);
         shader->SetUniformMat4f("u_Projection", proj);
+        shader->SetUniform3fv("u_CameraPosition", g_Camera->GameObject()->position);
+
+        u32 i = 0;
+        for(Light *light : g_World->GetLights()) {
+            if(i >= 32) { break; }
+
+            shader->SetUniform3fv("u_LightingData[" + std::to_string(i) + "].color",     light->lightColor);
+            shader->SetUniform3fv("u_LightingData[" + std::to_string(i) + "].position",  light->position);
+            shader->SetUniform1fv("u_LightingData[" + std::to_string(i) + "].intensity", light->intensity);
+            i++;
+        }
+        shader->SetUniform1ui("u_LightCount", MIN(g_World->GetLights().size(), 32));
 
         /* Bind entity meshes to buffers. */
         std::vector<u32> tempIndices;

@@ -40,31 +40,45 @@ namespace VOID_NS {
         glUseProgram(0);
     }
 
-    void Shader::SetUniform1f(std::string identifier, f32 val) {
+    void Shader::SetUniform1i(std::string identifier, i32 val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform1i(loc, val);
+        }
+    }
+
+    void Shader::SetUniform1ui(std::string identifier, u32 val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform1ui(loc, val);
+        }
+    }
+
+    void Shader::SetUniform1fv(std::string identifier, f32 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
             glUniform1f(loc, val);
         }
     }
 
-    void Shader::SetUniform2f(std::string identifier, Vector2 val) {
+    void Shader::SetUniform2fv(std::string identifier, Vector2 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform2f(loc, val.x, val.y);
+            glUniform2fv(loc, 1, &val[0]);
         }
     }
 
-    void Shader::SetUniform3f(std::string identifier, Vector3 val) {
+    void Shader::SetUniform3fv(std::string identifier, Vector3 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform3f(loc, val.x, val.y, val.z);
+            glUniform3fv(loc, 1, &val[0]);
         }
     }
 
-    void Shader::SetUniform4f(std::string identifier, Vector4 val) {
+    void Shader::SetUniform4fv(std::string identifier, Vector4 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform4f(loc, val.x, val.y, val.z, val.w);
+            glUniform4fv(loc, 1, &val[0]);
         }
     }
 
@@ -99,7 +113,7 @@ namespace VOID_NS {
             return loc;
         }
 
-        Logger::LogError("Invalid uniform identifier '%s'", identifier.c_str());
+        Logger::LogError("Invalid uniform identifier '%s', %d", identifier.c_str(), loc);
         return -1;
     }
 

@@ -9,6 +9,11 @@ public:
     Game(const ApplicationInfo &info) : Application(info) {}
 
     void Start() override {
+        Light *light = new Light();
+        light->position = Vector3(10.f, 10.f, 10.f);
+        light->lightColor = Color::White();
+        light->intensity = 0.01f;
+
         for(u32 x = 0; x < 10; x++) {
             for(u32 y = 0; y < 10; y++) {
                 Cube *cube = new Cube();

@@ -68,14 +68,15 @@ namespace VOID_NS {
                 mesh->indices.push_back(i);
             }
 
+            u32 i = 0;
             for(Vector3 n : m_Normals) {
-                /* Add each normal 6 times. Thrice per triangle, twice per direction. */
-                mesh->normals.push_back(n);
-                mesh->normals.push_back(n);
-                mesh->normals.push_back(n);
-                mesh->normals.push_back(n);
-                mesh->normals.push_back(n);
-                mesh->normals.push_back(n);
+                mesh->vertices[i + 0].normal = n;;
+                mesh->vertices[i + 1].normal = n;;
+                mesh->vertices[i + 2].normal = n;;
+                mesh->vertices[i + 3].normal = n;;
+                mesh->vertices[i + 4].normal = n;;
+                mesh->vertices[i + 5].normal = n;;
+                i += 6;
             }
         }
     };

@@ -9,15 +9,19 @@
 extern int main(int argc, char **argv);
 
 namespace VOID_NS {
+    class Light;
+
     class World {
     public:
         World(const ApplicationInfo &);
         ~World();
 
         inline std::vector<Entity *> GetEntities() { return m_WorldObjects; }
+        inline std::vector<Light *> GetLights() { return m_Lights; }
 
     protected:
         std::vector<Entity *> m_WorldObjects;
+        std::vector<Light *> m_Lights;
 
         void AddGameObject(Entity *);
         void DestroyGameObject(Entity *);
@@ -29,6 +33,7 @@ namespace VOID_NS {
         friend int ::main(int argc, char **argv);
         friend Time;
         friend Entity;
+        friend Light;
     };
 };
 

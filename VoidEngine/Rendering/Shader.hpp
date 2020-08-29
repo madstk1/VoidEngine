@@ -17,10 +17,12 @@ namespace VOID_NS {
         void Enable();
         void Disable();
 
-        void SetUniform1f(std::string, f32);
-        void SetUniform2f(std::string, Vector2);
-        void SetUniform3f(std::string, Vector3);
-        void SetUniform4f(std::string, Vector4);
+        void SetUniform1i(std::string, i32);
+        void SetUniform1ui(std::string, u32);
+        void SetUniform1fv(std::string, f32);
+        void SetUniform2fv(std::string, Vector2);
+        void SetUniform3fv(std::string, Vector3);
+        void SetUniform4fv(std::string, Vector4);
         void SetUniformMat2f(std::string, Mat2);
         void SetUniformMat3f(std::string, Mat3);
         void SetUniformMat4f(std::string, Mat4);
