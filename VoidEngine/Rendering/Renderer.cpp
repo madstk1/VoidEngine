@@ -39,6 +39,14 @@ namespace VOID_NS {
 
         glCreateVertexArrays(1, &m_VertexArray);
         glBindVertexArray(m_VertexArray);
+
+#if defined(VOID_ENABLE_DEBUG)
+        Logger::LogInfo("GLFW, v%s", glfwGetVersionString());
+        Logger::LogInfo("Renderer: %s", glGetString(GL_RENDERER));
+        Logger::LogInfo("Version: OpenGL %s", glGetString(GL_VERSION));
+
+        PrintExtensions();
+#endif 
     }
 
     Renderer::~Renderer() {
@@ -192,5 +200,19 @@ namespace VOID_NS {
 
     bool Renderer::IsRunning() {
         return !glfwWindowShouldClose(g_Window->m_Window);
+    }
+
+    /**
+     *  PROTECTED/PRIVATE METHODS
+     */
+
+    void Renderer::PrintExtensions() {
+        i32 nExtensions = 0;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &nExtensions);
+
+        for(i32 i = 0; i < nExtensions; i++) {
+            const uchar *ext = glGetStringi(GL_EXTENSIONS, i);
+            Logger::LogInfo("[EXT] %s", ext);
+        }
     }
 };

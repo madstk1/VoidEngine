@@ -19,6 +19,8 @@ namespace VOID_NS {
         u32             m_IndexBuffer;
         u32             m_VertexArray;
 
+        static void PrintExtensions();
+
     public:
         Renderer(ApplicationInfo);
         ~Renderer();

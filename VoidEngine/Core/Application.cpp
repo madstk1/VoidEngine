@@ -29,11 +29,6 @@ namespace VOID_NS {
 };
 
 int main(int argc, char **argv) {
-    Void::Logger::Initialize();
-
-    Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
-    Void::g_Application = Void::CreateApplication(k_DefaultInfo);
-
 #if VOID_ENABLE_DEBUG
     Logger::LogInfo(
         "Void Engine, v%d.%d.%d",
@@ -41,10 +36,12 @@ int main(int argc, char **argv) {
         VOID_VERSION_MINOR,
         VOID_VERSION_PATCH
     );
-
-    Logger::LogInfo("GLFW, v%s", glfwGetVersionString());
-    Logger::LogInfo("OpenGL v%d.%d", GLVersion.major, GLVersion.minor);
 #endif
+
+    Void::Logger::Initialize();
+
+    Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
+    Void::g_Application = Void::CreateApplication(k_DefaultInfo);
 
     ShaderLibrary::CreateDefaultShaders();
 
