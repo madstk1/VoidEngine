@@ -45,19 +45,14 @@ namespace VOID_NS {
             ReadBytes(fp, &nAttr,  sizeof(u16),     1);
 
             /* Vertices */
-            mesh->vertices.push_back(Vertex(v3, Color::White()));
-            mesh->vertices.push_back(Vertex(v2, Color::White()));
-            mesh->vertices.push_back(Vertex(v1, Color::White()));
+            mesh->vertices.push_back(Vertex(v3, Color::White(), normal));
+            mesh->vertices.push_back(Vertex(v2, Color::White(), normal));
+            mesh->vertices.push_back(Vertex(v1, Color::White(), normal));
 
             /* Indices */
             mesh->indices.push_back(3 * i + 0);
             mesh->indices.push_back(3 * i + 1);
             mesh->indices.push_back(3 * i + 2);
-
-            /* Normals */
-            mesh->normals.push_back(normal);
-            mesh->normals.push_back(normal);
-            mesh->normals.push_back(normal);
         }
 
         return mesh;
