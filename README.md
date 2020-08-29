@@ -6,6 +6,7 @@ Void Engine is a small game-engine of mine. It aims to be usable, even without k
 
 Currently implemented features include:
 * OpenGL backend
+* Basic lighting
 * That's about it.
 
 # Why does this exist? Aren't there enough game engines?
