@@ -8,7 +8,7 @@
 namespace VOID_NS {
     class FirstPersonCamera : public Entity {
     public:
-        FirstPersonCamera() : Entity() {
+        FirstPersonCamera() : Entity("First Person Camera") {
             this->renderable = false;
             AddComponent(new CameraComponent());
         }
