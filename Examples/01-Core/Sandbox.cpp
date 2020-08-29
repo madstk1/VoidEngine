@@ -14,6 +14,10 @@ public:
         light->lightColor = Color::White();
         light->intensity = 0.01f;
 
+        Quad *quad = new Quad();
+        quad->position = Vector3(0.f, -3.0f, 0.f);
+        quad->scale = Vector3(30, 1, 30);
+
         for(u32 x = 0; x < 10; x++) {
             for(u32 y = 0; y < 10; y++) {
                 Cube *cube = new Cube();
