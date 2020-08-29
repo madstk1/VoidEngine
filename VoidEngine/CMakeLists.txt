@@ -16,7 +16,6 @@ SET(VOID_SOURCES
     "Rendering/Renderer.cpp"
     "Rendering/Shader.cpp"
     "Rendering/Window.cpp"
-    "Rendering/GLAD/GLAD.c"
 )
 
 ##
@@ -43,6 +42,7 @@ PKG_SEARCH_MODULE(OPENGL REQUIRED gl)
 
 ADD_LIBRARY("${CMAKE_PROJECT_NAME}" STATIC ${VOID_SOURCES})
 TARGET_LINK_LIBRARIES(${CMAKE_PROJECT_NAME} PUBLIC
+    glad
     glfw
     pthread
     ${OPENGL_LIBRARIES}
