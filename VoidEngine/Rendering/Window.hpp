@@ -7,7 +7,7 @@
 #include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Math/Color.hpp>
 
-#include <VoidEngine/Rendering/GLAD/GLAD.h>
+// #include <VoidEngine/Rendering/GLAD/GLAD.h>
 #include <GLFW/glfw3.h>
 
 namespace VOID_NS {

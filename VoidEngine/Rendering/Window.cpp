@@ -1,3 +1,5 @@
+ #include "GLAD/GLAD.h"
+
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Debug/Log.hpp>

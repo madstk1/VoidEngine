@@ -1,3 +1,5 @@
+#include "../Rendering/GLAD/GLAD.h"
+
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
