@@ -10,46 +10,73 @@
 namespace VOID_NS {
     class Cube : public Entity {
     private:
+        const Vector3 m_Normals[6] = {
+            Vector3( 0.000000,  0.000000, -1.000000),
+            Vector3( 0.000000,  0.000000,  1.000000),
+            Vector3( 1.000000,  0.000000,  0.000000),
+            Vector3( 0.000000, -1.000000,  0.000000),
+            Vector3(-1.000000,  0.000000,  0.000000),
+            Vector3( 0.000000,  1.000000,  0.000000),
+        };
+
     protected:
     public:
         Cube() : Entity() {
             this->name = "Cube"; 
             this->renderable = true;
             MeshComponent *mc = AddComponent(new MeshComponent());
-            mc->mesh = new Mesh();
-            Mesh *mesh = mc->mesh;
+            Mesh *mesh = mc->mesh = new Mesh();
 
-            /* Front */
-            mesh->vertices.push_back(Vertex(glm::vec3(0.0f, 0.0f, 0.0f), Color::Green())); // 0
-            mesh->vertices.push_back(Vertex(glm::vec3(1.0f, 0.0f, 0.0f), Color::Green())); // 1
-            mesh->vertices.push_back(Vertex(glm::vec3(1.0f, 1.0f, 0.0f), Color::Blue()));  // 2
-            mesh->vertices.push_back(Vertex(glm::vec3(0.0f, 1.0f, 0.0f), Color::Blue()));  // 3
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000, -1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000, -1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3( 1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000,  1.000000));
+            mesh->vertices.push_back(Vector3(-1.000000,  1.000000, -1.000000));
 
-            /* Back */
-            mesh->vertices.push_back(Vertex(glm::vec3(0.0f, 0.0f, 1.0f), Color::Blue()));  // 4
-            mesh->vertices.push_back(Vertex(glm::vec3(1.0f, 0.0f, 1.0f), Color::Blue()));  // 5
-            mesh->vertices.push_back(Vertex(glm::vec3(1.0f, 1.0f, 1.0f), Color::Green())); // 6
-            mesh->vertices.push_back(Vertex(glm::vec3(0.0f, 1.0f, 1.0f), Color::Green())); // 7
+            for(u32 i = 0; i < 36; i++) {
+                mesh->indices.push_back(i);
+            }
 
-            mesh->indices.insert(mesh->indices.begin(), {
-                /* Front */
-                0, 1, 2, 2, 3, 0,
-
-                /* Back */
-                6, 5, 4, 4, 7, 6,
-
-                /* Left */
-                5, 2, 1, 5, 6, 2,
-
-                /* Right */
-                0, 3, 4, 3, 7, 4,
-
-                /* Bottom */
-                4, 1, 0, 4, 5, 1,
-
-                /* Top */
-                6, 3, 2, 6, 7, 3
-            });
+            for(Vector3 n : m_Normals) {
+                /* Add each normal 6 times. Thrice per triangle, twice per direction. */
+                mesh->normals.push_back(n);
+                mesh->normals.push_back(n);
+                mesh->normals.push_back(n);
+                mesh->normals.push_back(n);
+                mesh->normals.push_back(n);
+                mesh->normals.push_back(n);
+            }
         }
     };
 };
