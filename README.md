@@ -27,6 +27,10 @@ As of now, the building process has only been tested on Linux.
 
 ## Building Void
 
+Before anything else, you must checkout the third-party dependencies.
+
+    git submodule update --init --recursive
+
 Start by making a build-folder, where the compiled code will end up.
 
     mkdir build && cd build
