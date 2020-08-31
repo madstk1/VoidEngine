@@ -9,10 +9,6 @@
 
 #if defined(VOID_ENABLE_OPENGL)
 #include <VoidEngine/Platforms/GL/Renderer.hpp>
-#else
-namespace VOID_NS {
-    class RendererGL;
-};
 #endif
 
 namespace VOID_NS {
@@ -23,7 +19,12 @@ namespace VOID_NS {
         g_World     = Allocator::Allocate<World>(info);
 
         switch(info.API) {
+#if defined(VOID_ENABLE_OPENGL)
             case RenderingAPI::OpenGL: g_Renderer = (Renderer *) Allocator::Allocate<RendererGL>(info); break;
+#endif
+
+            default:
+                Logger::LogFatal(VOID_ERR_INV_API);
         }
     }
 
