@@ -1,15 +1,15 @@
- #include "GLAD/GLAD.h"
+ #include "../../Rendering/GLAD/GLAD.h"
 
 #include <VoidEngine/Core/Application.hpp>
-#include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Debug/Log.hpp>
 #include <VoidEngine/ECS/Components/CameraComponent.hpp>
 #include <VoidEngine/Input/InputManager.hpp>
-#include <VoidEngine/Rendering/Window.hpp>
+
+#include <VoidEngine/Platforms/GL/Window.hpp>
 
 namespace VOID_NS {
 #if defined(VOID_ENABLE_DEBUG)
-    void Window::GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
+    void WindowGL::GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
         switch(severity) {
             case GL_DEBUG_SEVERITY_HIGH:         Logger::LogFatal   ("GL: %s", msg); break;
             case GL_DEBUG_SEVERITY_MEDIUM:       Logger::LogError   ("GL: %s", msg); break;
@@ -19,15 +19,15 @@ namespace VOID_NS {
     }
 #endif
 
-    void Window::ErrorCallback(i32 code, const char *msg) {
+    void WindowGL::ErrorCallback(i32 code, const char *msg) {
         Logger::LogError("GLFW: %d, %s", code, msg);
     }
 
-    void Window::ResizeCallback(GLFWwindow *win, i32 w, i32 h) {
+    void WindowGL::ResizeCallback(GLFWwindow *win, i32 w, i32 h) {
         glViewport(0, 0, w, h);
     }
 
-    void Window::KeyCallback(GLFWwindow *win, i32 key, i32 scancode, i32 action, i32 mods) {
+    void WindowGL::KeyCallback(GLFWwindow *win, i32 key, i32 scancode, i32 action, i32 mods) {
         switch(key) {
             case GLFW_KEY_W:      Input::m_Keys[Keycode::KeyW]     = (action != GLFW_RELEASE); break;
             case GLFW_KEY_S:      Input::m_Keys[Keycode::KeyS]     = (action != GLFW_RELEASE); break;
@@ -40,7 +40,7 @@ namespace VOID_NS {
 
     /* TODO: */
     /* Add this to a separate FirstPersonCamera controller. */
-    void Window::MouseCallback(GLFWwindow *win, f64 xpos, f64 ypos) {
+    void WindowGL::MouseCallback(GLFWwindow *win, f64 xpos, f64 ypos) {
         static float lastX = g_Window->GetSize().x;
         static float lastY = g_Window->GetSize().y;
 
@@ -59,14 +59,7 @@ namespace VOID_NS {
         }
     }
 
-    Window::Window(ApplicationInfo info) {
-        m_Title         = info.Title;
-        m_Position      = info.Position;
-        m_Size          = info.Size;
-        m_Background    = info.Background;
-        m_Resizable     = info.Resizable;
-        m_Fullscreen    = info.Fullscreen;
-
+    WindowGL::WindowGL(ApplicationInfo info) : Window(info) {
         glfwSetErrorCallback(ErrorCallback);
 
         VOID_ASSERT(glfwInit(), "Failed to initialize GLFW.");
@@ -140,38 +133,38 @@ namespace VOID_NS {
         Logger::LogInfo("Finished intializing GLFW.");
     }
 
-    Window::~Window() {
+    WindowGL::~WindowGL() {
         glfwDestroyWindow(this->m_Window);
         glfwTerminate();
 
         Logger::LogInfo("Deallocated GLFW window.");
     }
 
-    void Window::SetTitle(std::string title) {
+    void WindowGL::SetTitle(std::string title) {
         glfwSetWindowTitle(this->m_Window, title.c_str());
         m_Title = title;
     }
 
-    void Window::SetPosition(Vector2i pos) {
+    void WindowGL::SetPosition(Vector2i pos) {
         glfwSetWindowPos(this->m_Window, pos.x, pos.y);
         m_Position = pos;
     }
 
-    void Window::SetSize(Vector2u size) {
+    void WindowGL::SetSize(Vector2u size) {
         glfwSetWindowSize(this->m_Window, size.x, size.y);
         m_Size = size;
     }
 
-    void Window::SetBackgroundColor(Color bg) {
+    void WindowGL::SetBackgroundColor(Color bg) {
         m_Background = bg;
     }
 
-    void Window::SetResizable(bool resizable) {
+    void WindowGL::SetResizable(bool resizable) {
         glfwWindowHint(GLFW_RESIZABLE, resizable);
         m_Resizable = resizable;
     }
 
-    void Window::SetFullscreen(bool fullscreen) {
+    void WindowGL::SetFullscreen(bool fullscreen) {
         glfwSetWindowMonitor(
             this->m_Window,
             (fullscreen) ? this->m_Monitor : nullptr,

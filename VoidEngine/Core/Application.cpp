@@ -7,13 +7,24 @@
 #include <VoidEngine/ECS/Entities/FirstPersonCamera.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
 
+#if defined(VOID_ENABLE_OPENGL)
+#include <VoidEngine/Platforms/GL/Renderer.hpp>
+#else
+namespace VOID_NS {
+    class RendererGL;
+};
+#endif
+
 namespace VOID_NS {
     Application::Application() : Application(ApplicationInfo::GetDefault()) {}
 
     Application::Application(ApplicationInfo info) {
         g_FixedUpdateInterval = info.FixedUpdateInterval;
         g_World     = Allocator::Allocate<World>(info);
-        g_Renderer  = Allocator::Allocate<Renderer>(info);
+
+        switch(info.API) {
+            case RenderingAPI::OpenGL: g_Renderer = (Renderer *) Allocator::Allocate<RendererGL>(info); break;
+        }
     }
 
     Application::~Application() {

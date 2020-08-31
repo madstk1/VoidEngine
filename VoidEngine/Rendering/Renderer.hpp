@@ -3,8 +3,9 @@
 
 #include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Core/World.hpp>
+
 #include <VoidEngine/Rendering/Window.hpp>
+#include <VoidEngine/Rendering/Shader.hpp>
 
 namespace VOID_NS {
     class Renderer {
@@ -15,30 +16,26 @@ namespace VOID_NS {
         MultiSampling   m_Sampling      = MultiSampling::x4;
         SwapInterval    m_Buffering     = SwapInterval::SingleBuffer;
 
-        u32             m_VertexBuffer;
-        u32             m_IndexBuffer;
-        u32             m_VertexArray;
-
-        static void PrintExtensions();
-
     public:
-        Renderer(ApplicationInfo);
-        ~Renderer();
+        Renderer(ApplicationInfo) {}
+        virtual ~Renderer() = default;
 
-        void Begin();
-        void End();
-        void Render();
+        virtual Shader *CreateShader(ShaderCreationInfo) = 0;
 
-        f64 GetRenderTime();
-        bool IsRunning();
+        virtual void Begin() = 0;
+        virtual void End() = 0;
+        virtual void Render() = 0;
 
-        void SetRefreshRate(i32);
-        void SetSampling(MultiSampling);
-        void SetSwapInterval(SwapInterval);
+        virtual f64 GetRenderTime() = 0;
+        virtual bool IsRunning() = 0;
 
-        i32 GetRefreshRate() { return m_RefreshRate; }
-        MultiSampling GetSampling() { return m_Sampling; }
-        SwapInterval GetSwapInterval() { return m_Buffering; }
+        virtual void SetRefreshRate(i32) = 0;
+        virtual void SetSampling(MultiSampling) = 0;
+        virtual void SetSwapInterval(SwapInterval) = 0;
+
+        virtual i32 GetRefreshRate() { return m_RefreshRate; }
+        virtual MultiSampling GetSampling() { return m_Sampling; }
+        virtual SwapInterval GetSwapInterval() { return m_Buffering; }
     };
 };
 

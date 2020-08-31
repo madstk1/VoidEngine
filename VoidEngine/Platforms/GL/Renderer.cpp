@@ -1,4 +1,4 @@
-#include "../Rendering/GLAD/GLAD.h"
+#include "../..//Rendering/GLAD/GLAD.h"
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/Allocator.hpp>
@@ -6,9 +6,11 @@
 #include <VoidEngine/ECS/Components/CameraComponent.hpp>
 #include <VoidEngine/ECS/Components/MeshComponent.hpp>
 #include <VoidEngine/ECS/Entities/Light.hpp>
-#include <VoidEngine/Rendering/Window.hpp>
+
 #include <VoidEngine/Rendering/Renderer.hpp>
-#include <VoidEngine/Rendering/Shader.hpp>
+#include <VoidEngine/Platforms/GL/Shader.hpp>
+#include <VoidEngine/Platforms/GL/Window.hpp>
+#include <VoidEngine/Platforms/GL/Renderer.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -20,8 +22,8 @@ namespace VOID_NS {
     u32 indexExtension = 0;
     u32 indexCount = 0;
 
-    Renderer::Renderer(ApplicationInfo info) {
-        g_Window = Allocator::Allocate<Window>(info);
+    RendererGL::RendererGL(ApplicationInfo info) : Renderer(info) {
+        g_Window = Allocator::Allocate<WindowGL>(info);
 
         SetRefreshRate(info.RefreshRate);
         SetSampling(info.Sampling);
@@ -49,7 +51,7 @@ namespace VOID_NS {
 #endif 
     }
 
-    Renderer::~Renderer() {
+    RendererGL::~RendererGL() {
         glDeleteVertexArrays(1, &m_VertexArray);
         glDeleteBuffers(1, &m_IndexBuffer);
         glDeleteBuffers(1, &m_VertexBuffer);
@@ -57,20 +59,24 @@ namespace VOID_NS {
         Allocator::Free(g_Window);
     }
 
-    void Renderer::Begin() {
+    Shader *RendererGL::CreateShader(ShaderCreationInfo info) {
+        return Allocator::Allocate<ShaderGL>(info);
+    }
+
+    void RendererGL::Begin() {
         /* Clear screen. */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(
-            g_Window->m_Background.r,
-            g_Window->m_Background.g,
-            g_Window->m_Background.b,
-            g_Window->m_Background.a
+            g_Window->GetBackgroundColor().r,
+            g_Window->GetBackgroundColor().g,
+            g_Window->GetBackgroundColor().b,
+            g_Window->GetBackgroundColor().a
         );
 
         /* Calculate camera MVP. */
         glm::mat4 proj = glm::perspective(
             glm::radians(g_Camera->fieldOfView),
-            (float) g_Window->m_Size.x / (float) g_Window->m_Size.y,
+            (float) g_Window->GetSize().x / (float) g_Window->GetSize().y,
             g_Camera->zNear,
             g_Camera->zFar
         );
@@ -161,23 +167,23 @@ namespace VOID_NS {
         }
     }
 
-    void Renderer::Render() {
+    void RendererGL::Render() {
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
         glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
     }
 
-    void Renderer::End() {
+    void RendererGL::End() {
         glfwPollEvents();
-        glfwSwapBuffers(g_Window->m_Window);
+        glfwSwapBuffers(GetWindow()->m_Window);
     }
 
-    void Renderer::SetRefreshRate(i32 rate) {
+    void RendererGL::SetRefreshRate(i32 rate) {
         m_RefreshRate = rate;
         glfwWindowHint(GLFW_REFRESH_RATE, (rate == -1) ? GLFW_DONT_CARE : rate);
     }
 
-    void Renderer::SetSampling(MultiSampling samples) {
+    void RendererGL::SetSampling(MultiSampling samples) {
         m_Sampling = samples;
         glfwWindowHint(GLFW_SAMPLES, samples);
 
@@ -188,25 +194,25 @@ namespace VOID_NS {
         }
     }
 
-    void Renderer::SetSwapInterval(SwapInterval buffering) {
+    void RendererGL::SetSwapInterval(SwapInterval buffering) {
         m_Buffering = buffering;
         glfwWindowHint(GLFW_DOUBLEBUFFER, m_Buffering == SwapInterval::DoubleBuffer);
         glfwSwapInterval(m_Buffering);
     }
 
-    f64 Renderer::GetRenderTime() {
+    f64 RendererGL::GetRenderTime() {
         return glfwGetTime();
     }
 
-    bool Renderer::IsRunning() {
-        return !glfwWindowShouldClose(g_Window->m_Window);
+    bool RendererGL::IsRunning() {
+        return !glfwWindowShouldClose(GetWindow()->m_Window);
     }
 
     /**
      *  PROTECTED/PRIVATE METHODS
      */
 
-    void Renderer::PrintExtensions() {
+    void RendererGL::PrintExtensions() {
         i32 nExtensions = 0;
         glGetIntegerv(GL_NUM_EXTENSIONS, &nExtensions);
 
@@ -214,5 +220,9 @@ namespace VOID_NS {
             const uchar *ext = glGetStringi(GL_EXTENSIONS, i);
             Logger::LogInfo("[EXT] %s", ext);
         }
+    }
+
+    WindowGL *RendererGL::GetWindow() {
+        return (WindowGL *) g_Window;
     }
 };

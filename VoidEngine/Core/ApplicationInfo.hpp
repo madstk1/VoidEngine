@@ -18,6 +18,10 @@ namespace VOID_NS {
         DoubleBuffer = (i32) 2
     } SwapInterval;
 
+    typedef enum {
+        OpenGL
+    } RenderingAPI;
+
     struct ApplicationInfo {
         std::string Title;
 
@@ -33,6 +37,8 @@ namespace VOID_NS {
         MultiSampling Sampling;
         SwapInterval  Buffering;
 
+        RenderingAPI  API;
+
         static inline ApplicationInfo& GetDefault() {
             static ApplicationInfo info;
 
@@ -42,6 +48,7 @@ namespace VOID_NS {
 
             info.Sampling  = MultiSampling::x4;
             info.Buffering = SwapInterval::SingleBuffer;
+            info.API       = RenderingAPI::OpenGL;
             
             info.RefreshRate         = 60;
             info.Background          = Color(0.13f, 0.1f, 0.1f, 1.0f);

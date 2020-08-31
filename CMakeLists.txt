@@ -15,9 +15,11 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 ## BUILD OPTIONS
 ##
 
-OPTION(VOID_ENABLE_DEBUG   "Enable debug tools." TRUE)
-OPTION(VOID_BUILD_EXAMPLES "Build VoidEngine examples." TRUE)
-OPTION(VOID_CUSTOM_ALLOC   "Use Void-Engine's custom allocator" TRUE)
+OPTION(VOID_ENABLE_DEBUG    "Enable debug tools."                TRUE)
+OPTION(VOID_BUILD_EXAMPLES  "Build VoidEngine examples."         TRUE)
+OPTION(VOID_CUSTOM_ALLOC    "Use Void-Engine's custom allocator" TRUE)
+
+OPTION(VOID_ENABLE_OPENGL   "Enable OpenGL backend"              TRUE)
 
 IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     MESSAGE(STATUS "Setting build type to 'Debug' as none was specified.")
@@ -27,6 +29,7 @@ ENDIF()
 
 MESSAGE(STATUS "Building library as ${CMAKE_BUILD_TYPE}")
 MESSAGE(STATUS "Building custom allocator: ${VOID_CUSTOM_ALLOC}")
+MESSAGE(STATUS "Building with OpenGL backend: ${VOID_ENABLE_OPENGL}")
 
 ##
 ## PROJECT

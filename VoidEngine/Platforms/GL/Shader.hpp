@@ -1,0 +1,46 @@
+#ifndef VOID_PLATFORMS_GL_SHADER_H__
+#define VOID_PLATFORMS_GL_SHADER_H__
+
+#include <vector>
+#include <VoidEngine/Math/Vectors.hpp>
+#include <VoidEngine/Rendering/Window.hpp>
+#include <VoidEngine/Rendering/Shader.hpp>
+
+#include <glm/glm.hpp>
+
+namespace VOID_NS {
+    class ShaderGL : public Shader {
+    protected:
+        u32 m_StageID[ShaderStage::StageCount];
+        u32 m_Program;
+
+        i32 m_Status;
+        i32 m_LogLength;
+        std::vector<char> m_ErrorLog;
+
+        i32 GetUniform(std::string);
+        void Compile(ShaderCreationInfo);
+        void Link(ShaderCreationInfo);
+
+    public:
+        ShaderGL(ShaderCreationInfo);
+        ~ShaderGL();
+
+        virtual void Enable() override;
+        virtual void Disable() override;
+
+        virtual void SetUniform1i(std::string, i32) override;
+        virtual void SetUniform1ui(std::string, u32) override;
+        virtual void SetUniform1fv(std::string, f32) override;
+
+        virtual void SetUniform2fv(std::string, Vector2) override;
+        virtual void SetUniform3fv(std::string, Vector3) override;
+        virtual void SetUniform4fv(std::string, Vector4) override;
+
+        virtual void SetUniformMat2f(std::string, Mat2) override;
+        virtual void SetUniformMat3f(std::string, Mat3) override;
+        virtual void SetUniformMat4f(std::string, Mat4) override;
+    };
+};
+
+#endif /* VOID_PLATFORMS_GL_SHADER_H__ */

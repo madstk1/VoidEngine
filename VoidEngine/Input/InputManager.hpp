@@ -5,8 +5,6 @@
 #include <VoidEngine/Debug/Log.hpp>
 #include <VoidEngine/Input/Keycodes.hpp>
 
-#include <VoidEngine/Rendering/Window.hpp>
-
 namespace VOID_NS {
     class Input {
     private:
@@ -21,7 +19,8 @@ namespace VOID_NS {
             return m_Keys[key];
         }
 
-        friend Window;
+        friend class Window;
+        friend class WindowGL;
     };
 };
 

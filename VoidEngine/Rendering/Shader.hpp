@@ -10,37 +10,30 @@
 
 namespace VOID_NS {
     class Shader {
-    public:
-        Shader(ShaderCreationInfo);
-        ~Shader();
-
-        void Enable();
-        void Disable();
-
-        void SetUniform1i(std::string, i32);
-        void SetUniform1ui(std::string, u32);
-        void SetUniform1fv(std::string, f32);
-        void SetUniform2fv(std::string, Vector2);
-        void SetUniform3fv(std::string, Vector3);
-        void SetUniform4fv(std::string, Vector4);
-        void SetUniformMat2f(std::string, Mat2);
-        void SetUniformMat3f(std::string, Mat3);
-        void SetUniformMat4f(std::string, Mat4);
-
-        inline std::string GetName() { return m_Name; }
-
     protected:
         std::string m_Name;
-        u32 m_StageID[ShaderStage::StageCount];
-        u32 m_Program;
 
-        i32 m_Status;
-        i32 m_LogLength;
-        std::vector<char> m_ErrorLog;
+    public:
+        Shader(ShaderCreationInfo) {}
+        virtual ~Shader() = default;
 
-        i32 GetUniform(std::string);
-        void Compile(ShaderCreationInfo);
-        void Link(ShaderCreationInfo);
+        virtual void Enable() = 0;
+        virtual void Disable() = 0;
+
+        /* Uniform setters. */
+        virtual void SetUniform1i(std::string, i32) = 0;
+        virtual void SetUniform1ui(std::string, u32) = 0;
+        virtual void SetUniform1fv(std::string, f32) = 0;
+
+        virtual void SetUniform2fv(std::string, Vector2) = 0;
+        virtual void SetUniform3fv(std::string, Vector3) = 0;
+        virtual void SetUniform4fv(std::string, Vector4) = 0;
+
+        virtual void SetUniformMat2f(std::string, Mat2) = 0;
+        virtual void SetUniformMat3f(std::string, Mat3) = 0;
+        virtual void SetUniformMat4f(std::string, Mat4) = 0;
+
+        inline std::string GetName() { return m_Name; }
     };
 
     class ShaderLibrary {

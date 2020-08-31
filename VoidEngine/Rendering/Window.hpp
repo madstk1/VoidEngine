@@ -7,7 +7,6 @@
 #include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Math/Color.hpp>
 
-// #include <VoidEngine/Rendering/GLAD/GLAD.h>
 #include <GLFW/glfw3.h>
 
 namespace VOID_NS {
@@ -20,35 +19,31 @@ namespace VOID_NS {
         bool        m_Resizable;
         bool        m_Fullscreen;
 
-        GLFWwindow *m_Window;
-        GLFWmonitor *m_Monitor;
-
-        /* Callbacks */
-#if defined(VOID_ENABLE_DEBUG)
-        static void GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *);
-#endif
-        static void ErrorCallback(i32, const char *);
-        static void ResizeCallback(GLFWwindow *, i32, i32);
-        static void MouseCallback(GLFWwindow *, f64, f64);
-        static void KeyCallback(GLFWwindow *, i32, i32, i32, i32);
-
     public:
-        Window(ApplicationInfo);
-        ~Window();
+        Window(ApplicationInfo info) {
+            m_Title         = info.Title;
+            m_Position      = info.Position;
+            m_Size          = info.Size;
+            m_Background    = info.Background;
+            m_Resizable     = info.Resizable;
+            m_Fullscreen    = info.Fullscreen;
+        }
 
-        void SetTitle(std::string);
-        void SetPosition(Vector2i);
-        void SetSize(Vector2u);
-        void SetBackgroundColor(Color);
-        void SetResizable(bool);
-        void SetFullscreen(bool);
+        virtual ~Window() = default;
 
-        std::string GetTitle()     { return m_Title; }
-        Vector2i GetPosition()     { return m_Position; }
-        Vector2u GetSize()         { return m_Size; }
-        Color GetBackgroundColor() { return m_Background; }
-        bool GetResizable()        { return m_Resizable; }
-        bool GetFullscreen()       { return m_Fullscreen; }
+        virtual void SetTitle(std::string) = 0;
+        virtual void SetPosition(Vector2i) = 0;
+        virtual void SetSize(Vector2u) = 0;
+        virtual void SetBackgroundColor(Color) = 0;
+        virtual void SetResizable(bool) = 0;
+        virtual void SetFullscreen(bool) = 0;
+
+        virtual std::string GetTitle()     { return m_Title; }
+        virtual Vector2i GetPosition()     { return m_Position; }
+        virtual Vector2u GetSize()         { return m_Size; }
+        virtual Color GetBackgroundColor() { return m_Background; }
+        virtual bool GetResizable()        { return m_Resizable; }
+        virtual bool GetFullscreen()       { return m_Fullscreen; }
 
         friend class Renderer;
     };
