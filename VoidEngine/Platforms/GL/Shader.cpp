@@ -73,21 +73,21 @@ namespace VOID_NS {
     void ShaderGL::SetUniform1i(std::string identifier, i32 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform1i(loc, val);
+            glProgramUniform1i(m_Program, loc, val);
         }
     }
 
     void ShaderGL::SetUniform1ui(std::string identifier, u32 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform1ui(loc, val);
+            glProgramUniform1ui(m_Program, loc, val);
         }
     }
 
     void ShaderGL::SetUniform1fv(std::string identifier, f32 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform1f(loc, val);
+            glProgramUniform1f(m_Program, loc, val);
         }
     }
 
@@ -95,21 +95,21 @@ namespace VOID_NS {
     void ShaderGL::SetUniform2i(std::string identifier, Vector2i val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform2i(loc, val[0], val[1]);
+            glProgramUniform2i(m_Program, loc, val[0], val[1]);
         }
     }
 
     void ShaderGL::SetUniform2ui(std::string identifier, Vector2u val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform2ui(loc, val[0], val[1]);
+            glProgramUniform2ui(m_Program, loc, val[0], val[1]);
         }
     }
 
     void ShaderGL::SetUniform2fv(std::string identifier, Vector2 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform2fv(loc, 1, &val[0]);
+            glProgramUniform2fv(m_Program, loc, 1, &val[0]);
         }
     }
 
@@ -117,21 +117,21 @@ namespace VOID_NS {
     void ShaderGL::SetUniform3i(std::string identifier, Vector3i val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform3i(loc, val[0], val[1], val[2]);
+            glProgramUniform3i(m_Program, loc, val[0], val[1], val[2]);
         }
     }
 
     void ShaderGL::SetUniform3ui(std::string identifier, Vector3u val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform3ui(loc, val[0], val[1], val[2]);
+            glProgramUniform3ui(m_Program, loc, val[0], val[1], val[2]);
         }
     }
 
     void ShaderGL::SetUniform3fv(std::string identifier, Vector3 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform3fv(loc, 1, &val[0]);
+            glProgramUniform3fv(m_Program, loc, 1, &val[0]);
         }
     }
 
@@ -139,20 +139,20 @@ namespace VOID_NS {
     void ShaderGL::SetUniform4i(std::string identifier, Vector4i val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform4i(loc, val[0], val[1], val[2], val[3]);
+            glProgramUniform4i(m_Program, loc, val[0], val[1], val[2], val[3]);
         }
     }
 
     void ShaderGL::SetUniform4ui(std::string identifier, Vector4u val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform4ui(loc, val[0], val[1], val[2], val[3]);
+            glProgramUniform4ui(m_Program, loc, val[0], val[1], val[2], val[3]);
         }
     }
     void ShaderGL::SetUniform4fv(std::string identifier, Vector4 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniform4fv(loc, 1, &val[0]);
+            glProgramUniform4fv(m_Program, loc, 1, &val[0]);
         }
     }
 
@@ -160,21 +160,21 @@ namespace VOID_NS {
     void ShaderGL::SetUniformMat2f(std::string identifier, Mat2 mat) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniformMatrix2fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
+            glProgramUniformMatrix2fv(m_Program, loc, 1, GL_FALSE, glm::value_ptr(mat));
         }
     }
 
     void ShaderGL::SetUniformMat3f(std::string identifier, Mat3 mat) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
+            glProgramUniformMatrix3fv(m_Program, loc, 1, GL_FALSE, glm::value_ptr(mat));
         }
     }
 
     void ShaderGL::SetUniformMat4f(std::string identifier, Mat4 mat) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
-            glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
+            glProgramUniformMatrix4fv(m_Program, loc, 1, GL_FALSE, glm::value_ptr(mat));
         }
     }
 
