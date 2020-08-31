@@ -68,6 +68,8 @@ namespace VOID_NS {
     /**
      * Uniform setters.
      */
+
+    /* 1D setters */
     void ShaderGL::SetUniform1i(std::string identifier, i32 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
@@ -89,10 +91,40 @@ namespace VOID_NS {
         }
     }
 
+    /* 2D setters */
+    void ShaderGL::SetUniform2i(std::string identifier, Vector2i val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform2i(loc, val[0], val[1]);
+        }
+    }
+
+    void ShaderGL::SetUniform2ui(std::string identifier, Vector2u val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform2ui(loc, val[0], val[1]);
+        }
+    }
+
     void ShaderGL::SetUniform2fv(std::string identifier, Vector2 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
             glUniform2fv(loc, 1, &val[0]);
+        }
+    }
+
+    /* 3D setters */
+    void ShaderGL::SetUniform3i(std::string identifier, Vector3i val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform3i(loc, val[0], val[1], val[2]);
+        }
+    }
+
+    void ShaderGL::SetUniform3ui(std::string identifier, Vector3u val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform3ui(loc, val[0], val[1], val[2]);
         }
     }
 
@@ -103,6 +135,20 @@ namespace VOID_NS {
         }
     }
 
+    /* 4D setters */
+    void ShaderGL::SetUniform4i(std::string identifier, Vector4i val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform4i(loc, val[0], val[1], val[2], val[3]);
+        }
+    }
+
+    void ShaderGL::SetUniform4ui(std::string identifier, Vector4u val) {
+        i32 loc = 0;
+        if((loc = GetUniform(identifier)) != -1) {
+            glUniform4ui(loc, val[0], val[1], val[2], val[3]);
+        }
+    }
     void ShaderGL::SetUniform4fv(std::string identifier, Vector4 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {
@@ -110,6 +156,7 @@ namespace VOID_NS {
         }
     }
 
+    /* Matrix setters */
     void ShaderGL::SetUniformMat2f(std::string identifier, Mat2 mat) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {

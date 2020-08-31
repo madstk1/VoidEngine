@@ -29,12 +29,21 @@ namespace VOID_NS {
         virtual void Enable() override;
         virtual void Disable() override;
 
-        virtual void SetUniform1i(std::string, i32) override;
+        /* Uniform setters. */
+        virtual void SetUniform1i(std::string,  i32) override;
         virtual void SetUniform1ui(std::string, u32) override;
         virtual void SetUniform1fv(std::string, f32) override;
 
+        virtual void SetUniform2i(std::string,  Vector2i) override;
+        virtual void SetUniform2ui(std::string, Vector2u) override;
         virtual void SetUniform2fv(std::string, Vector2) override;
+
+        virtual void SetUniform3i(std::string,  Vector3i) override;
+        virtual void SetUniform3ui(std::string, Vector3u) override;
         virtual void SetUniform3fv(std::string, Vector3) override;
+
+        virtual void SetUniform4i(std::string,  Vector4i) override;
+        virtual void SetUniform4ui(std::string, Vector4u) override;
         virtual void SetUniform4fv(std::string, Vector4) override;
 
         virtual void SetUniformMat2f(std::string, Mat2) override;

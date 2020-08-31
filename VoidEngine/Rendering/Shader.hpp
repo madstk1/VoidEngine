@@ -26,12 +26,20 @@ namespace VOID_NS {
         virtual void Disable() = 0;
 
         /* Uniform setters. */
-        virtual void SetUniform1i(std::string, i32) = 0;
+        virtual void SetUniform1i(std::string,  i32) = 0;
         virtual void SetUniform1ui(std::string, u32) = 0;
         virtual void SetUniform1fv(std::string, f32) = 0;
 
+        virtual void SetUniform2i(std::string,  Vector2i) = 0;
+        virtual void SetUniform2ui(std::string, Vector2u) = 0;
         virtual void SetUniform2fv(std::string, Vector2) = 0;
+
+        virtual void SetUniform3i(std::string,  Vector3i) = 0;
+        virtual void SetUniform3ui(std::string, Vector3u) = 0;
         virtual void SetUniform3fv(std::string, Vector3) = 0;
+
+        virtual void SetUniform4i(std::string,  Vector4i) = 0;
+        virtual void SetUniform4ui(std::string, Vector4u) = 0;
         virtual void SetUniform4fv(std::string, Vector4) = 0;
 
         virtual void SetUniformMat2f(std::string, Mat2) = 0;
