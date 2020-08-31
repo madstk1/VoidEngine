@@ -66,6 +66,12 @@ ShaderCreationInfo k_ShaderDefault = {
     "Default", {
         { ShaderStage::StageVertex,     k_ShaderDefault_vert },
         { ShaderStage::StageFragment,   k_ShaderDefault_frag },
+    }, {
+        sizeof(Vertex), {
+            { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, position) },
+            { ShaderLayout::Type::Float, ShaderLayout::Dimension::L4D, false, offsetof(Vertex, color)    },
+            { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, normal)   },
+        }
     }
 };
 

@@ -10,8 +10,19 @@ namespace VOID_NS {
         [ShaderStage::StageCompute]  = GL_COMPUTE_SHADER,
     };
 
+    const static u32 k_AttributeType[] = {
+        [ShaderLayout::Type::Byte]      = GL_BYTE,
+        [ShaderLayout::Type::UByte]     = GL_UNSIGNED_BYTE,
+        [ShaderLayout::Type::Short]     = GL_SHORT,
+        [ShaderLayout::Type::UShort]    = GL_UNSIGNED_SHORT,
+        [ShaderLayout::Type::Int]       = GL_INT,
+        [ShaderLayout::Type::UInt]      = GL_UNSIGNED_INT,
+        [ShaderLayout::Type::HFloat]    = GL_HALF_FLOAT,
+        [ShaderLayout::Type::Float]     = GL_FLOAT,
+        [ShaderLayout::Type::Double]    = GL_DOUBLE,
+    };
+
     ShaderGL::ShaderGL(ShaderCreationInfo info) : Shader(info) {
-        m_Name = info.name;
         Compile(info);
         Link(info);
     }
@@ -23,19 +34,40 @@ namespace VOID_NS {
     void ShaderGL::Enable() {
         glUseProgram(m_Program);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, position));
-        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, color));
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, normal));
-
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
+        /**
+         * Enable vertex attributes.
+         * These should be defined in the Shader-file.
+         */
+        u32 i = 0;
+        for(const ShaderLayout::LayoutElement &le : m_Layout.GetElements()) {
+            glEnableVertexAttribArray(i);
+            glVertexAttribPointer(
+                i,
+                le.dimension,
+                k_AttributeType[le.type],
+                (le.normalized) ? GL_TRUE : GL_FALSE,
+                m_Layout.GetPointerSize(),
+                (const void *) le.offset
+            );
+            i++;
+        }
     }
 
     void ShaderGL::Disable() {
         glUseProgram(0);
+
+        /**
+         * Disable vertex attributes.
+         * Read ShaderGL::Enable().
+         */
+        for(u64 i = 0; i < m_Layout.GetElements().size(); i++) {
+            glDisableVertexAttribArray(i);
+        }
     }
 
+    /**
+     * Uniform setters.
+     */
     void ShaderGL::SetUniform1i(std::string identifier, i32 val) {
         i32 loc = 0;
         if((loc = GetUniform(identifier)) != -1) {

@@ -12,9 +12,14 @@ namespace VOID_NS {
     class Shader {
     protected:
         std::string m_Name;
+        ShaderLayout m_Layout;
 
     public:
-        Shader(ShaderCreationInfo) {}
+        Shader(ShaderCreationInfo info) {
+            m_Name   = info.name;
+            m_Layout = info.layout;
+        }
+
         virtual ~Shader() = default;
 
         virtual void Enable() = 0;
