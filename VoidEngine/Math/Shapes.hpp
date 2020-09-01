@@ -16,7 +16,7 @@ namespace VOID_NS {
         Vector3 normal;
         Vector2 texCoords;
 
-        Vertex(Vector3 pos) 
+        Vertex(Vector3 pos)
             : position(pos),
               color(Color::White()) {}
 
