@@ -14,10 +14,26 @@ namespace VOID_NS {
         Vector3 position;
         Color color;
         Vector3 normal;
+        Vector2 texCoords;
 
-        Vertex(Vector3 pos) : position(pos), color(Color::White()) {}
-        Vertex(Vector3 pos, Color col) : position(pos), color(col) {}
-        Vertex(Vector3 pos, Color col, Vector3 normal) : position(pos), color(col), normal(normal) {}
+        Vertex(Vector3 pos)
+            : position(pos),
+              color(Color::White()) {}
+
+        Vertex(Vector3 pos, Color col)
+            : position(pos),
+              color(col) {}
+
+        Vertex(Vector3 pos, Color col, Vector3 normal)
+            : position(pos),
+              color(col),
+              normal(normal) {}
+
+        Vertex(Vector3 pos, Color col, Vector3 normal, Vector2 texCoords)
+            : position(pos),
+              color(col),
+              normal(normal),
+              texCoords(texCoords) {}
     };
 };
 
