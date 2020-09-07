@@ -6,6 +6,7 @@
 
 /* Default shaders */
 #include "Shaders/Default.shader"
+#include "Shaders/Framebuffer.shader"
 /* End of default shaders */
 
 namespace VOID_NS {
@@ -37,5 +38,6 @@ namespace VOID_NS {
 
     void ShaderLibrary::CreateDefaultShaders() {
         AddShader(k_ShaderDefault);
+        AddShader(k_ShaderFramebuffer);
     }
 };

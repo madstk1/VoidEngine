@@ -1,4 +1,5 @@
 #include "../..//Rendering/GLAD/GLAD.h"
+#include "VoidEngine/Rendering/Shader.hpp"
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/Allocator.hpp>
@@ -22,6 +23,18 @@ namespace VOID_NS {
     u32 indexExtension = 0;
     u32 indexCount = 0;
 
+    Vertex k_QuadVertices[] = {
+        Vertex(Vector3(-1.0f, -1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 0.0f)),
+        Vertex(Vector3( 1.0f, -1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 0.0f)),
+        Vertex(Vector3( 1.0f,  1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 1.0f)),
+        Vertex(Vector3(-1.0f,  1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
+    };
+
+    u32 k_QuadIndices[] = {
+        2, 1, 0,
+        0, 3, 2
+    };
+
     RendererGL::RendererGL(ApplicationInfo info) : Renderer(info) {
         g_Window = Allocator::Allocate<WindowGL>(info);
 
@@ -29,7 +42,10 @@ namespace VOID_NS {
         SetSampling(info.Sampling);
         SetSwapInterval(info.Buffering);
 
-        /* Initialize buffers. */
+        /**
+         *  Initialize vertex-buffers.
+         */
+
         glCreateBuffers(1, &m_VertexBuffer);
         glCreateBuffers(1, &m_IndexBuffer);
 
@@ -41,6 +57,38 @@ namespace VOID_NS {
 
         glCreateVertexArrays(1, &m_VertexArray);
         glBindVertexArray(m_VertexArray);
+        
+        /**
+         *  Initialize framebuffers.
+         */
+
+        glCreateFramebuffers(1, &m_Framebuffer);
+        glCreateRenderbuffers(1, &m_Renderbuffer);
+        glGenTextures(1, &m_TextureColorbuffer);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
+
+        /* Generate texture. */
+        glBindTexture(GL_TEXTURE_2D, m_TextureColorbuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindow()->GetSize().x, GetWindow()->GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        /* Attach texture to framebuffer. */
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureColorbuffer, 0);
+
+        /* Generate renderbuffer. */
+        glBindRenderbuffer(GL_RENDERBUFFER, m_Renderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindow()->GetSize().x, GetWindow()->GetSize().y);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        /* Attach renderbuffer to framebuffer. */
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_Renderbuffer);
+
+        /* Make sure the framebuffer is valid. Otherwise nothing will render. */
+        VOID_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete!");
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #if defined(VOID_ENABLE_DEBUG)
         Logger::LogInfo("GLFW, v%s", glfwGetVersionString());
@@ -64,6 +112,10 @@ namespace VOID_NS {
     }
 
     void RendererGL::Begin() {
+        /* Bind framebuffer. */
+        glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
+        glEnable(GL_DEPTH_TEST);
+
         /* Clear screen. */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(
@@ -90,7 +142,6 @@ namespace VOID_NS {
         );
 
         Shader *shader = ShaderLibrary::GetShader("Default");
-
         shader->Enable();
         shader->SetUniformMat4f("u_Model",      model);
         shader->SetUniformMat4f("u_View",       view);
@@ -170,7 +221,32 @@ namespace VOID_NS {
     void RendererGL::Render() {
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (const void *) 0);
+
+        /* Unbind framebuffer and render to texture. */
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDisable(GL_DEPTH_TEST);
+
+        /* Clear screen. */
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(
+            g_Window->GetBackgroundColor().r,
+            g_Window->GetBackgroundColor().g,
+            g_Window->GetBackgroundColor().b,
+            g_Window->GetBackgroundColor().a
+        );
+
+        /* Draw rendering quad. */
+        Shader *fbShader = ShaderLibrary::GetShader("Framebuffer");
+        fbShader->Enable();
+        fbShader->SetUniform1i("u_ScreenTexture", 0);
+
+        /* TODO: Consider moving to separate buffers. */
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(k_QuadVertices), k_QuadVertices);
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(k_QuadIndices), k_QuadIndices);
+
+        glBindTexture(GL_TEXTURE_2D, m_TextureColorbuffer);
+        glDrawElements(GL_TRIANGLES, LEN(k_QuadIndices), GL_UNSIGNED_INT, (const void *) 0);
     }
 
     void RendererGL::End() {
@@ -224,5 +300,17 @@ namespace VOID_NS {
 
     WindowGL *RendererGL::GetWindow() {
         return (WindowGL *) g_Window;
+    }
+
+    void RendererGL::OnResize(i32 w, i32 h) {
+        /* Resize render-texture. */
+        glBindTexture(GL_TEXTURE_2D, m_TextureColorbuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        /* Resize renderbuffer. */
+        glBindRenderbuffer(GL_RENDERBUFFER, m_Renderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
 };

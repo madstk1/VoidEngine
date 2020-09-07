@@ -8,10 +8,12 @@ std::string k_ShaderDefault_vert = R"(#version 450 core
 layout(location = 0) in vec3 i_Position;
 layout(location = 1) in vec4 i_Color;
 layout(location = 2) in vec3 i_Normal;
+layout(location = 3) in vec2 i_TexCoords;
 
 layout(location = 0) out vec3 v_Position;
 layout(location = 1) out vec4 v_Color;
 layout(location = 2) out vec3 v_Normal;
+layout(location = 3) out vec2 v_TexCoords;
 
 uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -22,6 +24,7 @@ void main() {
     v_Position  = vec3(u_Model * vec4(i_Position, 1.0));
     v_Color     = i_Color;
     v_Normal    = i_Normal;
+    v_TexCoords = i_TexCoords;
 }
 )";
 
@@ -36,6 +39,7 @@ struct PointLight {
 layout(location = 0) in vec3 v_Position;
 layout(location = 1) in vec4 v_Color;
 layout(location = 2) in vec3 v_Normal;
+layout(location = 3) in vec2 v_TexCoords;
 
 layout(location = 0) out vec4 o_Color;
 
@@ -71,6 +75,7 @@ ShaderCreationInfo k_ShaderDefault = {
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, position) },
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L4D, false, offsetof(Vertex, color)    },
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, normal)   },
+            { ShaderLayout::Type::Float, ShaderLayout::Dimension::L2D, false, offsetof(Vertex, texCoords) },
         }
     }
 };

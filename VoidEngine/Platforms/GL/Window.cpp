@@ -6,6 +6,7 @@
 #include <VoidEngine/Input/InputManager.hpp>
 
 #include <VoidEngine/Platforms/GL/Window.hpp>
+#include <VoidEngine/Platforms/GL/Renderer.hpp>
 
 namespace VOID_NS {
 #if defined(VOID_ENABLE_DEBUG)
@@ -25,6 +26,8 @@ namespace VOID_NS {
 
     void WindowGL::ResizeCallback(GLFWwindow *win, i32 w, i32 h) {
         glViewport(0, 0, w, h);
+
+        ((RendererGL *) g_Renderer)->OnResize(w, h);
     }
 
     void WindowGL::KeyCallback(GLFWwindow *win, i32 key, i32 scancode, i32 action, i32 mods) {
