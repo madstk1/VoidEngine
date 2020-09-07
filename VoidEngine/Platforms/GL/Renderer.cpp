@@ -91,9 +91,10 @@ namespace VOID_NS {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #if defined(VOID_ENABLE_DEBUG)
-        Logger::LogInfo("GLFW, v%s", glfwGetVersionString());
-        Logger::LogInfo("Renderer: %s", glGetString(GL_RENDERER));
-        Logger::LogInfo("Version: OpenGL %s", glGetString(GL_VERSION));
+        Logger::LogInfo("System information:");
+        Logger::LogInfo("   GLFW, v%s", glfwGetVersionString());
+        Logger::LogInfo("   Renderer: %s", glGetString(GL_RENDERER));
+        Logger::LogInfo("   Version: OpenGL %s", glGetString(GL_VERSION));
 
         PrintExtensions();
 #endif 
