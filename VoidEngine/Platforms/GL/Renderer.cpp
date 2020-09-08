@@ -63,24 +63,22 @@ namespace VOID_NS {
          */
 
         glCreateFramebuffers(1, &m_Framebuffer);
+        glCreateFramebuffers(1, &m_IntermediateFBO);
         glCreateRenderbuffers(1, &m_Renderbuffer);
         glGenTextures(1, &m_TextureColorbuffer);
+        glGenTextures(1, &m_ScreenTexture);
 
         glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
 
-        /* Generate texture. */
-        glBindTexture(GL_TEXTURE_2D, m_TextureColorbuffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindow()->GetSize().x, GetWindow()->GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        /* Attach texture to framebuffer. */
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureColorbuffer, 0);
+        /* Generate multi-sampled texture. */
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorbuffer);
+        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, GetWindow()->GetSize().x, GetWindow()->GetSize().y, GL_TRUE);
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorbuffer, 0);
 
         /* Generate renderbuffer. */
         glBindRenderbuffer(GL_RENDERBUFFER, m_Renderbuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindow()->GetSize().x, GetWindow()->GetSize().y);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, GetWindow()->GetSize().x, GetWindow()->GetSize().y);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
         /* Attach renderbuffer to framebuffer. */
@@ -88,6 +86,20 @@ namespace VOID_NS {
 
         /* Make sure the framebuffer is valid. Otherwise nothing will render. */
         VOID_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete!");
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        /* Generate non-multi-sampled texture. */
+        glBindFramebuffer(GL_FRAMEBUFFER, m_IntermediateFBO);
+
+        glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindow()->GetSize().x, GetWindow()->GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ScreenTexture, 0);
+
+        /* Make sure the framebuffer is valid. Otherwise nothing will render. */
+        VOID_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Intermediate framebuffer is not complete!");
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #if defined(VOID_ENABLE_DEBUG)
@@ -101,6 +113,13 @@ namespace VOID_NS {
     }
 
     RendererGL::~RendererGL() {
+        glDeleteFramebuffers(1, &m_Framebuffer);
+        glDeleteFramebuffers(1, &m_IntermediateFBO);
+        glDeleteRenderbuffers(1, &m_Renderbuffer);
+
+        glDeleteTextures(1, &m_TextureColorbuffer);
+        glDeleteTextures(1, &m_ScreenTexture);
+            
         glDeleteVertexArrays(1, &m_VertexArray);
         glDeleteBuffers(1, &m_IndexBuffer);
         glDeleteBuffers(1, &m_VertexBuffer);
@@ -116,15 +135,7 @@ namespace VOID_NS {
         /* Bind framebuffer. */
         glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
         glEnable(GL_DEPTH_TEST);
-
-        /* Clear screen. */
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(
-            g_Window->GetBackgroundColor().r,
-            g_Window->GetBackgroundColor().g,
-            g_Window->GetBackgroundColor().b,
-            g_Window->GetBackgroundColor().a
-        );
+        ClearColor();
 
         /* Calculate camera MVP. */
         glm::mat4 proj = glm::perspective(
@@ -224,18 +235,22 @@ namespace VOID_NS {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
         glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (const void *) 0);
 
+        /* Blut multisampled buffer to normal buffer. */
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Framebuffer);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_IntermediateFBO);
+        glBlitFramebuffer(
+            0, 0,
+            GetWindow()->GetSize().x, GetWindow()->GetSize().y,
+            0, 0,
+            GetWindow()->GetSize().x, GetWindow()->GetSize().y,
+            GL_COLOR_BUFFER_BIT,
+            GL_NEAREST
+        );
+
         /* Unbind framebuffer and render to texture. */
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDisable(GL_DEPTH_TEST);
-
-        /* Clear screen. */
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(
-            g_Window->GetBackgroundColor().r,
-            g_Window->GetBackgroundColor().g,
-            g_Window->GetBackgroundColor().b,
-            g_Window->GetBackgroundColor().a
-        );
+        ClearColor();
 
         /* Draw rendering quad. */
         Shader *fbShader = ShaderLibrary::GetShader("Framebuffer");
@@ -246,7 +261,7 @@ namespace VOID_NS {
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(k_QuadVertices), k_QuadVertices);
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(k_QuadIndices), k_QuadIndices);
 
-        glBindTexture(GL_TEXTURE_2D, m_TextureColorbuffer);
+        glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
         glDrawElements(GL_TRIANGLES, LEN(k_QuadIndices), GL_UNSIGNED_INT, (const void *) 0);
     }
 
@@ -261,13 +276,15 @@ namespace VOID_NS {
     }
 
     void RendererGL::SetSampling(MultiSampling samples) {
-        m_Sampling = samples;
-        glfwWindowHint(GLFW_SAMPLES, samples);
+        /* TODO: OpenGL does not like a sample-count of 0, in glTexImage2DMultisample. */
+        m_Sampling = (samples > 1) ? samples : (MultiSampling) 1;
 
-        if(samples == MultiSampling::x0) {
-            glDisable(GL_MULTISAMPLE);
-        } else {
-            glEnable(GL_MULTISAMPLE);
+        /* In case no renderbuffer is found, don't update it. */
+        i32 rbBinding = 0;
+        glGetIntegerv(GL_RENDERBUFFER_BINDING, &rbBinding);
+
+        if(rbBinding != 0) {
+            OnResize(GetWindow()->GetSize().x, GetWindow()->GetSize().y);
         }
     }
 
@@ -304,14 +321,35 @@ namespace VOID_NS {
     }
 
     void RendererGL::OnResize(i32 w, i32 h) {
-        /* Resize render-texture. */
-        glBindTexture(GL_TEXTURE_2D, m_TextureColorbuffer);
+        GetWindow()->m_Size.x = w;
+        GetWindow()->m_Size.y = h;
+
+        /* Resize multi-sampled texture. */
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorbuffer);
+        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_Sampling, GL_RGB, w, h, GL_TRUE);
+        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+
+        /* Resize non-multi-sampled render-texture. */
+        glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         glBindTexture(GL_TEXTURE_2D, 0);
 
         /* Resize renderbuffer. */
         glBindRenderbuffer(GL_RENDERBUFFER, m_Renderbuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_Sampling, GL_DEPTH24_STENCIL8, w, h);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    }
+
+    void RendererGL::ClearColor() {
+        uchar depthTest = false;
+        glGetBooleanv(GL_DEPTH_TEST, &depthTest);
+
+        glClear(GL_COLOR_BUFFER_BIT | (depthTest ? GL_DEPTH_BUFFER_BIT : 0));
+        glClearColor(
+            g_Window->GetBackgroundColor().r,
+            g_Window->GetBackgroundColor().g,
+            g_Window->GetBackgroundColor().b,
+            g_Window->GetBackgroundColor().a
+        );
     }
 };

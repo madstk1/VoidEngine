@@ -14,13 +14,16 @@ namespace VOID_NS {
         u32             m_VertexArray;
 
         u32             m_Framebuffer;
+        u32             m_IntermediateFBO;
         u32             m_TextureColorbuffer;
+        u32             m_ScreenTexture;
         u32             m_Renderbuffer;
 
         static void PrintExtensions();
         WindowGL *GetWindow();
 
         void OnResize(i32, i32);
+        void ClearColor();
 
     public:
         RendererGL(ApplicationInfo);
