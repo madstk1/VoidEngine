@@ -33,22 +33,11 @@ namespace VOID_NS {
         Link(info);
 
 #if defined(VOID_ENABLE_DEBUG)
-        glObjectLabel(
-            GL_PROGRAM,
-            this->m_Program,
-            strlen(info.name.c_str()),
-            info.name.c_str()
-        );
+        glObjectLabel(GL_PROGRAM, this->m_Program, -1, info.name.c_str());
 
         for(std::pair<ShaderStage, std::string> src : info.sources) {
             std::string name = info.name + " (" + k_StageNames[src.first] + ")";
-
-            glObjectLabel(
-                GL_SHADER,
-                m_StageID[src.first],
-                strlen(name.c_str()),
-                name.c_str()
-            );
+            glObjectLabel(GL_SHADER, m_StageID[src.first], -1, name.c_str());
         }
 #endif
     }
