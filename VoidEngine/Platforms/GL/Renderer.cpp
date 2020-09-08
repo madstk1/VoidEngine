@@ -103,6 +103,10 @@ namespace VOID_NS {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #if defined(VOID_ENABLE_DEBUG)
+        glObjectLabel(GL_FRAMEBUFFER,  m_Framebuffer,     -1, "Framebuffer");
+        glObjectLabel(GL_FRAMEBUFFER,  m_IntermediateFBO, -1, "Intermediate FBO");
+        glObjectLabel(GL_RENDERBUFFER, m_Renderbuffer,    -1, "Renderbuffer");
+
         Logger::LogInfo("System information:");
         Logger::LogInfo("   GLFW, v%s", glfwGetVersionString());
         Logger::LogInfo("   Renderer: %s", glGetString(GL_RENDERER));
