@@ -22,9 +22,35 @@ namespace VOID_NS {
         [ShaderLayout::Type::Double]    = GL_DOUBLE,
     };
 
+    const static std::string k_StageNames[] = {
+        [ShaderStage::StageVertex]   = "Vertex",
+        [ShaderStage::StageFragment] = "Fragment",
+        [ShaderStage::StageCompute]  = "Compute",
+    };
+
     ShaderGL::ShaderGL(ShaderCreationInfo info) : Shader(info) {
         Compile(info);
         Link(info);
+
+#if defined(VOID_ENABLE_DEBUG)
+        glObjectLabel(
+            GL_PROGRAM,
+            this->m_Program,
+            strlen(info.name.c_str()),
+            info.name.c_str()
+        );
+
+        for(std::pair<ShaderStage, std::string> src : info.sources) {
+            std::string name = info.name + " (" + k_StageNames[src.first] + ")";
+
+            glObjectLabel(
+                GL_SHADER,
+                m_StageID[src.first],
+                strlen(name.c_str()),
+                name.c_str()
+            );
+        }
+#endif
     }
     
     ShaderGL::~ShaderGL() {
