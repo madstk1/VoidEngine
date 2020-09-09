@@ -4,7 +4,7 @@
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/Core/World.hpp>
-#include <VoidEngine/ECS/Entities/FirstPersonCamera.hpp>
+#include <VoidEngine/ECS/Entities/Camera.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
 
 #if defined(VOID_ENABLE_OPENGL)
@@ -33,7 +33,7 @@ namespace VOID_NS {
     }
 
     Application     *g_Application;
-    CameraComponent *g_Camera;
+    Camera          *g_Camera;
     Renderer        *g_Renderer;
     Window          *g_Window;
     World           *g_World;
@@ -57,15 +57,14 @@ int main(int argc, char **argv) {
 
     ShaderLibrary::CreateDefaultShaders();
 
-    /* This will create a CameraComponent, and assign g_Camera. */ 
-    if(!Void::g_Camera) {
-        Allocator::Allocate<FirstPersonCamera>();
-    }
-
-    VOID_ASSERT(Void::g_Camera != nullptr, "g_Camera is nullptr.");
-
     Void::g_Application->Start();
     Void::g_World->Start();
+
+    /* This will create a Camera, and assign g_Camera. */ 
+    VOID_ASSERT(Void::g_Camera != nullptr, "g_Camera is nullptr.");
+    if(!Void::g_Camera) {
+        Allocator::Allocate<Camera>();
+    }
 
     while(Void::g_Renderer->IsRunning()) {
         Void::Time::HandleDeltaTime();

@@ -13,7 +13,7 @@
 #include <VoidEngine/ECS/Entity.hpp>
 #include <VoidEngine/ECS/Component.hpp>
 #include <VoidEngine/ECS/Components/RigidbodyComponent.hpp>
-#include <VoidEngine/ECS/Components/CameraComponent.hpp>
+#include <VoidEngine/ECS/Entities/Camera.hpp>
 #include <VoidEngine/ECS/Entities/Cube.hpp>
 #include <VoidEngine/ECS/Entities/FirstPersonCamera.hpp>
 #include <VoidEngine/ECS/Entities/Light.hpp>

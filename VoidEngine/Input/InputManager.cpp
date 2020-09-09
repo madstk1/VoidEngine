@@ -3,6 +3,5 @@
 
 namespace VOID_NS {
     bool    Input::m_Keys[Keycode::MAX_KEYCODES];
-    f32     Input::m_CursorX;
-    f32     Input::m_CursorY;
+    Vector2 Input::m_Cursor;
 };

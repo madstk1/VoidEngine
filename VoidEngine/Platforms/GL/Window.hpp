@@ -23,8 +23,9 @@ namespace VOID_NS {
 #endif
         static void ErrorCallback(i32, const char *);
         static void ResizeCallback(GLFWwindow *, i32, i32);
-        static void MouseCallback(GLFWwindow *, f64, f64);
         static void KeyCallback(GLFWwindow *, i32, i32, i32, i32);
+
+        void HandleMouse();
 
     public:
         WindowGL(ApplicationInfo);
