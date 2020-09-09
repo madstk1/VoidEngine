@@ -10,12 +10,14 @@
 namespace VOID_NS {
     class FirstPersonCamera : public Camera {
     public:
+        f32 lookSensitivity = 1.0f;
+
         FirstPersonCamera() : Camera() {
         }
 
         virtual void Update() override {
-            rotation.x += Input::GetAxis("Mouse X");
-            rotation.y += Input::GetAxis("Mouse Y");
+            rotation.x += Input::GetAxis("Mouse X") * lookSensitivity;
+            rotation.y += Input::GetAxis("Mouse Y") * lookSensitivity;
 
             if(rotation.y >  89.0f) { rotation.y =  89.0f; }
             if(rotation.y < -89.0f) { rotation.y = -89.0f; }
