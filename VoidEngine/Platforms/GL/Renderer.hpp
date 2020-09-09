@@ -9,15 +9,19 @@ namespace VOID_NS {
 
     class RendererGL : public Renderer {
     protected:
+        /* Buffers */
         u32             m_VertexBuffer;
         u32             m_IndexBuffer;
         u32             m_VertexArray;
 
+        /* Framebuffers / renderbuffers */
         u32             m_Framebuffer;
         u32             m_IntermediateFBO;
+        u32             m_Renderbuffer;
+
+        /* Textures */
         u32             m_TextureColorbuffer;
         u32             m_ScreenTexture;
-        u32             m_Renderbuffer;
 
         static void PrintExtensions();
         WindowGL *GetWindow();
