@@ -41,7 +41,7 @@ namespace VOID_NS {
 };
 
 int main(int argc, char **argv) {
-#if VOID_ENABLE_DEBUG
+#if defined(VOID_ENABLE_DEBUG)
     Logger::LogInfo(
         "Void Engine, v%d.%d.%d",
         VOID_VERSION_MAJOR,
