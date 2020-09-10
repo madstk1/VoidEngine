@@ -22,6 +22,16 @@ namespace VOID_NS {
         }
 
         /**
+         *  Allocator::Allocate(size_t, size_t)
+         *
+         *  Allocate memory using class/type size and count.
+         */
+        static inline void *Allocate(u32 count, u64 size) {
+            m_AllocatedSize += size * count;
+            return calloc(count, size);
+        }
+
+        /**
          *  Allocator::Allocate(Args&&...)
          *
          *  Allocate memory using class specification,
