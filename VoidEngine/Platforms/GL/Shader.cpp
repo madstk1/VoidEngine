@@ -1,4 +1,4 @@
-#include "../../Rendering/GLAD/GLAD.h"
+#include "glad/glad.h"
 #include <VoidEngine/Platforms/GL/Shader.hpp>
 
 #include <glm/gtc/type_ptr.hpp>

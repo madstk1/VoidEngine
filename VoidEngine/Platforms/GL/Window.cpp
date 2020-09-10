@@ -1,4 +1,4 @@
- #include "../../Rendering/GLAD/GLAD.h"
+ #include "glad/glad.h"
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Debug/Log.hpp>

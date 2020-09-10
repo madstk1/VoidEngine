@@ -1,8 +1,5 @@
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
-#include <VoidEngine/Rendering/GLAD/GLAD.h>
-
-#include <glm/gtc/type_ptr.hpp>
 
 /* Default shaders */
 #include "Shaders/Default.shader"
