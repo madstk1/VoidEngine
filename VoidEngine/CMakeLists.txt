@@ -16,6 +16,7 @@ SET(VOID_SOURCES
     "Misc/File.cpp"
     "Misc/StlLoader.cpp"
     "Misc/ObjLoader.cpp"
+    "Misc/Resource.cpp"
     "Input/InputManager.cpp"
     "Rendering/Shader.cpp"
 )
