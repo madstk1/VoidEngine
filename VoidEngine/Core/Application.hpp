@@ -9,7 +9,7 @@
 #include <VoidEngine/Rendering/Window.hpp>
 
 namespace VOID_NS {
-    class CameraComponent;
+    class Camera;
 
     class Application {
     public:
@@ -25,7 +25,7 @@ namespace VOID_NS {
     };
 
     extern Application     *g_Application;
-    extern CameraComponent *g_Camera;
+    extern Camera          *g_Camera;
     extern Renderer        *g_Renderer;
     extern Window          *g_Window;
     extern World           *g_World;

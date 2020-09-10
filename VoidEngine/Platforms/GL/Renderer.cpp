@@ -4,8 +4,8 @@
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
-#include <VoidEngine/ECS/Components/CameraComponent.hpp>
 #include <VoidEngine/ECS/Components/MeshComponent.hpp>
+#include <VoidEngine/ECS/Entities/Camera.hpp>
 #include <VoidEngine/ECS/Entities/Light.hpp>
 
 #include <VoidEngine/Rendering/Renderer.hpp>
@@ -136,6 +136,8 @@ namespace VOID_NS {
     }
 
     void RendererGL::Begin() {
+        GetWindow()->HandleMouse();
+
         /* Bind framebuffer. */
         glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
         glEnable(GL_DEPTH_TEST);
@@ -152,8 +154,8 @@ namespace VOID_NS {
         glm::vec3 camUp = glm::vec3(0, 1, 0);
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(
-            g_Camera->GameObject()->position,
-            g_Camera->GameObject()->position + g_Camera->Forward(),
+            g_Camera->position,
+            g_Camera->position + g_Camera->Forward(),
             camUp
         );
 
@@ -162,7 +164,7 @@ namespace VOID_NS {
         shader->SetUniformMat4f("u_Model",      model);
         shader->SetUniformMat4f("u_View",       view);
         shader->SetUniformMat4f("u_Projection", proj);
-        shader->SetUniform3fv("u_CameraPosition", g_Camera->GameObject()->position);
+        shader->SetUniform3fv("u_CameraPosition", g_Camera->position);
 
         u32 i = 0;
         for(Light *light : g_World->GetLights()) {

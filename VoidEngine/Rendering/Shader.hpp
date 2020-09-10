@@ -3,19 +3,20 @@
 
 #include <vector>
 #include <VoidEngine/Math/Vectors.hpp>
+#include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 #include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
 #include <glm/glm.hpp>
 
 namespace VOID_NS {
-    class Shader {
+    class Shader : Resource {
     protected:
         std::string m_Name;
         ShaderLayout m_Layout;
 
     public:
-        Shader(ShaderCreationInfo info) {
+        Shader(ShaderCreationInfo info) : Resource(info.name, Type::Shader) {
             m_Name   = info.name;
             m_Layout = info.layout;
         }

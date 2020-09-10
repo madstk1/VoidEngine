@@ -2,7 +2,6 @@
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Debug/Log.hpp>
-#include <VoidEngine/ECS/Components/CameraComponent.hpp>
 #include <VoidEngine/Input/InputManager.hpp>
 
 #include <VoidEngine/Platforms/GL/Window.hpp>
@@ -41,25 +40,16 @@ namespace VOID_NS {
         }
     }
 
-    /* TODO: */
-    /* Add this to a separate FirstPersonCamera controller. */
-    void WindowGL::MouseCallback(GLFWwindow *win, f64 xpos, f64 ypos) {
-        static float lastX = g_Window->GetSize().x;
-        static float lastY = g_Window->GetSize().y;
+    void WindowGL::HandleMouse() {
+        static Vector2d lastMouse = {0.0f, 0.0f};
+        Vector2d mousePosition = {0.0f, 0.0f};
 
-        float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos; 
-        lastX = xpos;
-        lastY = ypos;
-        
-        g_Camera->GameObject()->rotation.x += xoffset;
-        g_Camera->GameObject()->rotation.y += yoffset;
-        
-        if(g_Camera->GameObject()->rotation.y > 89.0f) {
-            g_Camera->GameObject()->rotation.y = 89.0f;
-        } else if(g_Camera->GameObject()->rotation.y < -89.0f) {
-            g_Camera->GameObject()->rotation.y = -89.0f;
-        }
+        glfwGetCursorPos(m_Window, &mousePosition.x, &mousePosition.y);
+
+        Input::m_Cursor.x = mousePosition.x - lastMouse.x;
+        Input::m_Cursor.y = lastMouse.y - mousePosition.y;
+
+        lastMouse = mousePosition;
     }
 
     WindowGL::WindowGL(ApplicationInfo info) : Window(info) {
@@ -99,7 +89,6 @@ namespace VOID_NS {
         /* NOTE(max): GLFW callbacks */
         glfwSetFramebufferSizeCallback(this->m_Window, ResizeCallback);
         glfwSetKeyCallback(this->m_Window, KeyCallback);
-        glfwSetCursorPosCallback(this->m_Window, MouseCallback);
         glfwSetInputMode(this->m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         VOID_ASSERT(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress), "Failed to bind GLAD to GLFW.");

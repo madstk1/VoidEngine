@@ -7,6 +7,10 @@
 
 #include <VoidEngine/Core/Errors.hpp>
 
+#if ! defined(NDEBUG)
+#define VOID_ENABLE_DEBUG
+#endif
+
 #define VOID_NS     Void
 
 #define LEN(x)      (sizeof(x)/sizeof(x[0]))
