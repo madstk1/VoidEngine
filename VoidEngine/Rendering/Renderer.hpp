@@ -15,6 +15,7 @@ namespace VOID_NS {
         i32             m_RefreshRate;
         MultiSampling   m_Sampling;
         SwapInterval    m_Buffering;
+        f32             m_Gamma = 2.2f;
 
     public:
         Renderer(ApplicationInfo) {}

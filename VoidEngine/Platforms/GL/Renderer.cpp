@@ -201,6 +201,8 @@ namespace VOID_NS {
 
         Shader *shader = ShaderLibrary::GetShader("Default");
         shader->Enable();
+        shader->SetUniform1fv("u_Gamma", m_Gamma);
+
         shader->SetUniformMat4f("u_Model",      model);
         shader->SetUniformMat4f("u_View",       view);
         shader->SetUniformMat4f("u_Projection", proj);
