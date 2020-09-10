@@ -16,7 +16,7 @@ namespace VOID_NS {
         ShaderLayout m_Layout;
 
     public:
-        Shader(ShaderCreationInfo info) : Resource(info.name, Type::Shader) {
+        Shader(ShaderCreationInfo info) : Resource(info.name, Type::ShaderResource) {
             m_Name   = info.name;
             m_Layout = info.layout;
         }

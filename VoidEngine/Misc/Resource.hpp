@@ -10,9 +10,9 @@ namespace VOID_NS {
     class Resource {
     public:
         typedef enum {
-            Unknown  = (u32) 0,
-            Shader,
-            Texture,
+            UnknownResource  = (u32) 0,
+            ShaderResource,
+            TextureResource,
         } Type;
 
         Resource(std::string, Type);

@@ -5,9 +5,9 @@ namespace VOID_NS {
     ResourceMap ResourceManager::m_Resources;
 
     const std::string k_ResourceTypeNames[] = {
-        [Resource::Type::Unknown]  = "Unknown",
-        [Resource::Type::Shader]   = "Shader",
-        [Resource::Type::Texture]  = "Texture",
+        [Resource::Type::UnknownResource]  = "Unknown",
+        [Resource::Type::ShaderResource]   = "Shader",
+        [Resource::Type::TextureResource]  = "Texture",
     };
 
     /**
