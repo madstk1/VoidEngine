@@ -63,4 +63,15 @@ namespace VOID_NS {
         }
         return nullptr;
     }
+
+    const std::vector<Resource *> ResourceMap::get_type(Resource::Type type) const {
+        std::vector<Resource *> resources;
+
+        for(const _IntResource &ir : m_Resources) {
+            if(ir.type == type) {
+                resources.push_back(ir.resc);
+            }
+        }
+        return resources;
+    }
 };

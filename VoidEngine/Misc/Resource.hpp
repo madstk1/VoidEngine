@@ -42,6 +42,7 @@ namespace VOID_NS {
         void push(std::string, Resource::Type, Resource *);
         Resource *erase(std::string, Resource::Type);
         const Resource *find(std::string, Resource::Type) const;
+        const std::vector<Resource *>get_type(Resource::Type) const;
     };
 
     class ResourceManager {
@@ -57,6 +58,10 @@ namespace VOID_NS {
     public:
         const Resource *GetResource(std::string name, Resource::Type type) const {
             return m_Resources.find(name, type);
+        }
+
+        const std::vector<Resource *> GetResourceOfType(Resource::Type type) const {
+            return m_Resources.get_type(type);
         }
     };
 };
