@@ -9,14 +9,22 @@ namespace VOID_NS {
 
     class RendererGL : public Renderer {
     protected:
-        /* Buffers */
-        u32             m_VertexBuffer;
-        u32             m_IndexBuffer;
-        u32             m_VertexArray;
+        typedef struct {
+            u32 VBO;
+            u32 EBO;
+            u32 VAO;
+            u32 IndexCount;
 
-        u32             m_SkyboxVBO;
-        u32             m_SkyboxIBO;
-        u32             m_SkyboxVAO;
+            void Create();
+            void Free();
+            void Bind();
+        } RenderBuffer;
+
+        /* Buffers */
+        RenderBuffer    m_Dynamic;
+        RenderBuffer    m_Static;
+        RenderBuffer    m_Skybox;
+        RenderBuffer    m_RenderQuad;
 
         /* Framebuffers / renderbuffers */
         u32             m_Framebuffer;
@@ -26,9 +34,12 @@ namespace VOID_NS {
         /* Textures */
         u32             m_TextureColorbuffer;
         u32             m_ScreenTexture;
-        u32             m_Skybox;
+        u32             m_SkyboxCubemap;
 
-        static void PrintExtensions();
+        void UpdateBuffers();
+        void UpdateStaticBuffers();
+        void PrintExtensions();
+        void SetLightMatrix(Shader *);
         WindowGL *GetWindow();
 
         void OnResize(i32, i32);
