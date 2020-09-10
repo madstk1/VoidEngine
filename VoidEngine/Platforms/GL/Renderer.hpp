@@ -18,12 +18,10 @@ namespace VOID_NS {
         u32             m_Framebuffer;
         u32             m_IntermediateFBO;
         u32             m_Renderbuffer;
-        u32             m_DepthmapFBO;
 
         /* Textures */
         u32             m_TextureColorbuffer;
         u32             m_ScreenTexture;
-        u32             m_DepthmapTexture;
 
         static void PrintExtensions();
         WindowGL *GetWindow();

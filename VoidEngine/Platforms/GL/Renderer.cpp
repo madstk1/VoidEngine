@@ -64,11 +64,9 @@ namespace VOID_NS {
 
         glCreateFramebuffers(1, &m_Framebuffer);
         glCreateFramebuffers(1, &m_IntermediateFBO);
-        glCreateFramebuffers(1, &m_DepthmapFBO);
         glCreateRenderbuffers(1, &m_Renderbuffer);
         glGenTextures(1, &m_TextureColorbuffer);
         glGenTextures(1, &m_ScreenTexture);
-        glGenTextures(1, &m_DepthmapTexture);
 
         glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
 
@@ -86,6 +84,7 @@ namespace VOID_NS {
         /* Attach renderbuffer to framebuffer. */
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_Renderbuffer);
 
+        /* Make sure the framebuffer is valid. Otherwise nothing will render. */
         VOID_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is not complete!");
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -99,33 +98,13 @@ namespace VOID_NS {
         glBindTexture(GL_TEXTURE_2D, 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ScreenTexture, 0);
 
-        VOID_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Intermediate framebuffer is not complete!");
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        /* Generate depthmap framebuffer. */
-        f32 m_BorderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-        glBindTexture(GL_TEXTURE_2D, m_DepthmapTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, m_BorderColor);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, m_DepthmapFBO);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthmapTexture, 0);
-        glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
-
+        /* Make sure the framebuffer is valid. Otherwise nothing will render. */
         VOID_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Intermediate framebuffer is not complete!");
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #if defined(VOID_ENABLE_DEBUG)
         glObjectLabel(GL_FRAMEBUFFER,  m_Framebuffer,     -1, "Framebuffer");
         glObjectLabel(GL_FRAMEBUFFER,  m_IntermediateFBO, -1, "Intermediate FBO");
-        glObjectLabel(GL_FRAMEBUFFER,  m_DepthmapFBO,     -1, "Depthmap FBO");
         glObjectLabel(GL_RENDERBUFFER, m_Renderbuffer,    -1, "Renderbuffer");
 
         Logger::LogInfo("System information:");
@@ -140,12 +119,10 @@ namespace VOID_NS {
     RendererGL::~RendererGL() {
         glDeleteFramebuffers(1, &m_Framebuffer);
         glDeleteFramebuffers(1, &m_IntermediateFBO);
-        glDeleteFramebuffers(1, &m_DepthmapFBO);
         glDeleteRenderbuffers(1, &m_Renderbuffer);
 
         glDeleteTextures(1, &m_TextureColorbuffer);
         glDeleteTextures(1, &m_ScreenTexture);
-        glDeleteTextures(1, &m_DepthmapTexture);
             
         glDeleteVertexArrays(1, &m_VertexArray);
         glDeleteBuffers(1, &m_IndexBuffer);
