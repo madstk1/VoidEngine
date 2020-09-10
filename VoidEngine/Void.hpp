@@ -29,8 +29,6 @@
 #include <VoidEngine/Misc/Cubemap.hpp>
 #include <VoidEngine/Misc/File.hpp>
 #include <VoidEngine/Misc/Mesh.hpp>
-#include <VoidEngine/Misc/ObjLoader.hpp>
-#include <VoidEngine/Misc/StlLoader.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Misc/Texture.hpp>
 

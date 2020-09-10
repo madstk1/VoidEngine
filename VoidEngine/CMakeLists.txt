@@ -14,8 +14,6 @@ SET(VOID_SOURCES
     "ECS/Entity.cpp"
     "Math/Color.cpp"
     "Misc/File.cpp"
-    "Misc/StlLoader.cpp"
-    "Misc/ObjLoader.cpp"
     "Misc/Resource.cpp"
     "Misc/Texture.cpp"
     "Input/InputManager.cpp"
