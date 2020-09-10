@@ -24,7 +24,7 @@ namespace VOID_NS {
         Vector3 scale    = Vector3(1, 1, 1);
 
         bool isStatic = false;
-        bool renderable = false;
+        bool renderable = true;
 
         Entity();
         Entity(std::string);
