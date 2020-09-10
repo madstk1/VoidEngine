@@ -26,11 +26,13 @@
 #include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/Math/Vectors.hpp>
 
+#include <VoidEngine/Misc/Cubemap.hpp>
 #include <VoidEngine/Misc/File.hpp>
 #include <VoidEngine/Misc/Mesh.hpp>
 #include <VoidEngine/Misc/ObjLoader.hpp>
 #include <VoidEngine/Misc/StlLoader.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
+#include <VoidEngine/Misc/Texture.hpp>
 
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
