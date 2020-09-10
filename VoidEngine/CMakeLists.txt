@@ -4,6 +4,7 @@ ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 SET(LIBRARIES
     "glad"
     "glm"
+    "assimp"
 )
 SET(VOID_SOURCES
     "Core/Application.cpp"
@@ -14,6 +15,7 @@ SET(VOID_SOURCES
     "ECS/Entity.cpp"
     "Math/Color.cpp"
     "Misc/File.cpp"
+    "Misc/ModelLoader.cpp"
     "Misc/Resource.cpp"
     "Misc/Texture.cpp"
     "Input/InputManager.cpp"

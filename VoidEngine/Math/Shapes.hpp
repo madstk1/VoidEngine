@@ -16,6 +16,9 @@ namespace VOID_NS {
         Vector3 normal;
         Vector2 texCoords;
 
+        Vector3 tangents;
+        Vector3 bitangents;
+
         Vertex(Vector3 pos)
             : position(pos),
               color(Color::White()) {}
