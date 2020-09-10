@@ -17,7 +17,7 @@ namespace VOID_NS {
             return m_Size;
         }
 
-        const inline Color *GetData() const {
+        const inline uchar *GetData() const {
             return m_Data;
         }
 
@@ -31,7 +31,7 @@ namespace VOID_NS {
     protected:
         Vector2i m_Size;
         i32 m_ChannelCount;
-        Color *m_Data;
+        uchar *m_Data;
 
         Texture(std::string name) : Resource(name, Type::TextureResource) {}
 
