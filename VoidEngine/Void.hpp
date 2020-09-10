@@ -30,6 +30,7 @@
 #include <VoidEngine/Misc/Mesh.hpp>
 #include <VoidEngine/Misc/ObjLoader.hpp>
 #include <VoidEngine/Misc/StlLoader.hpp>
+#include <VoidEngine/Misc/Resource.hpp>
 
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
