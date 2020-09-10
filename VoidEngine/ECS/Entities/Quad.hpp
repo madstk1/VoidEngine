@@ -21,8 +21,8 @@ namespace VOID_NS {
             mesh->vertices.push_back(Vertex(Vector3( 1.0f, 0.0f, -1.0f), Color::White(), Vector3(0.0f, 1.0f, 0.0f)));
 
             mesh->indices.insert(mesh->indices.begin(), {
-                2, 1, 0,
-                0, 3, 2
+                0, 1, 2,
+                2, 3, 0
             });
         }
         

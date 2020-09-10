@@ -25,8 +25,8 @@ namespace VOID_NS {
     };
 
     u32 k_QuadIndices[] = {
-        2, 1, 0,
-        0, 3, 2
+        0, 1, 2,
+        2, 3, 0
     };
 
     Vertex k_SkyboxVertices[] = {

@@ -116,7 +116,7 @@ namespace VOID_NS {
 
         glEnable(GL_CULL_FACE);
         glCullFace(GL_FRONT);
-        glFrontFace(GL_CCW);
+        glFrontFace(GL_CW);
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_FRAMEBUFFER_SRGB);
