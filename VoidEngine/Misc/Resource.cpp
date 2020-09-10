@@ -4,6 +4,12 @@
 namespace VOID_NS {
     ResourceMap ResourceManager::m_Resources;
 
+    const std::string k_ResourceTypeNames[] = {
+        [Resource::Type::Unknown]  = "Unknown",
+        [Resource::Type::Shader]   = "Shader",
+        [Resource::Type::Texture]  = "Texture",
+    };
+
     /**
      *  Resource
      */
@@ -30,9 +36,9 @@ namespace VOID_NS {
         m_Resources.push_back({name, type, resc});
 
         Logger::LogDebug(
-            "Added Resource {%s, %d} to resource map.",
+            "Added Resource {%s, %s} to resource map.",
             name.c_str(), 
-            type
+            k_ResourceTypeNames[type].c_str()
         );
     }
 
@@ -41,9 +47,9 @@ namespace VOID_NS {
         for(const _IntResource &ir : m_Resources) {
             if(ir.name == name && ir.type == type) {
                 Logger::LogDebug(
-                    "Remove Resource {%s, %d} to resource map.",
+                    "Remove Resource {%s, %s} to resource map.",
                     name.c_str(), 
-                    type
+                    k_ResourceTypeNames[type].c_str()
                 );
 
                 m_Resources.erase(m_Resources.begin() + i);
@@ -51,7 +57,7 @@ namespace VOID_NS {
             }
             i++;
         }
-        Logger::LogError("Resource(%s, %d) doesn't exist in resource map.", name.c_str(), type);
+        Logger::LogError("Resource{%s, %s} doesn't exist in resource map.", name.c_str(), k_ResourceTypeNames[type].c_str());
         return nullptr;
     }
 
