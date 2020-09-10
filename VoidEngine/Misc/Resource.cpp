@@ -30,34 +30,22 @@ namespace VOID_NS {
 
     void ResourceMap::push(std::string name, Resource::Type type, Resource *resc) {
         if(find(name, type) != nullptr) {
-            Logger::LogError("Resource(%s, %d) already exists in resource map.", name.c_str(), type);
+            Logger::LogError("Resource (%s, %s) already exists in resource map.", name.c_str(), k_ResourceTypeNames[type].c_str());
             return;
         }
         m_Resources.push_back({name, type, resc});
-
-        Logger::LogDebug(
-            "Added Resource {%s, %s} to resource map.",
-            name.c_str(), 
-            k_ResourceTypeNames[type].c_str()
-        );
     }
 
     Resource *ResourceMap::erase(std::string name, Resource::Type type) {
         u32 i = 0;
         for(const _IntResource &ir : m_Resources) {
             if(ir.name == name && ir.type == type) {
-                Logger::LogDebug(
-                    "Remove Resource {%s, %s} to resource map.",
-                    name.c_str(), 
-                    k_ResourceTypeNames[type].c_str()
-                );
-
                 m_Resources.erase(m_Resources.begin() + i);
                 return m_Resources[i].resc;
             }
             i++;
         }
-        Logger::LogError("Resource{%s, %s} doesn't exist in resource map.", name.c_str(), k_ResourceTypeNames[type].c_str());
+        Logger::LogError("Resource (%s, %s) doesn't exist in resource map.", name.c_str(), k_ResourceTypeNames[type].c_str());
         return nullptr;
     }
 
