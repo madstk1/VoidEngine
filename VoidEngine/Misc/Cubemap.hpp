@@ -19,6 +19,8 @@ namespace VOID_NS {
             m_Textures = textures;
         }
 
+        const inline std::array<Texture *, 6> GetTextures() const { return m_Textures; }
+
     protected:
         std::array<Texture *, 6> m_Textures;
         

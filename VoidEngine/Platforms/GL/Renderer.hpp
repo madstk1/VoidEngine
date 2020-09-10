@@ -22,6 +22,7 @@ namespace VOID_NS {
         /* Textures */
         u32             m_TextureColorbuffer;
         u32             m_ScreenTexture;
+        u32             m_Skybox;
 
         static void PrintExtensions();
         WindowGL *GetWindow();
@@ -42,6 +43,7 @@ namespace VOID_NS {
         virtual f64 GetRenderTime() override;
         virtual bool IsRunning() override;
 
+        virtual void SetSkybox(Cubemap *) override;
         virtual void SetRefreshRate(i32) override;
         virtual void SetSampling(MultiSampling) override;
         virtual void SetSwapInterval(SwapInterval) override;

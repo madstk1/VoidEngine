@@ -3,7 +3,7 @@
 
 #include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Core/Common.hpp>
-
+#include <VoidEngine/Misc/Cubemap.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
 
@@ -29,6 +29,7 @@ namespace VOID_NS {
         virtual f64 GetRenderTime() = 0;
         virtual bool IsRunning() = 0;
 
+        virtual void SetSkybox(Cubemap *) = 0;
         virtual void SetRefreshRate(i32) = 0;
         virtual void SetSampling(MultiSampling) = 0;
         virtual void SetSwapInterval(SwapInterval) = 0;

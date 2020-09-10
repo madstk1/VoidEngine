@@ -13,6 +13,18 @@ namespace VOID_NS {
     public:
         virtual ~Texture() = default;
 
+        const inline Vector2i GetSize() const {
+            return m_Size;
+        }
+
+        const inline Color *GetData() const {
+            return m_Data;
+        }
+
+        const inline u32 GetChannelCount() const {
+            return m_ChannelCount;
+        }
+
         static Texture *LoadTexture(std::string, std::string);
         static void FreeTexture(Texture *);
 

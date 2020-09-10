@@ -276,6 +276,38 @@ namespace VOID_NS {
         glfwSwapBuffers(GetWindow()->m_Window);
     }
 
+    void RendererGL::SetSkybox(Cubemap *skybox) {
+        if(glIsTexture(m_Skybox)) {
+            glDeleteTextures(1, &m_Skybox);
+        }
+
+        Texture *sample = skybox->GetTextures()[0];
+
+        u32 width = sample->GetSize().x;
+        u32 height = sample->GetSize().y;
+        u32 format = (sample->GetChannelCount() == 4) ? GL_RGBA : GL_RGB;
+
+        glGenTextures(1, &m_Skybox);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, m_Skybox);
+
+        /* Specify face data. */
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[0]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[1]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[2]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[3]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[4]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[5]->GetData());
+
+        /* Filter and wrapping. */
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    }
+
     void RendererGL::SetRefreshRate(i32 rate) {
         m_RefreshRate = rate;
         glfwWindowHint(GLFW_REFRESH_RATE, (rate == -1) ? GLFW_DONT_CARE : rate);
