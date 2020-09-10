@@ -23,16 +23,41 @@ namespace VOID_NS {
     u32 indexExtension = 0;
     u32 indexCount = 0;
 
+    Mat4 view, proj, model;
+
     Vertex k_QuadVertices[] = {
-        Vertex(Vector3(-1.0f, -1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 0.0f)),
-        Vertex(Vector3( 1.0f, -1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 0.0f)),
-        Vertex(Vector3( 1.0f,  1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 1.0f)),
-        Vertex(Vector3(-1.0f,  1.0f, -1.0f), Color::Green(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
+        Vertex(Vector3(-1.0f, -1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 0.0f)),
+        Vertex(Vector3( 1.0f, -1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 0.0f)),
+        Vertex(Vector3( 1.0f,  1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 1.0f)),
+        Vertex(Vector3(-1.0f,  1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
     };
 
     u32 k_QuadIndices[] = {
         2, 1, 0,
         0, 3, 2
+    };
+
+    Vertex k_SkyboxVertices[] = {
+        Vertex(Vector3(-1.0f,  1.0f, -1.0f)),
+        Vertex(Vector3(-1.0f, -1.0f, -1.0f)),
+        Vertex(Vector3( 1.0f, -1.0f, -1.0f)),
+        Vertex(Vector3( 1.0f,  1.0f, -1.0f)),
+
+        Vertex(Vector3(-1.0f, -1.0f,  1.0f)),
+        Vertex(Vector3(-1.0f,  1.0f,  1.0f)),
+        Vertex(Vector3( 1.0f, -1.0f,  1.0f)),
+        Vertex(Vector3( 1.0f,  1.0f,  1.0f)),
+    };
+
+    u32 k_SkyboxIndices[] = {
+        2, 1, 0, 0, 3, 2,
+        4, 1, 0, 0, 5, 4,
+
+        7, 6, 2, 2, 3, 7,
+        7, 5, 4, 4, 6, 7,
+
+        7, 3, 0, 0, 5, 7,
+        1, 4, 2, 2, 4, 6
     };
 
     RendererGL::RendererGL(ApplicationInfo info) : Renderer(info) {
@@ -48,6 +73,7 @@ namespace VOID_NS {
 
         glCreateBuffers(1, &m_VertexBuffer);
         glCreateBuffers(1, &m_IndexBuffer);
+        glCreateVertexArrays(1, &m_VertexArray);
 
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
@@ -55,8 +81,19 @@ namespace VOID_NS {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
 
-        glCreateVertexArrays(1, &m_VertexArray);
-        glBindVertexArray(m_VertexArray);
+        /**
+         *  Initialize skybox-buffers.
+         */
+
+        glCreateBuffers(1, &m_SkyboxVBO);
+        glCreateBuffers(1, &m_SkyboxIBO);
+        glCreateVertexArrays(1, &m_SkyboxVAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, m_SkyboxVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(k_SkyboxVertices), k_SkyboxVertices, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_SkyboxIBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(k_SkyboxIndices), k_SkyboxIndices, GL_STATIC_DRAW);
         
         /**
          *  Initialize framebuffers.
@@ -144,20 +181,23 @@ namespace VOID_NS {
         ClearColor();
 
         /* Calculate camera MVP. */
-        glm::mat4 proj = glm::perspective(
+        glm::vec3 camUp = glm::vec3(0, 1, 0);
+
+        proj = glm::perspective(
             glm::radians(g_Camera->fieldOfView),
             (float) g_Window->GetSize().x / (float) g_Window->GetSize().y,
             g_Camera->zNear,
             g_Camera->zFar
         );
 
-        glm::vec3 camUp = glm::vec3(0, 1, 0);
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = glm::lookAt(
+        model = glm::mat4(1.0f);
+        view = glm::lookAt(
             g_Camera->position,
             g_Camera->position + g_Camera->Forward(),
             camUp
         );
+
+        glBindVertexArray(m_VertexArray);
 
         Shader *shader = ShaderLibrary::GetShader("Default");
         shader->Enable();
@@ -237,11 +277,32 @@ namespace VOID_NS {
     }
 
     void RendererGL::Render() {
+        glEnable(GL_DEPTH_TEST);
+
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
         glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (const void *) 0);
 
-        /* Blut multisampled buffer to normal buffer. */
+        /* Draw skybox. */
+        Shader *sbShader = ShaderLibrary::GetShader("Skybox");
+        sbShader->Enable();
+        sbShader->SetUniformMat4f("u_Projection", proj);
+        sbShader->SetUniformMat4f("u_View", Mat4(Mat3(view)));
+
+        glDepthFunc(GL_LEQUAL);
+        glDisable(GL_CULL_FACE);
+
+        glBindVertexArray(m_SkyboxVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, m_SkyboxVBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_SkyboxIBO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, m_Skybox);
+        glDrawElements(GL_TRIANGLES, LEN(k_SkyboxIndices), GL_UNSIGNED_INT, (const void *) 0);
+
+        glEnable(GL_CULL_FACE);
+        glDepthFunc(GL_LESS);
+
+        /* Blit multisampled buffer to normal buffer. */
         glBindFramebuffer(GL_READ_FRAMEBUFFER, m_Framebuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_IntermediateFBO);
         glBlitFramebuffer(
@@ -264,6 +325,9 @@ namespace VOID_NS {
         fbShader->SetUniform1i("u_ScreenTexture", 0);
 
         /* TODO: Consider moving to separate buffers. */
+        glBindVertexArray(m_VertexArray);
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(k_QuadVertices), k_QuadVertices);
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(k_QuadIndices), k_QuadIndices);
 
@@ -291,12 +355,12 @@ namespace VOID_NS {
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_Skybox);
 
         /* Specify face data. */
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[0]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[1]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[2]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[3]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[4]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, width, height, 0, format, GL_FLOAT, skybox->GetTextures()[5]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, skybox->GetTextures()[0]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, skybox->GetTextures()[1]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, skybox->GetTextures()[2]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, skybox->GetTextures()[3]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, skybox->GetTextures()[4]->GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, skybox->GetTextures()[5]->GetData());
 
         /* Filter and wrapping. */
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

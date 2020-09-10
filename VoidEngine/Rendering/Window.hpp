@@ -7,8 +7,6 @@
 #include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Math/Color.hpp>
 
-#include <GLFW/glfw3.h>
-
 namespace VOID_NS {
     class Window {
     protected:

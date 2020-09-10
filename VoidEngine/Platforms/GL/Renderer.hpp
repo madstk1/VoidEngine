@@ -14,6 +14,10 @@ namespace VOID_NS {
         u32             m_IndexBuffer;
         u32             m_VertexArray;
 
+        u32             m_SkyboxVBO;
+        u32             m_SkyboxIBO;
+        u32             m_SkyboxVAO;
+
         /* Framebuffers / renderbuffers */
         u32             m_Framebuffer;
         u32             m_IntermediateFBO;

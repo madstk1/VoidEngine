@@ -7,6 +7,7 @@
 /* Default shaders */
 #include "Shaders/Default.shader"
 #include "Shaders/Framebuffer.shader"
+#include "Shaders/Skybox.shader"
 /* End of default shaders */
 
 namespace VOID_NS {
@@ -39,5 +40,6 @@ namespace VOID_NS {
     void ShaderLibrary::CreateDefaultShaders() {
         AddShader(k_ShaderDefault);
         AddShader(k_ShaderFramebuffer);
+        AddShader(k_ShaderSkybox);
     }
 };
