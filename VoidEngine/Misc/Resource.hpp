@@ -13,6 +13,7 @@ namespace VOID_NS {
             UnknownResource  = (u32) 0,
             ShaderResource,
             TextureResource,
+            CubemapResource,
         } Type;
 
         Resource(std::string, Type);

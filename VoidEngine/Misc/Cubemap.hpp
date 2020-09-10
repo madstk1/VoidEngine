@@ -1,0 +1,29 @@
+#ifndef VOID_MISC_CUBEMAP_H__
+#define VOID_MISC_CUBEMAP_H__
+
+#include <VoidEngine/Core/Allocator.hpp>
+#include <VoidEngine/Core/Common.hpp>
+#include <VoidEngine/Math/Shapes.hpp>
+#include <VoidEngine/Misc/Texture.hpp>
+
+namespace VOID_NS {
+    class Cubemap : public Resource {
+    public:
+        typedef enum {
+            Front, Back,
+            Top,   Bottom,
+            Left,  Right,
+        } CubemapFaces;
+
+        Cubemap(std::string name, std::array<Texture *, 6> textures) : Resource(name, Resource::Type::CubemapResource) {
+            m_Textures = textures;
+        }
+
+    protected:
+        std::array<Texture *, 6> m_Textures;
+        
+    private:
+    };
+};
+
+#endif /* VOID_MISC_CUBEMAP_H__ */
