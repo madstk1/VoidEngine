@@ -10,7 +10,7 @@
 namespace VOID_NS {
     class Renderer {
     protected:
-        static const u32 s_MaxTriangles = 100000;
+        static const u32 s_MaxTriangles = 800000;
 
         i32             m_RefreshRate;
         MultiSampling   m_Sampling;
