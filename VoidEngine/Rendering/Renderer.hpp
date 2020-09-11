@@ -15,7 +15,7 @@ namespace VOID_NS {
         i32             m_RefreshRate;
         MultiSampling   m_Sampling;
         SwapInterval    m_Buffering;
-        f32             m_Gamma = 2.2f;
+        f32             m_Gamma = 1.5f;
 
     public:
         Renderer(ApplicationInfo) {}
@@ -34,10 +34,12 @@ namespace VOID_NS {
         virtual void SetRefreshRate(i32) = 0;
         virtual void SetSampling(MultiSampling) = 0;
         virtual void SetSwapInterval(SwapInterval) = 0;
+        virtual void SetGamma(f32 gamma) { m_Gamma = gamma; }
 
         virtual i32 GetRefreshRate() { return m_RefreshRate; }
         virtual MultiSampling GetSampling() { return m_Sampling; }
         virtual SwapInterval GetSwapInterval() { return m_Buffering; }
+        virtual f32 GetGamma() { return m_Gamma; }
     };
 };
 
