@@ -252,20 +252,22 @@ namespace VOID_NS {
          *  Draw skybox.
          */
 
-        glDepthFunc(GL_LEQUAL);
-        glDisable(GL_CULL_FACE);
-
-        m_Skybox.Bind();
-        skyboxShader->Enable();
-        skyboxShader->SetUniformMat4f("u_Projection", proj);
-        skyboxShader->SetUniformMat4f("u_View", Mat4(Mat3(view)));
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
-        glDrawElements(GL_TRIANGLES, LEN(k_SkyboxIndices), GL_UNSIGNED_INT, (const void *) 0);
-
-        glEnable(GL_CULL_FACE);
-        glDepthFunc(GL_LESS);
+        if(glIsTexture(m_SkyboxCubemap)) {
+            glDepthFunc(GL_LEQUAL);
+            glDisable(GL_CULL_FACE);
+    
+            m_Skybox.Bind();
+            skyboxShader->Enable();
+            skyboxShader->SetUniformMat4f("u_Projection", proj);
+            skyboxShader->SetUniformMat4f("u_View", Mat4(Mat3(view)));
+    
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
+            glDrawElements(GL_TRIANGLES, LEN(k_SkyboxIndices), GL_UNSIGNED_INT, (const void *) 0);
+    
+            glEnable(GL_CULL_FACE);
+            glDepthFunc(GL_LESS);
+        }
 
         /**
          *  Blit multisampled buffer to normal buffer.
