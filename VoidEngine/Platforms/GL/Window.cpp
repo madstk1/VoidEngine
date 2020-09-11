@@ -84,7 +84,9 @@ namespace VOID_NS {
         }
 
         glfwMakeContextCurrent(this->m_Window);
-        glfwSetWindowPos(this->m_Window, m_Position.x, m_Position.y);
+        if(m_Position.x != -1 && m_Position.y != -1) {
+            glfwSetWindowPos(this->m_Window, m_Position.x, m_Position.y);
+        }
 
         /* NOTE(max): GLFW callbacks */
         glfwSetFramebufferSizeCallback(this->m_Window, ResizeCallback);

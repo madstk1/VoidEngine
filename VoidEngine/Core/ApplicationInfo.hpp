@@ -44,7 +44,7 @@ namespace VOID_NS {
 
             info.Title    = "Void Application";
             info.Size     = { 800, 600 };
-            info.Position = { 0,   0   };
+            info.Position = { -1,  -1  };
 
             info.Sampling  = MultiSampling::x4;
             info.Buffering = SwapInterval::SingleBuffer;
