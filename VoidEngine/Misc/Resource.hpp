@@ -14,6 +14,7 @@ namespace VOID_NS {
             ShaderResource,
             TextureResource,
             CubemapResource,
+            MaterialResource,
         } Type;
 
         Resource(std::string, Type);

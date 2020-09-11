@@ -9,6 +9,7 @@ namespace VOID_NS {
         [Resource::Type::ShaderResource]   = "Shader",
         [Resource::Type::TextureResource]  = "Texture",
         [Resource::Type::CubemapResource]  = "Cubemap",
+        [Resource::Type::MaterialResource] = "Material",
     };
 
     /**
