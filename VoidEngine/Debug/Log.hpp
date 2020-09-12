@@ -55,27 +55,17 @@ namespace VOID_NS {
         static void LogDebug(const char *fmt, ...)   __attribute__ ((format(printf, 1, 2)));
 
         template <typename T>
-        static const char *GetClassName();
-    };
-};
-
-/**
- *  TEMPLATE IMPLEMANTATIONS
- */
-
-namespace VOID_NS {
-    template <typename T>
-    const char *Logger::GetClassName() {
-        i32 status = -4;
-        const char *mangled = typeid(T).name();
-
+        static const char *GetClassName() {
+            i32 status = -4;
+            const char *mangled = typeid(T).name();
+    
 #ifdef __GNUC__
-        const char *demangled = abi::__cxa_demangle(mangled, NULL, NULL, &status);
-        return (status == 0) ? demangled : mangled;
+            const char *demangled = abi::__cxa_demangle(mangled, NULL, NULL, &status);
+            return (status == 0) ? demangled : mangled;
 #endif
-
-        return mangled;
-    }
+            return mangled;
+        }
+    };
 };
 
 #endif /* VOID_DEBUG_LOG_H__ */
