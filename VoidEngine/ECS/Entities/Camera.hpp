@@ -21,23 +21,6 @@ namespace VOID_NS {
             position = Vector3(0.0f, 0.0f, 2.5f);
             rotation = Vector3(0.0f, 0.0f, -90.0f);
         }
-
-        Vector3 Up() {
-            return Vector3(0, 1, 0);
-        }
-
-        Vector3 Forward() {
-            Vector3 dir = {
-                cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y)), /* X */
-                sin(glm::radians(rotation.y)),                                 /* Y */
-                sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y)), /* Z */
-            };
-            return glm::normalize(dir);
-        }
-
-        Vector3 Right() {
-            return glm::normalize(glm::cross(Forward(), Up()));
-        }
     };
 };
 
