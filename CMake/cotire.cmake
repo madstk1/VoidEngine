@@ -1,0 +1,1 @@
+../ThirdParty/cotire/CMake/cotire.cmake

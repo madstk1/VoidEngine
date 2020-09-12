@@ -13,3 +13,6 @@
 [submodule "ThirdParty/assimp"]
 	path = ThirdParty/assimp
 	url = https://github.com/assimp/assimp/
+[submodule "ThirdParty/cotire"]
+	path = ThirdParty/cotire
+	url = https://github.com/sakra/cotire/
