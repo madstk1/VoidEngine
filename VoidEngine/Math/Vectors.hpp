@@ -41,4 +41,13 @@ typedef glm::mat<4, 4, f64> Mat4d;
 typedef glm::mat<4, 4, i32> Mat4i;
 typedef glm::mat<4, 4, u32> Mat4u;
 
+/**
+ *  Quaternions
+ */
+
+typedef glm::qua<f32> Quaternion;
+typedef glm::qua<f64> Quaterniond;
+typedef glm::qua<i32> Quaternioni;
+typedef glm::qua<u32> Quaternionu;
+
 #endif /* VOID_MATH_VECTORS_H__ */
