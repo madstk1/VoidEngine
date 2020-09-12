@@ -30,6 +30,8 @@ namespace VOID_NS {
         Entity(std::string);
         ~Entity();
 
+        void LookAt(Vector3);
+
         virtual void Start() {}
         virtual void Update() {}
         virtual void FixedUpdate() {}
@@ -42,6 +44,10 @@ namespace VOID_NS {
 
         template<typename T>
         void DestroyComponent();
+
+        Vector3 Up();
+        Vector3 Forward();
+        Vector3 Right();
     };
 };
 
