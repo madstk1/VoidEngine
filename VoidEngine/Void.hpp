@@ -12,10 +12,12 @@
 
 #include <VoidEngine/ECS/Entity.hpp>
 #include <VoidEngine/ECS/Component.hpp>
+#include <VoidEngine/ECS/Components/MeshComponent.hpp>
 #include <VoidEngine/ECS/Components/RigidbodyComponent.hpp>
 #include <VoidEngine/ECS/Entities/Camera.hpp>
 #include <VoidEngine/ECS/Entities/Cube.hpp>
 #include <VoidEngine/ECS/Entities/FirstPersonCamera.hpp>
+#include <VoidEngine/ECS/Entities/OrbitCamera.hpp>
 #include <VoidEngine/ECS/Entities/Light.hpp>
 #include <VoidEngine/ECS/Entities/Quad.hpp>
 
