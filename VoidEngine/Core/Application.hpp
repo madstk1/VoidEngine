@@ -22,6 +22,8 @@ namespace VOID_NS {
         virtual void Update() {}
         virtual void FixedUpdate() {}
 
+        static void Exit();
+
         friend int ::main(int argc, char **argv);
     };
 

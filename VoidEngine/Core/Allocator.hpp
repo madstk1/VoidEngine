@@ -54,7 +54,7 @@ namespace VOID_NS {
         template<class T>
         static inline void Free(T *ptr) {
             m_AllocatedSize -= sizeof(ptr);
-            ::free(ptr);
+            ::delete(ptr);
         }
 
     protected:
@@ -63,10 +63,5 @@ namespace VOID_NS {
     private:
     };
 };
-
-#if defined(VOID_CUSTOM_ALLOC)
-void *operator new (u64);
-void operator delete(void *) noexcept;
-#endif /* VOID_CUSTOM_ALLOC */
 
 #endif /* VOID_CORE_ALLOCATOR_H__ */

@@ -1,4 +1,4 @@
- #include "glad/glad.h"
+#include "glad/glad.h"
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Debug/Log.hpp>
@@ -129,9 +129,7 @@ namespace VOID_NS {
     }
 
     WindowGL::~WindowGL() {
-        glfwDestroyWindow(this->m_Window);
-        glfwTerminate();
-
+        glfwMakeContextCurrent(nullptr);
         Logger::LogInfo("Deallocated GLFW window.");
     }
 

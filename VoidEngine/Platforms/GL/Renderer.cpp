@@ -171,6 +171,8 @@ namespace VOID_NS {
     }
 
     RendererGL::~RendererGL() {
+        Logger::LogDebug("Deallocating OpenGL-renderer.");
+
         glDeleteFramebuffers(1, &m_Framebuffer);
         glDeleteFramebuffers(1, &m_IntermediateFBO);
         glDeleteRenderbuffers(1, &m_Renderbuffer);
@@ -181,7 +183,7 @@ namespace VOID_NS {
         m_Dynamic.Free();
         m_Static.Free();
 
-        Allocator::Free(g_Window);
+        Allocator::Free(GetWindow());
     }
 
     Shader *RendererGL::CreateShader(ShaderCreationInfo info) {

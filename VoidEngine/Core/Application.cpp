@@ -2,6 +2,7 @@
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/Core/World.hpp>
+#include <VoidEngine/Debug/SignalHandler.hpp>
 #include <VoidEngine/ECS/Entities/Camera.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
 
@@ -28,6 +29,11 @@ namespace VOID_NS {
         Allocator::Free(g_Renderer);
     }
 
+    void Application::Exit() {
+        Allocator::Free(g_Application);
+        exit(0);
+    }
+
     Application     *g_Application;
     Camera          *g_Camera;
     Renderer        *g_Renderer;
@@ -50,6 +56,8 @@ int main(int argc, char **argv) {
 
     Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
     Void::g_Application = Void::CreateApplication(k_DefaultInfo);
+
+    Void::SignalHandler::Initialize();
     Void::g_Application->Initialize();
 
     ShaderLibrary::CreateDefaultShaders();
@@ -73,8 +81,5 @@ int main(int argc, char **argv) {
         Void::g_Renderer->Render();
         Void::g_Renderer->End();
     }
-
-    Allocator::Free(g_Application);
-    Void::Logger::Free();
     return 0;
 }

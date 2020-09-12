@@ -9,6 +9,7 @@
 #include <VoidEngine/Core/World.hpp>
 
 #include <VoidEngine/Debug/Log.hpp>
+#include <VoidEngine/Debug/SignalHandler.hpp>
 
 #include <VoidEngine/ECS/Entity.hpp>
 #include <VoidEngine/ECS/Component.hpp>
