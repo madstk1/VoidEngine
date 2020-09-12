@@ -1,7 +1,5 @@
 #include <VoidEngine/Void.hpp>
 
-#include <algorithm>
-
 using namespace Void;
 
 class Game : public Application {
@@ -10,9 +8,11 @@ protected:
 public:
     Game(const ApplicationInfo &info) : Application(info) {}
 
-    void Start() override {
-        new FirstPersonCamera();
+    void Initialize() override {
+        g_Camera = new FirstPersonCamera();
+    };
 
+    void Start() override {
         Light *light = new Light();
         light->position = Vector3(10.f, 10.f, 10.f);
         light->lightColor = Color::White();
@@ -37,31 +37,6 @@ public:
     }
 
     void FixedUpdate() override {
-        float speed = 5.00f;
-
-        if(Input::GetKeyDown(Keycode::KeyW)) {
-            g_Camera->position += g_Camera->Forward() * speed * Time::GetFixedDeltaTime();
-        }
-
-        if(Input::GetKeyDown(Keycode::KeyS)) {
-            g_Camera->position -= g_Camera->Forward() * speed * Time::GetFixedDeltaTime();
-        }
-
-        if(Input::GetKeyDown(Keycode::KeyD)) {
-            g_Camera->position += g_Camera->Right() * speed * Time::GetFixedDeltaTime();
-        }
-
-        if(Input::GetKeyDown(Keycode::KeyA)) {
-            g_Camera->position -= g_Camera->Right() * speed * Time::GetFixedDeltaTime();
-        }
-
-        if(Input::GetKeyDown(Keycode::KeySpace)) {
-            g_Camera->position += g_Camera->Up() * speed * Time::GetFixedDeltaTime();
-        }
-
-        if(Input::GetKeyDown(Keycode::KeyC)) {
-            g_Camera->position -= g_Camera->Up() * speed * Time::GetFixedDeltaTime();
-        }
     }
 };
 

@@ -17,6 +17,7 @@ namespace VOID_NS {
         Application(ApplicationInfo);
         virtual ~Application();
 
+        virtual void Initialize() {}
         virtual void Start() {}
         virtual void Update() {}
         virtual void FixedUpdate() {}

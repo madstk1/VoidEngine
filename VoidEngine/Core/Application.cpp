@@ -14,15 +14,13 @@ namespace VOID_NS {
 
     Application::Application(ApplicationInfo info) {
         g_FixedUpdateInterval = info.FixedUpdateInterval;
-        g_World     = Allocator::Allocate<World>(info);
+        g_World = Allocator::Allocate<World>(info);
 
         switch(info.API) {
 #if defined(VOID_ENABLE_OPENGL)
             case RenderingAPI::OpenGL: g_Renderer = (Renderer *) Allocator::Allocate<RendererGL>(info); break;
 #endif
-
-            default:
-                Logger::LogFatal(VOID_ERR_INV_API);
+            default: Logger::LogFatal(VOID_ERR_INV_API);
         }
     }
 
@@ -52,17 +50,18 @@ int main(int argc, char **argv) {
 
     Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
     Void::g_Application = Void::CreateApplication(k_DefaultInfo);
+    Void::g_Application->Initialize();
 
     ShaderLibrary::CreateDefaultShaders();
 
-    Void::g_Application->Start();
-    Void::g_World->Start();
-
     /* This will create a Camera, and assign g_Camera. */ 
-    VOID_ASSERT(Void::g_Camera != nullptr, "g_Camera is nullptr.");
     if(!Void::g_Camera) {
         Allocator::Allocate<Camera>();
     }
+    VOID_ASSERT(Void::g_Camera != nullptr, "g_Camera is nullptr.");
+
+    Void::g_Application->Start();
+    Void::g_World->Start();
 
     while(Void::g_Renderer->IsRunning()) {
         Void::Time::HandleDeltaTime();
