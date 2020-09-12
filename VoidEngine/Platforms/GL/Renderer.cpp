@@ -216,7 +216,7 @@ namespace VOID_NS {
 
         Mat4 model = glm::mat4(1.0f);
         Mat4 proj  = glm::perspective(glm::radians(g_Camera->fieldOfView), aspectRatio, g_Camera->zNear, g_Camera->zFar);
-        Mat4 view  = glm::lookAt(g_Camera->position, g_Camera->position + g_Camera->Forward(), g_Camera->Up());
+        Mat4 view  = glm::lookAt(g_Camera->position, g_Camera->position + g_Camera->Forward(), {0, 1, 0});
 
         /**
          *  Render dynamic entites.
