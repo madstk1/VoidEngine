@@ -9,7 +9,7 @@ namespace VOID_NS {
     FILE *Logger::s_Output;
 
     struct tm *Logger::GetTime() {
-        static time_t now = time(0);
+        time_t now = time(0);
         return gmtime(&now);
     }
 
