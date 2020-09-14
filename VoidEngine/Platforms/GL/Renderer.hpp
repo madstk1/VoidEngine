@@ -37,12 +37,12 @@ namespace VOID_NS {
         u32             m_SkyboxCubemap;
 
         void UpdateBuffers(BufferDataGL *);
-        void PrintExtensions();
         void SetLightMatrix(Shader *);
-        WindowGL *GetWindow();
 
         void OnResize(i32, i32);
         void ClearColor();
+
+        WindowGL *GetWindow();
 
     public:
         RendererGL(ApplicationInfo);
@@ -61,6 +61,8 @@ namespace VOID_NS {
         virtual void SetRefreshRate(i32) override;
         virtual void SetSampling(MultiSampling) override;
         virtual void SetSwapInterval(SwapInterval) override;
+
+        std::vector<std::string> GetExtensions() override;
 
         friend WindowGL;
     };

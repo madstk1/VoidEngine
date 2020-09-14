@@ -167,7 +167,9 @@ namespace VOID_NS {
         Logger::LogInfo("   Renderer: %s", glGetString(GL_RENDERER));
         Logger::LogInfo("   Version: OpenGL %s", glGetString(GL_VERSION));
 
-        PrintExtensions();
+        for(std::string ext : GetExtensions()) {
+            Logger::LogDebug("[EXT] %s", ext.c_str());
+        }
 #endif 
     }
 
@@ -393,14 +395,17 @@ namespace VOID_NS {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * buffer->indices.size(),  buffer->indices.data(),  usage[buffer->usage]);
     }
 
-    void RendererGL::PrintExtensions() {
+    std::vector<std::string> RendererGL::GetExtensions() {
         i32 nExtensions = 0;
+        std::vector<std::string> extensions;
+
         glGetIntegerv(GL_NUM_EXTENSIONS, &nExtensions);
 
         for(i32 i = 0; i < nExtensions; i++) {
             const uchar *ext = glGetStringi(GL_EXTENSIONS, i);
-            Logger::LogInfo("[EXT] %s", ext);
+            extensions.push_back(std::string((char *) ext));
         }
+        return extensions;
     }
 
     void RendererGL::SetLightMatrix(Shader *shader) {

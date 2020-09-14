@@ -57,6 +57,7 @@ namespace VOID_NS {
         virtual MultiSampling GetSampling() { return m_Sampling; }
         virtual SwapInterval GetSwapInterval() { return m_Buffering; }
         virtual f32 GetGamma() { return m_Gamma; }
+        virtual std::vector<std::string> GetExtensions() { return {}; }
     };
 };
 
