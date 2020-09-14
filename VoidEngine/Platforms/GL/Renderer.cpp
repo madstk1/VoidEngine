@@ -17,19 +17,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace VOID_NS {
-    Vertex k_QuadVertices[] = {
+    const Vertex k_QuadVertices[] = {
         Vertex(Vector3(-1.0f, -1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 0.0f)),
         Vertex(Vector3( 1.0f, -1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 0.0f)),
         Vertex(Vector3( 1.0f,  1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(1.0f, 1.0f)),
         Vertex(Vector3(-1.0f,  1.0f, -1.0f), Color::White(), Vector3(0.0f, 0.0f, -1.0f), Vector2(0.0f, 1.0f)),
     };
 
-    u32 k_QuadIndices[] = {
+    const u32 k_QuadIndices[] = {
         0, 1, 2,
         2, 3, 0
     };
 
-    Vertex k_SkyboxVertices[] = {
+    const Vertex k_SkyboxVertices[] = {
         Vertex(Vector3(-1.0f,  1.0f, -1.0f)),
         Vertex(Vector3(-1.0f, -1.0f, -1.0f)),
         Vertex(Vector3( 1.0f, -1.0f, -1.0f)),
@@ -41,7 +41,7 @@ namespace VOID_NS {
         Vertex(Vector3( 1.0f,  1.0f,  1.0f)),
     };
 
-    u32 k_SkyboxIndices[] = {
+    const u32 k_SkyboxIndices[] = {
         2, 1, 0, 0, 3, 2,
         4, 1, 0, 0, 5, 4,
         7, 6, 2, 2, 3, 7,
