@@ -56,11 +56,11 @@ int main(int argc, char **argv) {
 
     Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
     Void::g_Application = Void::CreateApplication(k_DefaultInfo);
+    ShaderLibrary::CreateDefaultShaders();
 
     Void::SignalHandler::Initialize();
     Void::g_Application->Initialize();
 
-    ShaderLibrary::CreateDefaultShaders();
 
     /* This will create a Camera, and assign g_Camera. */ 
     if(!Void::g_Camera) {
