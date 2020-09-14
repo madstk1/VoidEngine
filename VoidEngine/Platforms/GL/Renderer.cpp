@@ -191,6 +191,7 @@ namespace VOID_NS {
     }
 
     void RendererGL::Begin() {
+        this->Prepare();
         GetWindow()->HandleMouse();
 
         /* Bind framebuffer. */
@@ -199,12 +200,12 @@ namespace VOID_NS {
         ClearColor();
 
         /* Bind entity meshes to buffers. */
-        UpdateBuffers();
+        this->UpdateBuffers();
 
         static bool ff = true;
         if(ff) {
             ff = false;
-            UpdateStaticBuffers();
+            this->UpdateStaticBuffers();
         }
     }
 
@@ -380,91 +381,25 @@ namespace VOID_NS {
      */
 
     void RendererGL::UpdateStaticBuffers() {
-        std::vector<u32>    tempIndices;
-        std::vector<Vertex> tempVertices;
-
-        u32 indexExtension = 0;
+        BufferData data;
+        Renderer::UpdateStaticBuffers(&data);
 
         m_Static.Bind();
-        m_Static.IndexCount = 0;
+        m_Static.IndexCount = data.indices.size();
 
-        for(Entity *e : g_World->GetEntities()) {
-            MeshComponent *mc = e->GetComponent<MeshComponent>();
-
-            if(!e->renderable || !e->isStatic || mc == nullptr || mc->mesh == nullptr) {
-                continue;
-            }
-
-            Mat4 transform = Mat4(1.0f)
-                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.x), { 1.0f, 0.0f, 0.0f })
-                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.y), { 0.0f, 1.0f, 0.0f })
-                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.z), { 0.0f, 0.0f, 1.0f })
-                * glm::scale(Mat4(1.0f), {e->scale.x, e->scale.y, e->scale.z});
-
-            for(Vertex &v : mc->mesh->vertices) {
-                Vector4 v4 = Vector4(v.position, 1.0f) * transform;
-                v.position = Vector3(v4.x, v4.y, v4.z) + e->position;
-
-                tempVertices.push_back(v);
-            }
-
-            for(u32 &i : mc->mesh->indices) {
-                tempIndices.push_back(i += indexExtension);
-            }
-
-            m_Static.IndexCount += tempIndices.size();
-            indexExtension += tempVertices.size();
-        }
-
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * tempVertices.size(), tempVertices.data(), GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * tempIndices.size(),  tempIndices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * data.vertices.size(), data.vertices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * data.indices.size(),     data.indices.data(),  GL_STATIC_DRAW);
     }
 
     void RendererGL::UpdateBuffers() {
-        std::vector<u32>    tempIndices;
-        std::vector<Vertex> tempVertices;
-
-        u32 vertexOffset = 0;
-        u32 indexOffset = 0;
-        u32 indexExtension = 0;
+        BufferData data;
+        Renderer::UpdateBuffers(&data);
 
         m_Dynamic.Bind();
-        m_Dynamic.IndexCount = 0;
+        m_Dynamic.IndexCount = data.indices.size();
 
-        for(Entity *e : g_World->GetEntities()) {
-            MeshComponent *mc = e->GetComponent<MeshComponent>();
-
-            if(!e->renderable || e->isStatic || mc == nullptr || mc->mesh == nullptr) {
-                continue;
-            }
-
-            tempIndices  = mc->mesh->indices;
-            tempVertices = mc->mesh->vertices;
-
-            Mat4 transform = Mat4(1.0f)
-                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.x), { 1.0f, 0.0f, 0.0f })
-                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.y), { 0.0f, 1.0f, 0.0f })
-                * glm::rotate(Mat4(1.0f), glm::radians(e->rotation.z), { 0.0f, 0.0f, 1.0f })
-                * glm::scale(Mat4(1.0f), {e->scale.x, e->scale.y, e->scale.z});
-
-            for(Vertex &v : tempVertices) {
-                Vector4 v4 = Vector4(v.position, 1.0f) * transform;
-                v.position = Vector3(v4.x, v4.y, v4.z) + e->position;
-            }
-
-            for(u32 &i : tempIndices) {
-                i += indexExtension;
-            }
-
-            glBufferSubData(GL_ARRAY_BUFFER,         vertexOffset, sizeof(Vertex) * tempVertices.size(), tempVertices.data());
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexOffset,  sizeof(u32)    * tempIndices.size(),  tempIndices.data());
-
-            vertexOffset += sizeof(Vertex) * tempVertices.size();
-            indexOffset  += sizeof(u32) * tempIndices.size();
-            m_Dynamic.IndexCount += tempIndices.size();
-
-            indexExtension += tempVertices.size();
-        }
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * data.vertices.size(), data.vertices.data(), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * data.indices.size(),     data.indices.data(),  GL_DYNAMIC_DRAW);
     }
 
     void RendererGL::PrintExtensions() {

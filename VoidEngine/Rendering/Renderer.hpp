@@ -10,12 +10,23 @@
 namespace VOID_NS {
     class Renderer {
     protected:
+        typedef struct {
+            std::vector<Vertex> vertices;
+            std::vector<u32>    indices;
+        } BufferData;
+
         static const u32 s_MaxTriangles = 800000;
 
         i32             m_RefreshRate;
         MultiSampling   m_Sampling;
         SwapInterval    m_Buffering;
         f32             m_Gamma = 1.5f;
+        
+        void Prepare();
+        void UpdateBuffers(BufferData *);
+        void UpdateStaticBuffers(BufferData *);
+
+        void UpdateBufferImpl(BufferData *, bool);
 
     public:
         Renderer(ApplicationInfo) {}

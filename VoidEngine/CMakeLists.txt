@@ -21,6 +21,7 @@ SET(VOID_SOURCES
     "Misc/Texture.cpp"
     "Input/InputManager.cpp"
     "Rendering/Shader.cpp"
+    "Rendering/Renderer.cpp"
 )
 
 ##
