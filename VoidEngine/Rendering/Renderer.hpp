@@ -10,9 +10,18 @@
 namespace VOID_NS {
     class Renderer {
     protected:
-        typedef struct {
+        typedef enum {
+            DynamicBufferUsage,
+            StaticBufferUsage,
+        } BufferUsage;
+
+        typedef struct BufferData {
+            BufferUsage usage;
             std::vector<Vertex> vertices;
             std::vector<u32>    indices;
+
+            BufferData(BufferUsage usage) : usage(usage) {}
+            virtual ~BufferData() = default;
         } BufferData;
 
         static const u32 s_MaxTriangles = 800000;
@@ -23,10 +32,7 @@ namespace VOID_NS {
         f32             m_Gamma = 1.5f;
         
         void Prepare();
-        void UpdateBuffers(BufferData *);
-        void UpdateStaticBuffers(BufferData *);
-
-        void UpdateBufferImpl(BufferData *, bool);
+        void UpdateBuffersImpl(BufferData *);
 
     public:
         Renderer(ApplicationInfo) {}

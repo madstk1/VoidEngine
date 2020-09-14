@@ -50,19 +50,19 @@ namespace VOID_NS {
         1, 4, 2, 2, 4, 6
     };
 
-    void RendererGL::RenderBuffer::Create() {
+    RendererGL::BufferDataGL::BufferDataGL(BufferUsage usage) : BufferData(usage) {
         glCreateBuffers(1, &VBO);
         glCreateBuffers(1, &EBO);
         glCreateVertexArrays(1, &VAO);
     }
 
-    void RendererGL::RenderBuffer::Free() {
+    RendererGL::BufferDataGL::~BufferDataGL() {
         glDeleteBuffers(1, &VBO);
         glDeleteBuffers(1, &EBO);
         glDeleteVertexArrays(1, &VAO);
     }
 
-    void RendererGL::RenderBuffer::Bind() {
+    void RendererGL::BufferDataGL::Bind() {
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -79,9 +79,10 @@ namespace VOID_NS {
          *  Initialize vertex-buffers.
          */
 
-        m_Static.Create();
-        m_Dynamic.Create();
-        m_Dynamic.Bind();
+        m_Static  = new BufferDataGL(BufferUsage::StaticBufferUsage);
+        m_Dynamic = new BufferDataGL(BufferUsage::DynamicBufferUsage);
+
+        m_Dynamic->Bind();
 
         glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
@@ -90,8 +91,8 @@ namespace VOID_NS {
          *  Initialize renderquad buffers.
          */
 
-        m_RenderQuad.Create();
-        m_RenderQuad.Bind();
+        m_RenderQuad = new BufferDataGL(BufferUsage::StaticBufferUsage);
+        m_RenderQuad->Bind();
 
         glBufferData(GL_ARRAY_BUFFER,         sizeof(k_QuadVertices), k_QuadVertices, GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(k_QuadIndices),  k_QuadIndices,  GL_STATIC_DRAW);
@@ -100,8 +101,8 @@ namespace VOID_NS {
          *  Initialize skybox-buffers.
          */
 
-        m_Skybox.Create();
-        m_Skybox.Bind();
+        m_Skybox = new BufferDataGL(BufferUsage::StaticBufferUsage);
+        m_Skybox->Bind();
 
         glBufferData(GL_ARRAY_BUFFER, sizeof(k_SkyboxVertices), k_SkyboxVertices, GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(k_SkyboxIndices), k_SkyboxIndices, GL_STATIC_DRAW);
@@ -180,9 +181,8 @@ namespace VOID_NS {
         glDeleteTextures(1, &m_TextureColorbuffer);
         glDeleteTextures(1, &m_ScreenTexture);
             
-        m_Dynamic.Free();
-        m_Static.Free();
-
+        Allocator::Free(m_Dynamic);
+        Allocator::Free(m_Static);
         Allocator::Free(GetWindow());
     }
 
@@ -200,12 +200,12 @@ namespace VOID_NS {
         ClearColor();
 
         /* Bind entity meshes to buffers. */
-        this->UpdateBuffers();
+        this->UpdateBuffers(m_Dynamic);
 
         static bool ff = true;
         if(ff) {
             ff = false;
-            this->UpdateStaticBuffers();
+            this->UpdateBuffers(m_Static);
         }
     }
 
@@ -225,7 +225,7 @@ namespace VOID_NS {
          *  Render dynamic entites.
          */
 
-        m_Dynamic.Bind();
+        m_Dynamic->Bind();
         SetLightMatrix(defaultShader);
 
         defaultShader->SetUniform1fv("u_Gamma",          m_Gamma);
@@ -234,13 +234,13 @@ namespace VOID_NS {
         defaultShader->SetUniformMat4f("u_View",         view);
         defaultShader->SetUniformMat4f("u_Projection",   proj);
 
-        glDrawElements(GL_TRIANGLES, m_Dynamic.IndexCount, GL_UNSIGNED_INT, (const void *) 0);
+        glDrawElements(GL_TRIANGLES, m_Dynamic->indices.size(), GL_UNSIGNED_INT, (const void *) 0);
         
         /**
          *  Render static entites.
          */
 
-        m_Static.Bind();
+        m_Static->Bind();
         SetLightMatrix(defaultShader);
 
         defaultShader->SetUniform1fv("u_Gamma",          m_Gamma);
@@ -249,7 +249,7 @@ namespace VOID_NS {
         defaultShader->SetUniformMat4f("u_View",         view);
         defaultShader->SetUniformMat4f("u_Projection",   proj);
 
-        glDrawElements(GL_TRIANGLES, m_Static.IndexCount, GL_UNSIGNED_INT, (const void *) 0);
+        glDrawElements(GL_TRIANGLES, m_Static->indices.size(), GL_UNSIGNED_INT, (const void *) 0);
 
         /**
          *  Draw skybox.
@@ -259,7 +259,7 @@ namespace VOID_NS {
             glDepthFunc(GL_LEQUAL);
             glDisable(GL_CULL_FACE);
     
-            m_Skybox.Bind();
+            m_Skybox->Bind();
             skyboxShader->Enable();
             skyboxShader->SetUniformMat4f("u_Projection", proj);
             skyboxShader->SetUniformMat4f("u_View", Mat4(Mat3(view)));
@@ -296,7 +296,7 @@ namespace VOID_NS {
          *  Draw rendering quad.
          */
 
-        m_RenderQuad.Bind();
+        m_RenderQuad->Bind();
         framebufferShader->Enable();
         framebufferShader->SetUniform1i("u_ScreenTexture", 0);
 
@@ -380,26 +380,17 @@ namespace VOID_NS {
      *  PROTECTED/PRIVATE METHODS
      */
 
-    void RendererGL::UpdateStaticBuffers() {
-        BufferData data;
-        Renderer::UpdateStaticBuffers(&data);
+    void RendererGL::UpdateBuffers(BufferDataGL *buffer) {
+        u32 usage[] = {
+            [BufferUsage::DynamicBufferUsage] = GL_DYNAMIC_DRAW,
+            [BufferUsage::StaticBufferUsage]  = GL_STATIC_DRAW,
+        };
 
-        m_Static.Bind();
-        m_Static.IndexCount = data.indices.size();
+        Renderer::UpdateBuffersImpl(buffer);
 
-        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * data.vertices.size(), data.vertices.data(), GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * data.indices.size(),     data.indices.data(),  GL_STATIC_DRAW);
-    }
-
-    void RendererGL::UpdateBuffers() {
-        BufferData data;
-        Renderer::UpdateBuffers(&data);
-
-        m_Dynamic.Bind();
-        m_Dynamic.IndexCount = data.indices.size();
-
-        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * data.vertices.size(), data.vertices.data(), GL_DYNAMIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * data.indices.size(),     data.indices.data(),  GL_DYNAMIC_DRAW);
+        buffer->Bind();
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * buffer->vertices.size(), buffer->vertices.data(), usage[buffer->usage]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * buffer->indices.size(),  buffer->indices.data(),  usage[buffer->usage]);
     }
 
     void RendererGL::PrintExtensions() {

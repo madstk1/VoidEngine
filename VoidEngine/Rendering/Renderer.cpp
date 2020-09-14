@@ -6,7 +6,7 @@
 #include <glm/ext.hpp>
 
 namespace VOID_NS {
-    void Renderer::UpdateBufferImpl(BufferData *data, bool updateStatic) {
+    void Renderer::UpdateBuffersImpl(BufferData *data) {
         if(!data) { return; }
 
         u32 vertexOffset = 0;
@@ -19,7 +19,7 @@ namespace VOID_NS {
         for(Entity *e : g_World->GetEntities()) {
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
-            if(!e->renderable || e->isStatic != updateStatic || mc == nullptr || mc->mesh == nullptr) {
+            if(!e->renderable || e->isStatic != (data->usage == BufferUsage::StaticBufferUsage) || mc == nullptr || mc->mesh == nullptr) {
                 continue;
             }
 
@@ -48,17 +48,5 @@ namespace VOID_NS {
     }
 
     void Renderer::Prepare() {
-    }
-
-    void Renderer::UpdateBuffers(BufferData *data) {
-        if(!data) { return; }
-
-        UpdateBufferImpl(data, false);
-    }
-
-    void Renderer::UpdateStaticBuffers(BufferData *data) {
-        if(!data) { return; }
-
-        UpdateBufferImpl(data, true);
     }
 };
