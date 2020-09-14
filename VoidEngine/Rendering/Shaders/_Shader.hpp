@@ -66,6 +66,7 @@ namespace VOID_NS {
 
     struct ShaderCreationInfo {
         std::string name;
+        std::string version;
         std::vector<std::pair<ShaderStage, std::string>> sources;
         ShaderLayout layout;
     };

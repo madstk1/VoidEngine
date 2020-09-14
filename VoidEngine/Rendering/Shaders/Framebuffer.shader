@@ -3,38 +3,40 @@
 
 #include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
-std::string k_ShaderFramebuffer_vert = R"(#version 450 core
-
-layout(location = 0) in vec3 i_Position;
-layout(location = 1) in vec4 i_Color;
-layout(location = 2) in vec3 i_Normal;
-layout(location = 3) in vec2 i_TexCoords;
-
-layout(location = 0) out vec2 v_TexCoords;
-
-void main() {
-    gl_Position = vec4(i_Position, 1.0);
-    v_TexCoords = i_TexCoords;
-}
-)";
-
-std::string k_ShaderFramebuffer_frag = R"(#version 450 core
-
-layout(location = 0) in vec2 v_TexCoords;
-
-layout(location = 0) out vec4 o_Color;
-
-uniform sampler2D u_ScreenTexture;
-
-void main() {
-    o_Color = vec4(texture(u_ScreenTexture, v_TexCoords).rgb, 1.0);
-}
-)";
-
 ShaderCreationInfo k_ShaderFramebuffer = {
-    "Framebuffer", {
-        { ShaderStage::StageVertex,     k_ShaderFramebuffer_vert },
-        { ShaderStage::StageFragment,   k_ShaderFramebuffer_frag },
+    "Framebuffer", "450 core", {
+        { ShaderStage::StageVertex, R"(
+            /* Input variables. */
+            layout(location = 0) in vec3 i_Position;
+            layout(location = 1) in vec4 i_Color;
+            layout(location = 2) in vec3 i_Normal;
+            layout(location = 3) in vec2 i_TexCoords;
+            
+            /* Output variables. */
+            layout(location = 0) out vec2 v_TexCoords;
+            
+            /* Uniform variables. */
+            void main() {
+                gl_Position = vec4(i_Position, 1.0);
+                v_TexCoords = i_TexCoords;
+            }
+            )"
+        },
+        { ShaderStage::StageFragment, R"(
+            /* Input variables. */
+            layout(location = 0) in vec2 v_TexCoords;
+            
+            /* Output variables. */
+            layout(location = 0) out vec4 o_Color;
+            
+            /* Uniform variables. */
+            uniform sampler2D u_ScreenTexture;
+            
+            void main() {
+                o_Color = vec4(texture(u_ScreenTexture, v_TexCoords).rgb, 1.0);
+            }
+            )"
+        },
     }, {
         sizeof(Vertex), {
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, position)  },

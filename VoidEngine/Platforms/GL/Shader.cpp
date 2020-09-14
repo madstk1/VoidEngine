@@ -213,7 +213,9 @@ namespace VOID_NS {
             m_StageID[src.first] = glCreateShader(k_Stages[src.first]);
             u32 id = m_StageID[src.first];
 
+            src.second = "#version " + info.version + "\n" + src.second;
             const char *src_ = src.second.c_str();
+
             glShaderSource(id, 1, &src_, NULL);
             glCompileShader(id);
 
