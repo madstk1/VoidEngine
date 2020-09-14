@@ -414,7 +414,7 @@ namespace VOID_NS {
         u32 i = 0;
         for(Light *light : g_World->GetLights()) {
             if(i >= 32) { break; }
-            shader->SetUniform3fv("u_LightingData[" + std::to_string(i) + "].color",     light->lightColor);
+            shader->SetUniform4fv("u_LightingData[" + std::to_string(i) + "].color",     light->lightColor);
             shader->SetUniform3fv("u_LightingData[" + std::to_string(i) + "].position",  light->position);
             shader->SetUniform1fv("u_LightingData[" + std::to_string(i) + "].intensity", light->intensity);
             i++;

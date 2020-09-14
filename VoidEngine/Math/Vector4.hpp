@@ -2,6 +2,8 @@
 #define VOID_MATH_VECTOR4_H__
 
 #include <VoidEngine/Core/Common.hpp>
+#include <VoidEngine/Math/Vector2.hpp>
+#include <VoidEngine/Math/Vector3.hpp>
 #include <glm/glm.hpp>
 
 namespace VOID_NS {
@@ -14,13 +16,17 @@ namespace VOID_NS {
         typedef vec4<T>        self;
         typedef glm::vec<4, T> base;
 
-        vec4()                            : base() {}
-        vec4(base v)                      : base(v) {}
-        vec4(const self &v)               : base(v) {}
-        vec4(f32 x)                       : base(x, x, x, x) {}
-        vec4(f32 x, f32 y)                : base(x, y, 0.0f, 0.0f) {}
-        vec4(f32 x, f32 y, f32 z)         : base(x, y, z, 0.0f) {}
-        vec4(f32 x, f32 y, f32 z, f32 w)  : base(x, y, z, w) {}
+        vec4()                               : base() {}
+        vec4(base v)                         : base(v) {}
+        vec4(const self &v)                  : base(v) {}
+        vec4(const vec2<T> &v)               : base(v.x, v.y) {}
+        vec4(const vec2<T> &v, f32 z, f32 w) : base(v.x, v.y, z, w) {}
+        vec4(const vec3<T> &v)               : base(v.x, v.y, v.z) {}
+        vec4(const vec3<T> &v, f32 w)        : base(v.x, v.y, v.z, w) {}
+        vec4(f32 x)                          : base(x, x, x, x) {}
+        vec4(f32 x, f32 y)                   : base(x, y, 0.0f, 0.0f) {}
+        vec4(f32 x, f32 y, f32 z)            : base(x, y, z, 0.0f) {}
+        vec4(f32 x, f32 y, f32 z, f32 w)     : base(x, y, z, w) {}
 
         const f32        Length()               const { return glm::length((base) *this); }
         const self       Normalized()           const { return glm::normalize(*this); }

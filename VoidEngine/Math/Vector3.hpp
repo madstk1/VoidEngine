@@ -2,6 +2,7 @@
 #define VOID_MATH_VECTOR3_H__
 
 #include <VoidEngine/Core/Common.hpp>
+#include <VoidEngine/Math/Vector2.hpp>
 #include <glm/glm.hpp>
 
 namespace VOID_NS {
@@ -14,12 +15,14 @@ namespace VOID_NS {
         typedef vec3<T>        self;
         typedef glm::vec<3, T> base;
 
-        vec3()                    : base() {}
-        vec3(base v)              : base(v) {}
-        vec3(const self &v)       : base(v) {}
-        vec3(f32 x)               : base(x, x) {}
-        vec3(f32 x, f32 y)        : base(x, y) {}
-        vec3(f32 x, f32 y, f32 z) : base(x, y, z) {}
+        vec3()                        : base() {}
+        vec3(base v)                  : base(v) {}
+        vec3(const self &v)           : base(v) {}
+        vec3(const vec2<T> &v)        : base(v.x, v.y) {}
+        vec3(const vec2<T> &v, f32 z) : base(v.x, v.y, z) {}
+        vec3(f32 x)                   : base(x, x, x) {}
+        vec3(f32 x, f32 y)            : base(x, y, 0.0f) {}
+        vec3(f32 x, f32 y, f32 z)     : base(x, y, z) {}
 
         const f32        Length()              const { return glm::length((base) *this); }
         const self       Normalized()          const { return glm::normalize(*this); }

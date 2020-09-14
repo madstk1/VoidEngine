@@ -41,7 +41,7 @@ namespace VOID_NS {
         } while(false);
 
         eur = glm::eulerAngles(fin);
-        eur = glm::degrees(eur);
+        eur = glm::degrees((glm::vec3) eur);
 
         if(dir.z >= 0.0f) {
             rotation.x = -eur.y + 90;
@@ -58,9 +58,9 @@ namespace VOID_NS {
     
     Vector3 Entity::Forward() {
         Vector3 dir = {
-            cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y)), /* X */
-            sin(glm::radians(rotation.y)),                                 /* Y */
-            sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y)), /* Z */
+            static_cast<f32>(cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y))), /* X */
+            static_cast<f32>(sin(glm::radians(rotation.y))),                                 /* Y */
+            static_cast<f32>(sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y))), /* Z */
         };
         return glm::normalize(dir);
     }

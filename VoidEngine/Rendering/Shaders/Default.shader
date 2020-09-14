@@ -34,7 +34,7 @@ ShaderCreationInfo k_ShaderDefault = {
         },
         { ShaderStage::StageFragment, R"(
             struct PointLight {
-                vec3 color;
+                vec4 color;
                 vec3 position;
                 float intensity;
             };
