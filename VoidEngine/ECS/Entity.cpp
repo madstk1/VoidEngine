@@ -66,6 +66,6 @@ namespace VOID_NS {
     }
     
     Vector3 Entity::Right() {
-        return glm::normalize(glm::cross(Forward(), Up()));
+        return Vector3::Cross(Vector3::Forward(), Vector3::Up()).Normalized();
     }
 };

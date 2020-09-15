@@ -37,15 +37,14 @@ namespace VOID_NS {
             m_Position.y -= temp.y;
             m_Position.y = glm::clamp(m_Position.y, m_MinY, m_MaxY);
 
-            Vector3 newPosition = {
+            Vector3 newPosition = Vector3(
                 cos(m_Position.x) * cos(m_Position.y),
                 sin(m_Position.y),
                 sin(m_Position.x) * cos(m_Position.y)
-            };
+            ).Normalized();
 
-            newPosition = glm::normalize(newPosition);
             newPosition *= distance;
-            newPosition += orbitPosition;
+            newPosition += (glm::vec3) orbitPosition;
 
             position = newPosition;
 
