@@ -9,8 +9,6 @@ namespace VOID_NS {
     void Renderer::UpdateGeometryBuffer(GeometryBuffer *data) {
         if(!data) { return; }
 
-        u32 vertexOffset = 0;
-        u32 indexOffset = 0;
         u32 indexExtension = 0;
 
         data->vertices.Clear();
@@ -21,7 +19,7 @@ namespace VOID_NS {
         for(Entity *e : g_World->GetEntities()) {
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
-            if(!e->renderable || e->isStatic != (data->GetUsage() == Buffer::BufferUsage::Static) || mc == nullptr || mc->mesh == nullptr || mc->shader == nullptr) {
+            if(!e->renderable || e->isStatic != (data->GetUsage() == Buffer::BufferUsage::Static) || mc == nullptr || mc->mesh == nullptr) {
                 continue;
             }
 
@@ -43,9 +41,6 @@ namespace VOID_NS {
             }
 
             indexExtension += mc->mesh->vertices.size();
-
-            vertexOffset += sizeof(Vertex) * mc->mesh->vertices.size();
-            indexOffset  += sizeof(u32)    * mc->mesh->indices.size();
         }
     }
 
