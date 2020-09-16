@@ -16,10 +16,12 @@ namespace VOID_NS {
         data->vertices.clear();
         data->indices.clear();
 
+        std::vector<Shader *> shaders;
+
         for(Entity *e : g_World->GetEntities()) {
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
-            if(!e->renderable || e->isStatic != (data->usage == BufferUsage::StaticBufferUsage) || mc == nullptr || mc->mesh == nullptr) {
+            if(!e->renderable || e->isStatic != (data->usage == BufferUsage::StaticBufferUsage) || mc == nullptr || mc->mesh == nullptr || mc->shader == nullptr) {
                 continue;
             }
 

@@ -1,18 +1,20 @@
 #ifndef VOID_ECS_MESH_COMPONENT_H__
 #define VOID_ECS_MESH_COMPONENT_H__
 
-#include <vector>
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/ECS/Component.hpp>
-#include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/Misc/Mesh.hpp>
+#include <VoidEngine/Rendering/Shader.hpp>
 
 namespace VOID_NS {
-    class MeshComponent : Component {
+    class MeshComponent : public Component {
     public:
-        MeshComponent() : Component(true) {}
-
         Mesh *mesh = nullptr;
+        Shader *shader = nullptr;
+
+        MeshComponent(Mesh *mesh = nullptr) : Component(true) {
+            this->mesh   = mesh;
+            this->shader = ShaderLibrary::GetShader("Default");
+        }
     };
 };
 

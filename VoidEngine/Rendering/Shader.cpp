@@ -15,7 +15,7 @@ namespace VOID_NS {
 
     Shader *ShaderLibrary::AddShader(ShaderCreationInfo info) {
         if(GetShader(info.name) != nullptr) {
-            Logger::LogError("Shader with name '%s' already exists in shader library.", info.name.c_str());
+            Logger::Error("Shader with name '", info.name, "' already exists in shader library.");
             return nullptr;
         }
 

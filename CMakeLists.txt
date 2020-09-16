@@ -19,12 +19,12 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 OPTION(VOID_ENABLE_OPENGL   "Enable OpenGL backend"              TRUE)
 
 IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    MESSAGE(STATUS "Setting build type to 'Debug' as none was specified.")
+    MESSAGE(STATUS "[VOID] Setting build type to 'Debug' as none was specified.")
     SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build." FORCE)
 ENDIF()
 
-MESSAGE(STATUS "Building library as ${CMAKE_BUILD_TYPE}")
-MESSAGE(STATUS "Building with OpenGL backend: ${VOID_ENABLE_OPENGL}")
+MESSAGE(STATUS "[VOID] Building library as ${CMAKE_BUILD_TYPE}")
+MESSAGE(STATUS "[VOID] Building with OpenGL backend: ${VOID_ENABLE_OPENGL}")
 
 ##
 ## PROJECT
@@ -58,7 +58,7 @@ ADD_SUBDIRECTORY(ThirdParty/glad/)
 
 FIND_PACKAGE(glfw3 QUIET)
 IF(NOT glfw3_FOUND)
-    MESSAGE(STATUS "Didn't find GLFW on system. Using in-tree build.")
+    MESSAGE(STATUS "[VOID] Didn't find GLFW on system. Using in-tree build.")
 
     SET(BUILD_SHARED_LIBS   OFF CACHE BOOL "" FORCE)
     SET(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
@@ -74,7 +74,7 @@ ENDIF()
 
 FIND_PACKAGE(glm QUIET)
 IF(NOT glm_FOUND)
-    MESSAGE(STATUS "Didn't find GLM on system. Using in-tree build.")
+    MESSAGE(STATUS "[VOID] Didn't find GLM on system. Using in-tree build.")
 
     SET(GLM_TEST_ENABLE     OFF CACHE BOOL "" FORCE)
     SET(BUILD_SHARED_LIBS   OFF CACHE BOOL "" FORCE)
@@ -88,11 +88,12 @@ ENDIF()
 
 FIND_PACKAGE(assimp QUIET)
 IF(NOT assimp_FOUND)
-    MESSAGE(STATUS "Didn't find Assimp on system. Using in-tree build.")
+    MESSAGE(STATUS "[VOID] Didn't find Assimp on system. Using in-tree build.")
 
     SET(BUILD_SHARED_LIBS         OFF CACHE BOOL "" FORCE)
     SET(ASSIMP_BUILD_TESTS        OFF CACHE BOOL "" FORCE)
     SET(ASSIMP_INSTALL            OFF CACHE BOOL "" FORCE)
+    SET(ASSIMP_NO_EXPORT          ON  CACHE BOOL "" FORCE)
     SET(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
     ADD_SUBDIRECTORY(ThirdParty/assimp/)
     INCLUDE_DIRECTORIES(ThirdParty/assimp/include)

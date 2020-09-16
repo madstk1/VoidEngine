@@ -24,7 +24,7 @@ namespace VOID_NS {
         );
 
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            Logger::LogError("Failed to load model: %s, %s", path.c_str(), m_Importer.GetErrorString());
+            Logger::Error("Failed to load model: %s, %s", path.c_str(), m_Importer.GetErrorString());
             return nullptr;
         }
 

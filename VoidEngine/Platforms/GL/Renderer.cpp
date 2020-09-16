@@ -162,19 +162,19 @@ namespace VOID_NS {
         glObjectLabel(GL_FRAMEBUFFER,  m_IntermediateFBO, -1, "Intermediate FBO");
         glObjectLabel(GL_RENDERBUFFER, m_Renderbuffer,    -1, "Renderbuffer");
 
-        Logger::LogInfo("System information:");
-        Logger::LogInfo("   GLFW, v%s", glfwGetVersionString());
-        Logger::LogInfo("   Renderer: %s", glGetString(GL_RENDERER));
-        Logger::LogInfo("   Version: OpenGL %s", glGetString(GL_VERSION));
+        Logger::Info("System information:");
+        Logger::Info("   GLFW, v", glfwGetVersionString());
+        Logger::Info("   Renderer: ", glGetString(GL_RENDERER));
+        Logger::Info("   Version: OpenGL ", glGetString(GL_VERSION));
 
         for(std::string ext : GetExtensions()) {
-            Logger::LogDebug("[EXT] %s", ext.c_str());
+            Logger::Debug("[EXT] ", ext);
         }
 #endif 
     }
 
     RendererGL::~RendererGL() {
-        Logger::LogDebug("Deallocating OpenGL-renderer.");
+        Logger::Debug("Deallocating OpenGL-renderer.");
 
         glDeleteFramebuffers(1, &m_Framebuffer);
         glDeleteFramebuffers(1, &m_IntermediateFBO);

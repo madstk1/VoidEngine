@@ -23,7 +23,7 @@ namespace VOID_NS {
             if(axis == "Mouse X") { return m_Cursor.x; }
             if(axis == "Mouse Y") { return m_Cursor.y; }
 
-            Logger::LogWarning("Invalid axis: %s", axis.c_str());
+            Logger::Warning("Invalid axis: %s", axis.c_str());
             return 0.0f;
         }
 

@@ -2,10 +2,7 @@
 #define VOID_DEBUG_LOG_H__
 
 #include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <ostream>
-#include <string>
+#include <type_traits>
 #include <typeindex>
 #include <VoidEngine/Core/Common.hpp>
 
@@ -22,38 +19,40 @@
     }
 
 namespace VOID_NS {
-    typedef enum {
-        VOID_LOG_LEVEL_DEBUG       = (u8) 0,
-        VOID_LOG_LEVEL_INFO        = (u8) 1,
-        VOID_LOG_LEVEL_WARNING     = (u8) 2,
-        VOID_LOG_LEVEL_ERROR       = (u8) 3,
-        VOID_LOG_LEVEL_FATAL       = (u8) 4
-    } LogLevel;
-
     class Logger {
     protected:
-        static FILE *s_Output;
-        static LogLevel level_;
+        template<typename T>
+        static void Log(T t) {
+            std::cout << t << std::endl;
+        }
 
-        static struct tm *GetTime();
-        static void Log(const char *, const char *, va_list);
+        template<typename T, typename ... Ts>
+        static void Log(T t, Ts... ts) {
+            std::cout << t;
+            Log(std::forward<Ts>(ts)...);
+        }
 
     public:
-        static void Initialize();
-        static void Free();
+        enum class Level {
+            Debug,
+            Info,
+            Warning,
+            Error,
+            Fatal,
+        };
 
-        static LogLevel GetLogLevel();
-        static void SetLogLevel(LogLevel);
+        static Level GetLogLevel();
+        static void  SetLogLevel(Level);
 
         static f32 GetFramesPerSecond();
         static u64 GetMemoryAllocations();
-        
-        static void LogFatal(const char *fmt, ...)   __attribute__ ((format(printf, 1, 2), noreturn));
-        static void LogError(const char *fmt, ...)   __attribute__ ((format(printf, 1, 2)));
-        static void LogWarning(const char *fmt, ...) __attribute__ ((format(printf, 1, 2)));
-        static void LogInfo(const char *fmt, ...)    __attribute__ ((format(printf, 1, 2)));
-        static void LogDebug(const char *fmt, ...)   __attribute__ ((format(printf, 1, 2)));
 
+        template<typename T, typename... Ts> static void Debug   (T t, Ts... ts) { if(GetLogLevel() >= Level::Debug)   { Log(t, ts...); } }
+        template<typename T, typename... Ts> static void Info    (T t, Ts... ts) { if(GetLogLevel() >= Level::Info)    { Log(t, ts...); } }
+        template<typename T, typename... Ts> static void Warning (T t, Ts... ts) { if(GetLogLevel() >= Level::Warning) { Log(t, ts...); } }
+        template<typename T, typename... Ts> static void Error   (T t, Ts... ts) { if(GetLogLevel() >= Level::Error)   { Log(t, ts...); } }
+        template<typename T, typename... Ts> static void Fatal   (T t, Ts... ts) { if(GetLogLevel() >= Level::Fatal)   { Log(t, ts...); abort(); } }
+        
         template <typename T>
         static const char *GetClassName() {
             i32 status = -4;
@@ -65,6 +64,10 @@ namespace VOID_NS {
 #endif
             return mangled;
         }
+
+    protected:
+        static Level m_Level;
+        static struct tm *GetTime();
     };
 };
 

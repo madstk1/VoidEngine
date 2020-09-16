@@ -41,7 +41,7 @@ public:
 };
 
 Application *Void::CreateApplication(ApplicationInfo info) {
-    Logger::SetLogLevel(LogLevel::VOID_LOG_LEVEL_DEBUG);
+    Logger::SetLogLevel(Logger::Level::Debug);
 
     info.Buffering  = SwapInterval::SingleBuffer;
     info.Background = Color(0.25f, 0.1f, 0.1, 1.0f);

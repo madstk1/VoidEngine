@@ -4,6 +4,8 @@
 namespace VOID_NS {
     ResourceMap ResourceManager::m_Resources;
 
+    // TODO:
+    // Add translation function.
     const std::string k_ResourceTypeNames[] = {
         [Resource::Type::UnknownResource]  = "Unknown",
         [Resource::Type::ShaderResource]   = "Shader",
@@ -32,7 +34,7 @@ namespace VOID_NS {
 
     void ResourceMap::push(std::string name, Resource::Type type, Resource *resc) {
         if(find(name, type) != nullptr) {
-            Logger::LogError("Resource (%s, %s) already exists in resource map.", name.c_str(), k_ResourceTypeNames[type].c_str());
+            Logger::Error("Resource (", name, ", ", k_ResourceTypeNames[type], ") already exists in resource map.");
             return;
         }
         m_Resources.push_back({name, type, resc});
@@ -47,7 +49,7 @@ namespace VOID_NS {
             }
             i++;
         }
-        Logger::LogError("Resource (%s, %s) doesn't exist in resource map.", name.c_str(), k_ResourceTypeNames[type].c_str());
+        Logger::Error("Resource (", name, ", ", k_ResourceTypeNames[type], ") doesn't exist in resource map.");
         return nullptr;
     }
 

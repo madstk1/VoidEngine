@@ -21,7 +21,7 @@ namespace VOID_NS {
 #if defined(VOID_ENABLE_OPENGL)
             case RenderingAPI::OpenGL: g_Renderer = (Renderer *) Allocator::Allocate<RendererGL>(info); break;
 #endif
-            default: Logger::LogFatal(VOID_ERR_INV_API);
+            default: VOID_ASSERT(false, VOID_ERR_INV_API);
         }
     }
 
@@ -44,15 +44,13 @@ namespace VOID_NS {
 
 int main(int argc, char **argv) {
 #if defined(VOID_ENABLE_DEBUG)
-    Logger::LogInfo(
-        "Void Engine, v%d.%d.%d",
-        VOID_VERSION_MAJOR,
-        VOID_VERSION_MINOR,
+    Logger::Info(
+        "Void Engine, v",
+        VOID_VERSION_MAJOR, ".",
+        VOID_VERSION_MINOR, ".",
         VOID_VERSION_PATCH
     );
 #endif
-
-    Void::Logger::Initialize();
 
     Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
     Void::g_Application = Void::CreateApplication(k_DefaultInfo);

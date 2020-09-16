@@ -63,7 +63,7 @@ namespace VOID_NS {
 
         for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
             if(c_.first.name() == tindex.name()) {
-                Logger::LogError("Can't add %s to %s: component already exists", Logger::GetClassName<T>(), this->name.c_str());
+                Logger::Error("Can't add %s to %s: component already exists", Logger::GetClassName<T>(), this->name.c_str());
                 return NULL;
             }
         }

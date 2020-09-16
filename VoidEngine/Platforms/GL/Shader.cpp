@@ -211,7 +211,7 @@ namespace VOID_NS {
             return loc;
         }
 
-        Logger::LogError("Invalid uniform identifier '%s', %d", identifier.c_str(), loc);
+        Logger::Error("Invalid uniform identifier '", identifier, "', ", loc);
         return -1;
     }
 
@@ -234,7 +234,7 @@ namespace VOID_NS {
                 glGetShaderInfoLog(id, m_LogLength, &m_LogLength, &m_ErrorLog[0]);
                 
                 glDeleteShader(id);
-                Logger::LogFatal("Failed to compile shader: %s", m_ErrorLog.data());
+                Logger::Fatal("Failed to compile shader: ", m_ErrorLog.data());
             }
         }
     }
@@ -256,13 +256,13 @@ namespace VOID_NS {
             for(std::pair<ShaderStage, std::string> src : info.sources) {
                 glDeleteShader(m_StageID[src.first]);
             }
-            Logger::LogFatal("Failed to link shader: %s", m_ErrorLog.data());
+            Logger::Fatal("Failed to link shader: ", m_ErrorLog.data());
         }
 
         // Detach linked shaders to free memory.
         for(std::pair<ShaderStage, std::string> src : info.sources) {
             glDetachShader(m_Program, m_StageID[src.first]);
         }
-        Logger::LogInfo("Finished compiling shader: %s", info.name.c_str());
+        Logger::Info("Finished compiling shader: ", info.name.c_str());
     }
 };

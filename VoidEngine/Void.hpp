@@ -35,6 +35,7 @@
 #include <VoidEngine/Misc/ModelLoader.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Misc/Texture.hpp>
+#include <VoidEngine/Misc/String.hpp>
 
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>

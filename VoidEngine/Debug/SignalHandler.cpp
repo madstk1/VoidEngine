@@ -24,14 +24,14 @@ namespace VOID_NS {
     void SignalHandler::Initialize() {
         for(const std::pair<i32, SignalDeclaration> sig : m_AvailableSignals) {
             signal(sig.first, SignalHandler::Handler);
-            Logger::LogDebug("Setup signal for %s", sig.second.name.c_str());
+            Logger::Debug("Setup signal for ", sig.second.name.c_str());
         }
     }
 
     void SignalHandler::Handler(i32 code) {
         for(const std::pair<i32, SignalDeclaration> sig : m_AvailableSignals) {
             if(sig.first == code) {
-                Logger::LogWarning("Caught signal: %d, %s", code, sig.second.name.c_str());
+                Logger::Warning("Caught signal: ", code, sig.second.name.c_str());
                 sig.second.handler();
             }
         }

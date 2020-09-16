@@ -11,16 +11,16 @@ namespace VOID_NS {
 #if defined(VOID_ENABLE_DEBUG)
     void WindowGL::GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
         switch(severity) {
-            case GL_DEBUG_SEVERITY_HIGH:         Logger::LogFatal   ("GL: %s", msg); break;
-            case GL_DEBUG_SEVERITY_MEDIUM:       Logger::LogError   ("GL: %s", msg); break;
-            case GL_DEBUG_SEVERITY_LOW:          Logger::LogWarning ("GL: %s", msg); break;
-            case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::LogInfo    ("GL: %s", msg); break;
+            case GL_DEBUG_SEVERITY_HIGH:         Logger::Fatal   ("GL: ", msg); break;
+            case GL_DEBUG_SEVERITY_MEDIUM:       Logger::Error   ("GL: ", msg); break;
+            case GL_DEBUG_SEVERITY_LOW:          Logger::Warning ("GL: ", msg); break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::Info    ("GL: ", msg); break;
         }
     }
 #endif
 
     void WindowGL::ErrorCallback(i32 code, const char *msg) {
-        Logger::LogError("GLFW: %d, %s", code, msg);
+        Logger::Error("GLFW: ", code, " ", msg);
     }
 
     void WindowGL::ResizeCallback(GLFWwindow *win, i32 w, i32 h) {
@@ -80,7 +80,7 @@ namespace VOID_NS {
 
         if(!this->m_Window) {
             glfwTerminate();
-            Logger::LogFatal("Failed to create GLFW window.");
+            Logger::Fatal("Failed to create GLFW window.");
         }
 
         glfwMakeContextCurrent(this->m_Window);
@@ -100,7 +100,7 @@ namespace VOID_NS {
         i32 flags;
         glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
         if(!(flags & GL_CONTEXT_FLAG_DEBUG_BIT) || !GLAD_GL_ARB_debug_output) {
-            Logger::LogError("Debugging is enabled, but the GL-context does not support it.");
+            Logger::Error("Debugging is enabled, but the GL-context does not support it.");
         } else {
             glEnable(GL_DEBUG_OUTPUT);
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -125,12 +125,12 @@ namespace VOID_NS {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        Logger::LogInfo("Finished intializing GLFW.");
+        Logger::Info("Finished intializing GLFW.");
     }
 
     WindowGL::~WindowGL() {
         glfwMakeContextCurrent(nullptr);
-        Logger::LogInfo("Deallocated GLFW window.");
+        Logger::Info("Deallocated GLFW window.");
     }
 
     void WindowGL::SetTitle(std::string title) {
