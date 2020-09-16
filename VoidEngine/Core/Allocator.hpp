@@ -7,6 +7,9 @@
 #include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
+    template<typename T>
+    using Ptr = std::shared_ptr<T>;
+
     class Allocator {
         friend Logger;
 
