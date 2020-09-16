@@ -19,7 +19,6 @@ SET(VOID_SOURCES
     "Math/Color.cpp"
     "Misc/File.cpp"
     "Misc/ModelLoader.cpp"
-    "Misc/Vector.cpp"
     "Misc/Resource.cpp"
     "Misc/Texture.cpp"
     "Misc/String.cpp"

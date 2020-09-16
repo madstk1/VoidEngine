@@ -14,6 +14,8 @@ namespace VOID_NS {
 
         bool Empty() const { return m_Data.empty(); }
         u32  Length() const { return m_Data.size(); }
+        T   *GetData() const { return m_Data.data();  }
+
         bool Contains(const T elem) const { return FindIndex(elem) != -1; }
         i32  FindIndex(const T elem) const {
             for(u32 i = 0; i < this->Length(); i++) {
