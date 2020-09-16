@@ -50,19 +50,19 @@ namespace VOID_NS {
         1, 4, 2, 2, 4, 6
     };
 
-    RendererGL::BufferDataGL::BufferDataGL(BufferUsage usage) : BufferData(usage) {
+    RendererGL::GeometryBufferGL::GeometryBufferGL(BufferUsage usage) : GeometryBuffer(usage) {
         glCreateBuffers(1, &VBO);
         glCreateBuffers(1, &EBO);
         glCreateVertexArrays(1, &VAO);
     }
 
-    RendererGL::BufferDataGL::~BufferDataGL() {
+    RendererGL::GeometryBufferGL::~GeometryBufferGL() {
         glDeleteBuffers(1, &VBO);
         glDeleteBuffers(1, &EBO);
         glDeleteVertexArrays(1, &VAO);
     }
 
-    void RendererGL::BufferDataGL::Bind() {
+    void RendererGL::GeometryBufferGL::Bind() {
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -79,8 +79,8 @@ namespace VOID_NS {
          *  Initialize vertex-buffers.
          */
 
-        m_Static  = new BufferDataGL(BufferUsage::StaticBufferUsage);
-        m_Dynamic = new BufferDataGL(BufferUsage::DynamicBufferUsage);
+        m_Static  = new GeometryBufferGL(Buffer::BufferUsage::Static);
+        m_Dynamic = new GeometryBufferGL(Buffer::BufferUsage::Dynamic);
 
         m_Dynamic->Bind();
 
@@ -91,7 +91,7 @@ namespace VOID_NS {
          *  Initialize renderquad buffers.
          */
 
-        m_RenderQuad = new BufferDataGL(BufferUsage::StaticBufferUsage);
+        m_RenderQuad = new GeometryBufferGL(Buffer::BufferUsage::Static);
         m_RenderQuad->Bind();
 
         glBufferData(GL_ARRAY_BUFFER,         sizeof(k_QuadVertices), k_QuadVertices, GL_STATIC_DRAW);
@@ -101,7 +101,7 @@ namespace VOID_NS {
          *  Initialize skybox-buffers.
          */
 
-        m_Skybox = new BufferDataGL(BufferUsage::StaticBufferUsage);
+        m_Skybox = new GeometryBufferGL(Buffer::BufferUsage::Static);
         m_Skybox->Bind();
 
         glBufferData(GL_ARRAY_BUFFER, sizeof(k_SkyboxVertices), k_SkyboxVertices, GL_STATIC_DRAW);
@@ -193,7 +193,6 @@ namespace VOID_NS {
     }
 
     void RendererGL::Begin() {
-        this->Prepare();
         GetWindow()->HandleMouse();
 
         /* Bind framebuffer. */
@@ -202,12 +201,12 @@ namespace VOID_NS {
         ClearColor();
 
         /* Bind entity meshes to buffers. */
-        this->UpdateBuffers(m_Dynamic);
+        this->UpdateGeometryBuffer(m_Dynamic);
 
         static bool ff = true;
         if(ff) {
             ff = false;
-            this->UpdateBuffers(m_Static);
+            this->UpdateGeometryBuffer(m_Static);
         }
     }
 
@@ -236,7 +235,7 @@ namespace VOID_NS {
         defaultShader->SetUniformMat4f("u_View",         view);
         defaultShader->SetUniformMat4f("u_Projection",   proj);
 
-        glDrawElements(GL_TRIANGLES, m_Dynamic->indices.size(), GL_UNSIGNED_INT, (const void *) 0);
+        glDrawElements(GL_TRIANGLES, m_Dynamic->indices.Length(), GL_UNSIGNED_INT, (const void *) 0);
         
         /**
          *  Render static entites.
@@ -251,7 +250,7 @@ namespace VOID_NS {
         defaultShader->SetUniformMat4f("u_View",         view);
         defaultShader->SetUniformMat4f("u_Projection",   proj);
 
-        glDrawElements(GL_TRIANGLES, m_Static->indices.size(), GL_UNSIGNED_INT, (const void *) 0);
+        glDrawElements(GL_TRIANGLES, m_Static->indices.Length(), GL_UNSIGNED_INT, (const void *) 0);
 
         /**
          *  Draw skybox.
@@ -382,17 +381,20 @@ namespace VOID_NS {
      *  PROTECTED/PRIVATE METHODS
      */
 
-    void RendererGL::UpdateBuffers(BufferDataGL *buffer) {
-        u32 usage[] = {
-            [BufferUsage::DynamicBufferUsage] = GL_DYNAMIC_DRAW,
-            [BufferUsage::StaticBufferUsage]  = GL_STATIC_DRAW,
-        };
+    u32 Translate(Buffer::BufferUsage e) {
+        switch(e) {
+            case Buffer::BufferUsage::Dynamic:  return GL_DYNAMIC_DRAW;
+            case Buffer::BufferUsage::Static:   return GL_STATIC_DRAW;
+        }
+        VOID_ASSERT(false, "Invalid buffer-usage enum.");
+    }
 
-        Renderer::UpdateBuffersImpl(buffer);
+    void RendererGL::UpdateGeometryBuffer(GeometryBufferGL *buffer) {
+        Renderer::UpdateGeometryBuffer(buffer);
 
         buffer->Bind();
-        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * buffer->vertices.size(), buffer->vertices.data(), usage[buffer->usage]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * buffer->indices.size(),  buffer->indices.data(),  usage[buffer->usage]);
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * buffer->vertices.Length(), buffer->vertices.GetData(), Translate(buffer->GetUsage()));
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * buffer->indices.Length(),  buffer->indices.GetData(),  Translate(buffer->GetUsage()));
     }
 
     std::vector<std::string> RendererGL::GetExtensions() {

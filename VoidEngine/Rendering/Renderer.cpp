@@ -6,22 +6,22 @@
 #include <glm/ext.hpp>
 
 namespace VOID_NS {
-    void Renderer::UpdateBuffersImpl(BufferData *data) {
+    void Renderer::UpdateGeometryBuffer(GeometryBuffer *data) {
         if(!data) { return; }
 
         u32 vertexOffset = 0;
         u32 indexOffset = 0;
         u32 indexExtension = 0;
 
-        data->vertices.clear();
-        data->indices.clear();
+        data->vertices.Clear();
+        data->indices.Clear();
 
         std::vector<Shader *> shaders;
 
         for(Entity *e : g_World->GetEntities()) {
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
-            if(!e->renderable || e->isStatic != (data->usage == BufferUsage::StaticBufferUsage) || mc == nullptr || mc->mesh == nullptr || mc->shader == nullptr) {
+            if(!e->renderable || e->isStatic != (data->GetUsage() == Buffer::BufferUsage::Static) || mc == nullptr || mc->mesh == nullptr || mc->shader == nullptr) {
                 continue;
             }
 
@@ -35,11 +35,11 @@ namespace VOID_NS {
                 Vector4 v4 = Vector4(v.position, 1.0f) * transform;
 
                 v.position = Vector3(v4) + e->position;
-                data->vertices.push_back(v);
+                data->vertices.Append(v);
             }
 
             for(const u32 &i : mc->mesh->indices) {
-                data->indices.push_back(i + indexExtension);
+                data->indices.Append(i + indexExtension);
             }
 
             indexExtension += mc->mesh->vertices.size();
@@ -49,6 +49,6 @@ namespace VOID_NS {
         }
     }
 
-    void Renderer::Prepare() {
+    void Renderer::UpdateShaderBuffer(ShaderBuffer *data) {
     }
 };

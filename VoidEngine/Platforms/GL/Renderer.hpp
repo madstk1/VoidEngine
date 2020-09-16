@@ -9,34 +9,34 @@ namespace VOID_NS {
 
     class RendererGL : public Renderer {
     protected:
-        struct BufferDataGL : public BufferData {
+        struct GeometryBufferGL : public GeometryBuffer {
             u32 VBO;
             u32 EBO;
             u32 VAO;
 
-            BufferDataGL(BufferUsage);
-            ~BufferDataGL();
+            GeometryBufferGL(BufferUsage);
+            ~GeometryBufferGL();
 
             void Bind();
         };
 
         /* Buffers */
-        BufferDataGL   *m_Dynamic;
-        BufferDataGL   *m_Static;
-        BufferDataGL   *m_Skybox;
-        BufferDataGL   *m_RenderQuad;
+        GeometryBufferGL   *m_Dynamic;
+        GeometryBufferGL   *m_Static;
+        GeometryBufferGL   *m_Skybox;
+        GeometryBufferGL   *m_RenderQuad;
 
         /* Framebuffers / renderbuffers */
-        u32             m_Framebuffer;
-        u32             m_IntermediateFBO;
-        u32             m_Renderbuffer;
+        u32                 m_Framebuffer;
+        u32                 m_IntermediateFBO;
+        u32                 m_Renderbuffer;
 
         /* Textures */
-        u32             m_TextureColorbuffer;
-        u32             m_ScreenTexture;
-        u32             m_SkyboxCubemap;
+        u32                 m_TextureColorbuffer;
+        u32                 m_ScreenTexture;
+        u32                 m_SkyboxCubemap;
 
-        void UpdateBuffers(BufferDataGL *);
+        void UpdateGeometryBuffer(GeometryBufferGL *);
         void SetLightMatrix(Shader *);
 
         void OnResize(i32, i32);

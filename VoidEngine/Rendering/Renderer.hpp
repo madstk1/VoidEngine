@@ -1,30 +1,15 @@
 #ifndef VOID_RENDERING_RENDERER_H__
 #define VOID_RENDERING_RENDERER_H__
 
-#include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Misc/Cubemap.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
-#include <VoidEngine/Rendering/Shader.hpp>
+#include <VoidEngine/Rendering/Buffers/GeometryBuffer.hpp>
+#include <VoidEngine/Rendering/Buffers/ShaderBuffer.hpp>
 
 namespace VOID_NS {
     class Renderer {
     protected:
-        typedef enum {
-            DynamicBufferUsage,
-            StaticBufferUsage,
-        } BufferUsage;
-
-        typedef struct BufferData {
-            BufferUsage usage;
-            std::vector<Vertex> vertices;
-            std::vector<u32>    indices;
-
-            BufferData() : usage(BufferUsage::DynamicBufferUsage) {}
-            BufferData(BufferUsage usage) : usage(usage) {}
-            virtual ~BufferData() = default;
-        } BufferData;
-
         static const u32 s_MaxTriangles = 800000;
 
         i32             m_RefreshRate;
@@ -32,8 +17,8 @@ namespace VOID_NS {
         SwapInterval    m_Buffering;
         f32             m_Gamma = 1.5f;
         
-        void Prepare();
-        void UpdateBuffersImpl(BufferData *);
+        static void UpdateGeometryBuffer(GeometryBuffer *);
+        static void UpdateShaderBuffer(ShaderBuffer *);
 
     public:
         Renderer(ApplicationInfo) {}
