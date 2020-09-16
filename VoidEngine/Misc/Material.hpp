@@ -4,6 +4,7 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
+#include <VoidEngine/Rendering/Shader.hpp>
 
 namespace VOID_NS {
     class Material : public Resource {
@@ -13,8 +14,11 @@ namespace VOID_NS {
         f32     roughness   = 1.0f;
         f32     occlusion   = 1.0f;
 
-        Material(std::string name)
-            : Resource(name, Resource::Type::MaterialResource) {}
+        Shader *shader;
+
+        Material(std::string name) : Resource(name, Resource::Type::MaterialResource) {
+            shader = ShaderLibrary::GetShader("Default");
+        }
 
         virtual ~Material() = default;
 
