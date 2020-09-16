@@ -86,8 +86,9 @@ ENDIF()
 ## ASSIMP
 ##
 
-FIND_PACKAGE(assimp QUIET)
-IF(NOT assimp_FOUND)
+PKG_SEARCH_MODULE(ASSIMP QUIET assimp)
+
+IF(NOT ASSIMP_MODULE_NAME STREQUAL "assimp")
     MESSAGE(STATUS "[VOID] Didn't find Assimp on system. Using in-tree build.")
 
     SET(BUILD_SHARED_LIBS         OFF CACHE BOOL "" FORCE)
