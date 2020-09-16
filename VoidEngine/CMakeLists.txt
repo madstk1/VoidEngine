@@ -2,9 +2,11 @@ INCLUDE(GNUInstallDirs)
 ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 
 SET(LIBRARIES
-    "glad"
-    "glm"
-    "assimp"
+    glad
+    glm
+    assimp
+    dl
+    pthread
 )
 SET(VOID_SOURCES
     "Core/Application.cpp"

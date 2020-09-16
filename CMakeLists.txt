@@ -56,9 +56,9 @@ ADD_SUBDIRECTORY(ThirdParty/glad/)
 ## GLFW
 ##
 
-FIND_PACKAGE(glfw QUIET)
-IF(NOT glfw_FOUND)
-    MESSAGE(STATUS "Found GLFW on system.")
+FIND_PACKAGE(glfw3 QUIET)
+IF(NOT glfw3_FOUND)
+    MESSAGE(STATUS "Didn't find GLFW on system. Using in-tree build.")
 
     SET(BUILD_SHARED_LIBS   OFF CACHE BOOL "" FORCE)
     SET(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
@@ -74,7 +74,7 @@ ENDIF()
 
 FIND_PACKAGE(glm QUIET)
 IF(NOT glm_FOUND)
-    MESSAGE(STATUS "Found GLM on system.")
+    MESSAGE(STATUS "Didn't find GLM on system. Using in-tree build.")
 
     SET(GLM_TEST_ENABLE     OFF CACHE BOOL "" FORCE)
     SET(BUILD_SHARED_LIBS   OFF CACHE BOOL "" FORCE)
@@ -88,7 +88,7 @@ ENDIF()
 
 FIND_PACKAGE(assimp QUIET)
 IF(NOT assimp_FOUND)
-    MESSAGE(STATUS "Found Assimp on system.")
+    MESSAGE(STATUS "Didn't find Assimp on system. Using in-tree build.")
 
     SET(BUILD_SHARED_LIBS         OFF CACHE BOOL "" FORCE)
     SET(ASSIMP_BUILD_TESTS        OFF CACHE BOOL "" FORCE)
