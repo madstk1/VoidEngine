@@ -20,6 +20,7 @@ namespace VOID_NS {
             std::vector<Vertex> vertices;
             std::vector<u32>    indices;
 
+            BufferData() : usage(BufferUsage::DynamicBufferUsage) {}
             BufferData(BufferUsage usage) : usage(usage) {}
             virtual ~BufferData() = default;
         } BufferData;
