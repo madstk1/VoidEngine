@@ -3,6 +3,7 @@
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Misc/Cubemap.hpp>
+#include <VoidEngine/Rendering/Shader.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 #include <VoidEngine/Rendering/Buffers/GeometryBuffer.hpp>
 #include <VoidEngine/Rendering/Buffers/ShaderBuffer.hpp>
