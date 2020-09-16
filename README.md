@@ -42,7 +42,20 @@ Configure the build with CMake
 This is configure the build to compile examples, as well as the library itself. Now run make.
 
     make
+    
+## Using in project
 
-Now, the build folder will contain both the static-library `libvoid.a`, as well as the `Examples`-folder, which will contain executable examples.
+To use Void in a project, add is as a submodule.
 
-    ./Examples/01-Core/Example01
+    git submodule add https://github.com/madstk1/VoidEngine Engine
+    
+Thereafter, you can compile your application like this, using CMake:
+
+    CMAKE_MINIMUM_REQUIRED(VERSION 3.11.0)
+    PROJECT(Example)
+    
+    ADD_SUBDIRECTORY(Engine)
+    
+    ADD_EXECUTABLE(Example "Application.cpp")
+    TARGET_LINK_LIBRARIES(Example PUBLIC Void::Void)
+
