@@ -65,9 +65,9 @@ ShaderCreationInfo k_ShaderDefault = {
                     vec3 viewDir  = normalize(u_CameraPosition - v_Position);
                     vec3 halfDir  = normalize(lightDir + viewDir);
             
-                    vec3 ambient = u_LightingData[i].intensity * u_LightingData[i].color;
-                    vec3 diffuse = max(dot(v_Normal, lightDir), 0.0) * u_LightingData[i].color / max(0.1, distance);
-                    vec3 specular = pow(max(0.0, dot(v_Normal, halfDir)), 2.0) * u_LightingData[i].color;
+                    vec3 ambient = u_LightingData[i].intensity * u_LightingData[i].color.rgb;
+                    vec3 diffuse = max(dot(v_Normal, lightDir), 0.0) * u_LightingData[i].color.rgb / max(0.1, distance);
+                    vec3 specular = pow(max(0.0, dot(v_Normal, halfDir)), 2.0) * u_LightingData[i].color.rgb;
             
                     diffuse  *= attenuation;
                     specular *= attenuation;
