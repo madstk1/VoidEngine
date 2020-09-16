@@ -14,7 +14,6 @@ namespace VOID_NS {
 
         bool Empty() const { return m_Data.empty(); }
         u32  Length() const { return m_Data.size(); }
-        T   *GetData() const { return m_Data.data();  }
 
         bool Contains(const T elem) const { return FindIndex(elem) != -1; }
         i32  FindIndex(const T elem) const {
@@ -25,6 +24,7 @@ namespace VOID_NS {
         }
 
         void Clear() { m_Data.clear(); }
+        const T *GetData() const { return m_Data.data(); }
 
         void Prepend(const T elem) { m_Data.insert(m_Data.begin(), elem); }
         void Prepend(std::initializer_list<T>) {}
