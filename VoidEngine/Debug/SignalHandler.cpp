@@ -18,7 +18,6 @@ namespace VOID_NS {
         {SIGINT,    {"SIGINT",  Application::Exit}},
         {SIGABRT,   {"SIGABRT", Application::Exit}},
         {SIGILL,    {"SIGILL",  Application::Exit}},
-        {SIGSEGV,   {"SIGSEGV", Application::Exit}},
     };
 
     void SignalHandler::Initialize() {
@@ -31,7 +30,7 @@ namespace VOID_NS {
     void SignalHandler::Handler(i32 code) {
         for(const std::pair<i32, SignalDeclaration> sig : m_AvailableSignals) {
             if(sig.first == code) {
-                Logger::Warning("Caught signal: ", code, sig.second.name.c_str());
+                Logger::Warning("Caught signal: ", code, ", ", sig.second.name.c_str());
                 sig.second.handler();
             }
         }
