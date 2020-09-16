@@ -40,6 +40,7 @@ IF(${VOID_ENABLE_OPENGL})
 
     SET(VOID_SOURCES
         ${VOID_SOURCES}
+        "Platforms/GL/Buffers.cpp"
         "Platforms/GL/Shader.cpp"
         "Platforms/GL/Window.cpp"
         "Platforms/GL/Renderer.cpp"

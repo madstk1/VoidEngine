@@ -38,6 +38,12 @@ namespace VOID_NS {
               normal(normal),
               texCoords(texCoords) {}
     };
+
+    struct MVP {
+        Mat4 model = Mat4(0.0f);
+        Mat4 view  = Mat4(0.0f);
+        Mat4 proj  = Mat4(0.0f);
+    };
 };
 
 #endif /* VOID_MATH_SHAPES_H__ */

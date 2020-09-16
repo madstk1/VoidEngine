@@ -17,9 +17,11 @@ namespace VOID_NS {
         MultiSampling   m_Sampling;
         SwapInterval    m_Buffering;
         f32             m_Gamma = 1.5f;
-        
+
         static void UpdateGeometryBuffer(GeometryBuffer *);
         static void UpdateShaderBuffer(ShaderBuffer *);
+
+        static void CalculateMVP(MVP *);
 
     public:
         Renderer(ApplicationInfo) {}

@@ -10,9 +10,7 @@ namespace VOID_NS {
     class RendererGL : public Renderer {
     protected:
         struct GeometryBufferGL : public GeometryBuffer {
-            u32 VBO;
-            u32 EBO;
-            u32 VAO;
+            u32 VBO, EBO, VAO;
 
             GeometryBufferGL(BufferUsage);
             ~GeometryBufferGL();
@@ -20,9 +18,19 @@ namespace VOID_NS {
             void Bind();
         };
 
+        struct ShaderBufferGL : public ShaderBuffer {
+            u32 VBO, EBO, VAO;
+
+            ShaderBufferGL(BufferUsage);
+            ~ShaderBufferGL();
+
+            void Bind();
+        };
+
         /* Buffers */
-        GeometryBufferGL   *m_Dynamic;
-        GeometryBufferGL   *m_Static;
+        ShaderBufferGL     *m_Dynamic;
+        ShaderBufferGL     *m_Static;
+
         GeometryBufferGL   *m_Skybox;
         GeometryBufferGL   *m_RenderQuad;
 
@@ -36,9 +44,11 @@ namespace VOID_NS {
         u32                 m_ScreenTexture;
         u32                 m_SkyboxCubemap;
 
-        void UpdateGeometryBuffer(GeometryBufferGL *);
-        void SetLightMatrix(Shader *);
+        Shader             *m_DefaultShader;
+        MVP                 m_MVP;
 
+        void RenderShaderBuffer(ShaderBufferGL *);
+        void SetLightMatrix(Shader *);
         void OnResize(i32, i32);
         void ClearColor();
 

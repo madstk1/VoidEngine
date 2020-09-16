@@ -22,7 +22,10 @@ namespace VOID_NS {
 
         virtual ~Material() = default;
 
-        static inline Material GetDefault() { return Material("Default"); }
+        static inline Material *GetDefault() {
+            static Material mat("Default");
+            return &mat;
+        }
     };
 };
 

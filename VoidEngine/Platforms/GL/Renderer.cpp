@@ -50,24 +50,6 @@ namespace VOID_NS {
         1, 4, 2, 2, 4, 6
     };
 
-    RendererGL::GeometryBufferGL::GeometryBufferGL(BufferUsage usage) : GeometryBuffer(usage) {
-        glCreateBuffers(1, &VBO);
-        glCreateBuffers(1, &EBO);
-        glCreateVertexArrays(1, &VAO);
-    }
-
-    RendererGL::GeometryBufferGL::~GeometryBufferGL() {
-        glDeleteBuffers(1, &VBO);
-        glDeleteBuffers(1, &EBO);
-        glDeleteVertexArrays(1, &VAO);
-    }
-
-    void RendererGL::GeometryBufferGL::Bind() {
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    }
-
     RendererGL::RendererGL(ApplicationInfo info) : Renderer(info) {
         g_Window = Allocator::Allocate<WindowGL>(info);
 
@@ -79,11 +61,10 @@ namespace VOID_NS {
          *  Initialize vertex-buffers.
          */
 
-        m_Static  = new GeometryBufferGL(Buffer::BufferUsage::Static);
-        m_Dynamic = new GeometryBufferGL(Buffer::BufferUsage::Dynamic);
+        m_Static  = new ShaderBufferGL(Buffer::BufferUsage::Static);
+        m_Dynamic = new ShaderBufferGL(Buffer::BufferUsage::Dynamic);
 
         m_Dynamic->Bind();
-
         glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
 
@@ -201,56 +182,30 @@ namespace VOID_NS {
         ClearColor();
 
         /* Bind entity meshes to buffers. */
-        this->UpdateGeometryBuffer(m_Dynamic);
+        this->UpdateShaderBuffer(m_Dynamic);
 
         static bool ff = true;
         if(ff) {
             ff = false;
-            this->UpdateGeometryBuffer(m_Static);
+            this->UpdateShaderBuffer(m_Static);
+        
+            m_DefaultShader = ShaderLibrary::GetShader("Default");
         }
     }
 
     void RendererGL::Render() {
-        Shader *defaultShader      = ShaderLibrary::GetShader("Default");
         Shader *skyboxShader       = ShaderLibrary::GetShader("Skybox");
         Shader *framebufferShader  = ShaderLibrary::GetShader("Framebuffer");
 
         /* Calculate camera MVP. */
-        f32 aspectRatio = (f32) g_Window->GetSize().x / (f32) g_Window->GetSize().y;
-
-        Mat4 model = glm::mat4(1.0f);
-        Mat4 proj  = glm::perspective(glm::radians(g_Camera->fieldOfView), aspectRatio, g_Camera->zNear, g_Camera->zFar);
-        Mat4 view  = glm::lookAt(g_Camera->position, g_Camera->position + g_Camera->Forward(), {0, 1, 0});
+        CalculateMVP(&m_MVP);
 
         /**
-         *  Render dynamic entites.
+         *  Render entites.
          */
 
-        m_Dynamic->Bind();
-        SetLightMatrix(defaultShader);
-
-        defaultShader->SetUniform1fv("u_Gamma",          m_Gamma);
-        defaultShader->SetUniform3fv("u_CameraPosition", g_Camera->position);
-        defaultShader->SetUniformMat4f("u_Model",        model);
-        defaultShader->SetUniformMat4f("u_View",         view);
-        defaultShader->SetUniformMat4f("u_Projection",   proj);
-
-        glDrawElements(GL_TRIANGLES, m_Dynamic->indices.Length(), GL_UNSIGNED_INT, (const void *) 0);
-        
-        /**
-         *  Render static entites.
-         */
-
-        m_Static->Bind();
-        SetLightMatrix(defaultShader);
-
-        defaultShader->SetUniform1fv("u_Gamma",          m_Gamma);
-        defaultShader->SetUniform3fv("u_CameraPosition", g_Camera->position);
-        defaultShader->SetUniformMat4f("u_Model",        model);
-        defaultShader->SetUniformMat4f("u_View",         view);
-        defaultShader->SetUniformMat4f("u_Projection",   proj);
-
-        glDrawElements(GL_TRIANGLES, m_Static->indices.Length(), GL_UNSIGNED_INT, (const void *) 0);
+        RenderShaderBuffer(m_Dynamic);
+        RenderShaderBuffer(m_Static);
 
         /**
          *  Draw skybox.
@@ -262,8 +217,8 @@ namespace VOID_NS {
     
             m_Skybox->Bind();
             skyboxShader->Enable();
-            skyboxShader->SetUniformMat4f("u_Projection", proj);
-            skyboxShader->SetUniformMat4f("u_View", Mat4(Mat3(view)));
+            skyboxShader->SetUniformMat4f("u_Projection", m_MVP.proj);
+            skyboxShader->SetUniformMat4f("u_View", Mat4(Mat3(m_MVP.view)));
     
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
@@ -389,14 +344,6 @@ namespace VOID_NS {
         VOID_ASSERT(false, "Invalid buffer-usage enum.");
     }
 
-    void RendererGL::UpdateGeometryBuffer(GeometryBufferGL *buffer) {
-        Renderer::UpdateGeometryBuffer(buffer);
-
-        buffer->Bind();
-        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * buffer->vertices.Length(), buffer->vertices.GetData(), Translate(buffer->GetUsage()));
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * buffer->indices.Length(),  buffer->indices.GetData(),  Translate(buffer->GetUsage()));
-    }
-
     std::vector<std::string> RendererGL::GetExtensions() {
         i32 nExtensions = 0;
         std::vector<std::string> extensions;
@@ -408,6 +355,27 @@ namespace VOID_NS {
             extensions.push_back(std::string((char *) ext));
         }
         return extensions;
+    }
+
+    void RendererGL::RenderShaderBuffer(ShaderBufferGL *buffer) {
+        buffer->Bind();
+        for(auto d : buffer->GetData()) {
+            ShaderBuffer::Content content = d.second;
+            Shader *shader = content.material->shader;
+            shader = (!shader) ? m_DefaultShader : shader;
+
+            glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
+
+            SetLightMatrix(shader);
+            shader->SetUniform1fv("u_Gamma",          m_Gamma);
+            shader->SetUniform3fv("u_CameraPosition", g_Camera->position);
+            shader->SetUniformMat4f("u_Model",        m_MVP.model);
+            shader->SetUniformMat4f("u_View",         m_MVP.view);
+            shader->SetUniformMat4f("u_Projection",   m_MVP.proj);
+
+            glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
+        }
     }
 
     void RendererGL::SetLightMatrix(Shader *shader) {
