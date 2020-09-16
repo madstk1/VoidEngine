@@ -40,11 +40,11 @@ namespace VOID_NS {
             }
     
             if(Input::GetKeyDown(Keycode::KeySpace)) {
-                position += Vector3(0, 1, 0) * moveSpeed * Time::GetDeltaTime();
+                position += Vector3::Up() * moveSpeed * Time::GetDeltaTime();
             }
     
             if(Input::GetKeyDown(Keycode::KeyC)) {
-                position -= Vector3(0, 1, 0) * moveSpeed * Time::GetDeltaTime();
+                position -= Vector3::Up() * moveSpeed * Time::GetDeltaTime();
             }
         }
     };
