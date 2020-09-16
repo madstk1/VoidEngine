@@ -9,10 +9,10 @@ namespace VOID_NS {
     class MeshComponent : public Component {
     public:
         Mesh *mesh = nullptr;
-        Material *material = nullptr;
+        Material *material = Material::GetDefault();
 
         MeshComponent(Mesh *mesh = nullptr) : Component(true) {
-            this->mesh   = mesh;
+            this->mesh = mesh;
         }
     };
 };
