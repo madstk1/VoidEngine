@@ -4,24 +4,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace VOID_NS {
-    const static u32 k_Stages[] = {
-        [ShaderStage::StageVertex]   = GL_VERTEX_SHADER,
-        [ShaderStage::StageFragment] = GL_FRAGMENT_SHADER,
-        [ShaderStage::StageCompute]  = GL_COMPUTE_SHADER,
-    };
-
-    const static u32 k_AttributeType[] = {
-        [ShaderLayout::Type::Byte]      = GL_BYTE,
-        [ShaderLayout::Type::UByte]     = GL_UNSIGNED_BYTE,
-        [ShaderLayout::Type::Short]     = GL_SHORT,
-        [ShaderLayout::Type::UShort]    = GL_UNSIGNED_SHORT,
-        [ShaderLayout::Type::Int]       = GL_INT,
-        [ShaderLayout::Type::UInt]      = GL_UNSIGNED_INT,
-        [ShaderLayout::Type::HFloat]    = GL_HALF_FLOAT,
-        [ShaderLayout::Type::Float]     = GL_FLOAT,
-        [ShaderLayout::Type::Double]    = GL_DOUBLE,
-    };
-
     const static std::string k_StageNames[] = {
         [ShaderStage::StageVertex]   = "Vertex",
         [ShaderStage::StageFragment] = "Fragment",
@@ -59,7 +41,7 @@ namespace VOID_NS {
             glVertexAttribPointer(
                 i,
                 le.dimension,
-                k_AttributeType[le.type],
+                Translate(le.type),
                 (le.normalized) ? GL_TRUE : GL_FALSE,
                 m_Layout.GetPointerSize(),
                 (const void *) le.offset
@@ -193,6 +175,32 @@ namespace VOID_NS {
         }
     }
 
+    u32 ShaderGL::Translate(ShaderStage e) {
+        switch(e) {
+            case ShaderStage::StageVertex:   return GL_VERTEX_SHADER;
+            case ShaderStage::StageFragment: return GL_FRAGMENT_SHADER;
+            case ShaderStage::StageCompute:  return GL_COMPUTE_SHADER;
+
+            default: VOID_ASSERT(false, "Invalid shader-stage.");
+        }
+    }
+
+    u32 ShaderGL::Translate(ShaderLayout::Type e) {
+        switch(e) {
+            case ShaderLayout::Type::Byte:      return GL_BYTE;
+            case ShaderLayout::Type::UByte:     return GL_UNSIGNED_BYTE;
+            case ShaderLayout::Type::Short:     return GL_SHORT;
+            case ShaderLayout::Type::UShort:    return GL_UNSIGNED_SHORT;
+            case ShaderLayout::Type::Int:       return GL_INT;
+            case ShaderLayout::Type::UInt:      return GL_UNSIGNED_INT;
+            case ShaderLayout::Type::HFloat:    return GL_HALF_FLOAT;
+            case ShaderLayout::Type::Float:     return GL_FLOAT;
+            case ShaderLayout::Type::Double:    return GL_DOUBLE;
+
+            default: VOID_ASSERT(false, "Invalid layout-type.");
+        }
+    }
+
     /**
      *  Private/protected methods
      */
@@ -210,7 +218,7 @@ namespace VOID_NS {
 
     void ShaderGL::Compile(ShaderCreationInfo info) {
         for(std::pair<ShaderStage, std::string> src : info.sources) {
-            m_StageID[src.first] = glCreateShader(k_Stages[src.first]);
+            m_StageID[src.first] = glCreateShader(Translate(src.first));
             u32 id = m_StageID[src.first];
 
             src.second = "#version " + info.version + "\n" + src.second;

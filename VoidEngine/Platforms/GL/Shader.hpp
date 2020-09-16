@@ -49,6 +49,9 @@ namespace VOID_NS {
         virtual void SetUniformMat2f(std::string, Mat2) override;
         virtual void SetUniformMat3f(std::string, Mat3) override;
         virtual void SetUniformMat4f(std::string, Mat4) override;
+
+        static u32 Translate(ShaderStage);
+        static u32 Translate(ShaderLayout::Type);
     };
 };
 
