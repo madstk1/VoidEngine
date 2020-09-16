@@ -20,6 +20,8 @@ namespace VOID_NS {
         Resource(std::string, Type);
         ~Resource();
 
+        inline std::string GetName() const { return m_Name; }
+
     protected:
         std::string m_Name;
         Type m_Type;
