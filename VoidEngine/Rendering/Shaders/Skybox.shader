@@ -6,6 +6,11 @@
 ShaderCreationInfo k_ShaderSkybox = {
     "Skybox", "450 core", {
         { ShaderStage::StageVertex, R"(
+            struct vs_Uniform {
+                mat4 u_Projection;
+                mat4 u_View;
+            };
+
             /* Input variables. */
             layout(location = 0) in vec3 i_Position;
             layout(location = 1) in vec4 i_Color;
@@ -16,16 +21,19 @@ ShaderCreationInfo k_ShaderSkybox = {
             layout(location = 0) out vec3 v_TexCoords;
             
             /* Uniform variables. */
-            uniform mat4 u_Projection;
-            uniform mat4 u_View;
+            uniform vs_Uniform vs_Void;
             
             void main() {
-                gl_Position = vec4(u_Projection * u_View * vec4(i_Position, 1.0)).xyww;
+                gl_Position = vec4(vs_Void.u_Projection * vs_Void.u_View * vec4(i_Position, 1.0)).xyww;
                 v_TexCoords = i_Position;
             }
             )"
         },
         { ShaderStage::StageFragment, R"(
+            struct fs_Uniform {
+                samplerCube u_Skybox;
+            };
+
             /* Input variables. */
             layout(location = 0) in vec3 v_TexCoords;
             
@@ -33,10 +41,10 @@ ShaderCreationInfo k_ShaderSkybox = {
             layout(location = 0) out vec4 o_Color;
             
             /* Uniform variables. */
-            uniform samplerCube u_Skybox;
+            uniform fs_Uniform fs_Void;
             
             void main() {
-                o_Color = vec4(texture(u_Skybox, v_TexCoords).rgb, 1.0);
+                o_Color = vec4(texture(fs_Void.u_Skybox, v_TexCoords).rgb, 1.0);
             }
             )"
         },

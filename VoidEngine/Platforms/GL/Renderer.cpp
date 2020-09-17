@@ -217,8 +217,9 @@ namespace VOID_NS {
     
             m_Skybox->Bind();
             skyboxShader->Enable();
-            skyboxShader->SetUniformMat4f("u_Projection", m_MVP.proj);
-            skyboxShader->SetUniformMat4f("u_View", Mat4(Mat3(m_MVP.view)));
+            skyboxShader->SetUniformMat4f("vs_Void.u_Projection", m_MVP.proj);
+            skyboxShader->SetUniformMat4f("vs_Void.u_View", Mat4(Mat3(m_MVP.view)));
+            skyboxShader->SetUniform1i("fs_Void.u_Skybox", 0);
     
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
@@ -254,7 +255,7 @@ namespace VOID_NS {
 
         m_RenderQuad->Bind();
         framebufferShader->Enable();
-        framebufferShader->SetUniform1i("u_ScreenTexture", 0);
+        framebufferShader->SetUniform1i("fs_Void.u_ScreenTexture", 0);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
@@ -368,11 +369,11 @@ namespace VOID_NS {
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
 
             SetLightMatrix(shader);
-            shader->SetUniform1fv("u_Gamma",          m_Gamma);
-            shader->SetUniform3fv("u_CameraPosition", g_Camera->position);
-            shader->SetUniformMat4f("u_Model",        m_MVP.model);
-            shader->SetUniformMat4f("u_View",         m_MVP.view);
-            shader->SetUniformMat4f("u_Projection",   m_MVP.proj);
+            shader->SetUniform1fv("fs_Void.u_Gamma",          m_Gamma);
+            shader->SetUniform3fv("fs_Void.u_CameraPosition", g_Camera->position);
+            shader->SetUniformMat4f("vs_Void.u_Model",        m_MVP.model);
+            shader->SetUniformMat4f("vs_Void.u_View",         m_MVP.view);
+            shader->SetUniformMat4f("vs_Void.u_Projection",   m_MVP.proj);
 
             glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
         }
@@ -384,13 +385,13 @@ namespace VOID_NS {
         u32 i = 0;
         for(Light *light : g_World->GetLights()) {
             if(i >= 32) { break; }
-            shader->SetUniform4fv("u_LightingData[" + std::to_string(i) + "].color",     light->lightColor);
-            shader->SetUniform3fv("u_LightingData[" + std::to_string(i) + "].position",  light->position);
-            shader->SetUniform1fv("u_LightingData[" + std::to_string(i) + "].intensity", light->intensity);
+            shader->SetUniform4fv("fs_Void.u_LightingData[" + std::to_string(i) + "].color",     light->lightColor);
+            shader->SetUniform3fv("fs_Void.u_LightingData[" + std::to_string(i) + "].position",  light->position);
+            shader->SetUniform1fv("fs_Void.u_LightingData[" + std::to_string(i) + "].intensity", light->intensity);
             i++;
         }
     
-        shader->SetUniform1ui("u_LightCount",     i);
+        shader->SetUniform1ui("fs_Void.u_LightCount",     i);
     }
 
     WindowGL *RendererGL::GetWindow() {

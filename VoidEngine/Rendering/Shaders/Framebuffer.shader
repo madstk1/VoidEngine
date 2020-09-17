@@ -23,6 +23,10 @@ ShaderCreationInfo k_ShaderFramebuffer = {
             )"
         },
         { ShaderStage::StageFragment, R"(
+            struct fs_Uniform {
+                sampler2D u_ScreenTexture;
+            };
+
             /* Input variables. */
             layout(location = 0) in vec2 v_TexCoords;
             
@@ -30,10 +34,10 @@ ShaderCreationInfo k_ShaderFramebuffer = {
             layout(location = 0) out vec4 o_Color;
             
             /* Uniform variables. */
-            uniform sampler2D u_ScreenTexture;
+            uniform fs_Uniform fs_Void;
             
             void main() {
-                o_Color = vec4(texture(u_ScreenTexture, v_TexCoords).rgb, 1.0);
+                o_Color = vec4(texture(fs_Void.u_ScreenTexture, v_TexCoords).rgb, 1.0);
             }
             )"
         },
