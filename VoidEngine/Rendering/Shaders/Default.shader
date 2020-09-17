@@ -28,14 +28,10 @@ ShaderCreationInfo k_ShaderDefault = {
             uniform vs_Uniform vs_Void;
             
             void main() {
-                mat3 m_Normal = mat3(vs_Void.u_Projection * vs_Void.u_Model);
-                m_Normal = inverse(m_Normal);
-                m_Normal = transpose(m_Normal);
-
                 gl_Position = vs_Void.u_Projection * vs_Void.u_View * vs_Void.u_Model * vec4(i_Position, 1.0);
                 v_Position  = vec3(vs_Void.u_Model * vec4(i_Position, 1.0));
                 v_Color     = i_Color;
-                v_Normal    = i_Normal * m_Normal;
+                v_Normal    = i_Normal * mat3(vs_Void.u_Model);
                 v_TexCoords = i_TexCoords;
             }
         )"},
@@ -59,6 +55,8 @@ ShaderCreationInfo k_ShaderDefault = {
                 float u_Roughness;
                 float u_Occlusion;
             };
+
+            const float PI = 3.14159265359;
             
             /* Input variables. */
             layout(location = 0) in vec3 v_Position;
@@ -73,38 +71,80 @@ ShaderCreationInfo k_ShaderDefault = {
             uniform fs_Uniform  fs_Void;
             uniform fs_Material fs_Mat;
 
-            vec3 CalculateLight(PointLight light) {
-                float distance = distance(light.position, v_Position);
+            vec3 Fresnel(float theta, vec3 F) {
+                return F + (1.0 - F) * pow(1.0 - theta, 5.0);
+            }
+
+            float DistributionGGX(vec3 N, vec3 H, float roughness) {
+                float a   = pow(roughness, 2.0);
+                float a2  = pow(a, 2.0);
+                float NH  = max(dot(N, H), 0.0);
+                float NH2 = pow(NH, 2.0);
+
+                float den = (NH2 * (a2 - 1.0) + 1.0);
+                den = PI * den * den;
+
+                return a2 / den;
+            }
+
+            float SchlickGGX(float NV, float roughness) {
+                float r = roughness + 1.0;
+                float k = pow(r, 2.0) / 8.0;
+
+                return (NV) / (NV * (1.0 - k) + k);
+            }
+
+            float SmithGGX(vec3 N, vec3 V, vec3 L, float roughness) {
+                float NV = max(dot(N, V), 0.0);
+                float NL = max(dot(N, L), 0.0);
+                
+                return SchlickGGX(NV, roughness) * SchlickGGX(NL, roughness);
+            }
+
+            vec3 CalculateLight(PointLight light, vec3 N, vec3 V, vec3 F0) {
+                vec3 L = normalize(light.position - v_Position);
+                vec3 H = normalize(V + L);
+
+                float distance = length(light.position - v_Position);
                 float attenuation = 1.0 / distance;
+                vec3  radiance = light.color.rgb * attenuation;
+                vec3  F = Fresnel(max(dot(H, V), 0.0), F0);
+
+                float NDF = DistributionGGX(N, H, fs_Mat.u_Roughness);
+                float G   = SmithGGX(N, V, L, fs_Mat.u_Roughness);
+
+                /* Cook-Torrance BRDF */
+                vec3 num = NDF * G * F;
+                float de = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+                vec3 spec = num / max(de, 0.001);
+
+                vec3 kS = F;
+                vec3 kD = (vec3(1.0) - kS) * (1.0 - fs_Mat.u_Metallic);
+
+                float NL = max(dot(N, L), 0.0);
             
-                vec3 viewDir  = normalize(fs_Void.u_CameraPosition - v_Position);
-                vec3 lightDir = normalize(light.position - v_Position);
-                vec3 halfDir  = normalize(lightDir + viewDir);
-            
-                vec3 ambient = light.intensity * light.color.rgb;
-                vec3 diffuse = max(dot(v_Normal, lightDir), 0.0) * light.color.rgb / max(0.1, distance);
-                vec3 specular = pow(max(0.0, dot(v_Normal, halfDir)), 2.0) * light.color.rgb;
-            
-                diffuse  *= attenuation;
-                specular *= attenuation;
-            
-                return ambient + diffuse + specular;
+                return (kD * fs_Mat.u_Albedo.rgb / PI + spec) * radiance * NL;
             }
             
             void main() {
-                vec3 result = vec3(0.0, 0.0, 0.0);
+                vec3 Lo = vec3(0.0);
 
                 vec3 N = normalize(v_Normal);
                 vec3 V = normalize(fs_Void.u_CameraPosition - v_Position);
-            
+                vec3 F0 = mix(vec3(0.04), fs_Mat.u_Albedo.rgb, fs_Mat.u_Metallic);
+
                 for(uint i = 0; i < fs_Void.u_LightCount; i++) {
-                    result += CalculateLight(fs_Void.u_LightingData[i]);
+                    Lo += CalculateLight(fs_Void.u_LightingData[i], N, V, F0);
                 }
+
+                // Apply ambient light.
+                Lo += vec3(0.03) * fs_Mat.u_Albedo.rgb * fs_Mat.u_Occlusion;
             
                 // Apply gamma.
-                result = pow(result, vec3(1.0 / fs_Void.u_Gamma));
-            
-                o_Color = vec4(result, 1.0) * fs_Mat.u_Albedo;
+                Lo = Lo / (Lo + vec3(1.0));
+                Lo = Lo * fs_Void.u_Gamma;
+
+                o_Color = vec4(Lo, 1.0);
             }
         )"},
     }, {
