@@ -38,8 +38,7 @@ ShaderCreationInfo k_ShaderDefault = {
                 v_Normal    = i_Normal * m_Normal;
                 v_TexCoords = i_TexCoords;
             }
-            )"
-        },
+        )"},
         { ShaderStage::StageFragment, R"(
             struct PointLight {
                 vec4 color;
@@ -54,6 +53,12 @@ ShaderCreationInfo k_ShaderDefault = {
                 PointLight u_LightingData[32];
             };
 
+            struct fs_Material {
+                vec4  u_Albedo;
+                float u_Metallic;
+                float u_Roughness;
+                float u_Occlusion;
+            };
             
             /* Input variables. */
             layout(location = 0) in vec3 v_Position;
@@ -65,36 +70,43 @@ ShaderCreationInfo k_ShaderDefault = {
             layout(location = 0) out vec4 o_Color;
             
             /* Uniform variables. */
-            uniform fs_Uniform fs_Void;
+            uniform fs_Uniform  fs_Void;
+            uniform fs_Material fs_Mat;
+
+            vec3 CalculateLight(PointLight light) {
+                float distance = distance(light.position, v_Position);
+                float attenuation = 1.0 / distance;
+            
+                vec3 viewDir  = normalize(fs_Void.u_CameraPosition - v_Position);
+                vec3 lightDir = normalize(light.position - v_Position);
+                vec3 halfDir  = normalize(lightDir + viewDir);
+            
+                vec3 ambient = light.intensity * light.color.rgb;
+                vec3 diffuse = max(dot(v_Normal, lightDir), 0.0) * light.color.rgb / max(0.1, distance);
+                vec3 specular = pow(max(0.0, dot(v_Normal, halfDir)), 2.0) * light.color.rgb;
+            
+                diffuse  *= attenuation;
+                specular *= attenuation;
+            
+                return ambient + diffuse + specular;
+            }
             
             void main() {
                 vec3 result = vec3(0.0, 0.0, 0.0);
+
+                vec3 N = normalize(v_Normal);
+                vec3 V = normalize(fs_Void.u_CameraPosition - v_Position);
             
                 for(uint i = 0; i < fs_Void.u_LightCount; i++) {
-                    float distance = distance(fs_Void.u_LightingData[i].position, v_Position);
-                    float attenuation = 1.0 / distance;
-            
-                    vec3 lightDir = normalize(fs_Void.u_LightingData[i].position - v_Position);
-                    vec3 viewDir  = normalize(fs_Void.u_CameraPosition - v_Position);
-                    vec3 halfDir  = normalize(lightDir + viewDir);
-            
-                    vec3 ambient = fs_Void.u_LightingData[i].intensity * fs_Void.u_LightingData[i].color.rgb;
-                    vec3 diffuse = max(dot(v_Normal, lightDir), 0.0) * fs_Void.u_LightingData[i].color.rgb / max(0.1, distance);
-                    vec3 specular = pow(max(0.0, dot(v_Normal, halfDir)), 2.0) * fs_Void.u_LightingData[i].color.rgb;
-            
-                    diffuse  *= attenuation;
-                    specular *= attenuation;
-            
-                    result += ambient + diffuse + specular;
+                    result += CalculateLight(fs_Void.u_LightingData[i]);
                 }
             
                 // Apply gamma.
                 result = pow(result, vec3(1.0 / fs_Void.u_Gamma));
             
-                o_Color = vec4(result, 1.0) * v_Color;
+                o_Color = vec4(result, 1.0) * fs_Mat.u_Albedo;
             }
-            )"
-        },
+        )"},
     }, {
         sizeof(Vertex), {
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, position) },

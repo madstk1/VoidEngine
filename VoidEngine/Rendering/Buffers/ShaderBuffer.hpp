@@ -54,6 +54,20 @@ namespace VOID_NS {
                 c.material = mat;
                 c.mesh = Mesh();
                 c.indexExtension = 0;
+                
+                /* Handle vertices. */
+                for(Vertex v : mesh.vertices) {
+                    c.mesh.vertices.push_back(v);
+                }
+
+                /* Handle indices. */
+                for(u32 i : mesh.indices) {
+                    c.mesh.indices.push_back(i + c.indexExtension);
+                }
+
+                /* Handle index extenion. */
+                c.indexExtension += c.mesh.vertices.size();
+
                 m_Content.emplace(std::make_pair(key, c));
             }
         }

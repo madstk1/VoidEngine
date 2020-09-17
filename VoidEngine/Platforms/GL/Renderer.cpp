@@ -362,18 +362,29 @@ namespace VOID_NS {
         buffer->Bind();
         for(auto d : buffer->GetData()) {
             ShaderBuffer::Content content = d.second;
-            Shader *shader = content.material->shader;
+            Material *material = content.material;
+            material = (!material) ? Material::GetDefault() : material;
+
+            Shader *shader = material->shader;
             shader = (!shader) ? m_DefaultShader : shader;
 
             glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
 
             SetLightMatrix(shader);
+
+            /* Basic uniforms. */
             shader->SetUniform1fv("fs_Void.u_Gamma",          m_Gamma);
             shader->SetUniform3fv("fs_Void.u_CameraPosition", g_Camera->position);
             shader->SetUniformMat4f("vs_Void.u_Model",        m_MVP.model);
             shader->SetUniformMat4f("vs_Void.u_View",         m_MVP.view);
             shader->SetUniformMat4f("vs_Void.u_Projection",   m_MVP.proj);
+
+            /* Material uniforms. */
+            shader->SetUniform4fv("fs_Mat.u_Albedo",    material->albedo);
+            shader->SetUniform1fv("fs_Mat.u_Metallic",  material->metallic);
+            shader->SetUniform1fv("fs_Mat.u_Roughness", material->roughness);
+            shader->SetUniform1fv("fs_Mat.u_Occlusion", material->occlusion);
 
             glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
         }

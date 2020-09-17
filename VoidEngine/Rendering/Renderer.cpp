@@ -30,8 +30,6 @@ namespace VOID_NS {
         data->vertices.Clear();
         data->indices.Clear();
 
-        std::vector<Shader *> shaders;
-
         for(Entity *e : g_World->GetEntities()) {
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
