@@ -18,20 +18,16 @@
         abort();                                            \
     }
 
+#define __VOID_LOG_FUNC_DEF(lvl, ...)                               \
+    template<typename T, typename... Ts>                            \
+    static void lvl (T t, Ts... ts) {                               \
+        if(GetLogLevel() <= Level::lvl) {                           \
+            Log(GetLogPrefix(Level::lvl), t, ts...); __VA_ARGS__;   \
+        }                                                           \
+    }
+
 namespace VOID_NS {
     class Logger {
-    protected:
-        template<typename T>
-        static void Log(T t) {
-            std::cout << t << std::endl;
-        }
-
-        template<typename T, typename ... Ts>
-        static void Log(T t, Ts... ts) {
-            std::cout << t;
-            Log(std::forward<Ts>(ts)...);
-        }
-
     public:
         enum class Level {
             Debug,
@@ -47,12 +43,13 @@ namespace VOID_NS {
         static f32 GetFramesPerSecond();
         static u64 GetMemoryAllocations();
 
-        template<typename T, typename... Ts> static void Debug   (T t, Ts... ts) { if(GetLogLevel() >= Level::Debug)   { Log(t, ts...); } }
-        template<typename T, typename... Ts> static void Info    (T t, Ts... ts) { if(GetLogLevel() >= Level::Info)    { Log(t, ts...); } }
-        template<typename T, typename... Ts> static void Warning (T t, Ts... ts) { if(GetLogLevel() >= Level::Warning) { Log(t, ts...); } }
-        template<typename T, typename... Ts> static void Error   (T t, Ts... ts) { if(GetLogLevel() >= Level::Error)   { Log(t, ts...); } }
-        template<typename T, typename... Ts> static void Fatal   (T t, Ts... ts) { if(GetLogLevel() >= Level::Fatal)   { Log(t, ts...); abort(); } }
-        
+
+        __VOID_LOG_FUNC_DEF(Debug);
+        __VOID_LOG_FUNC_DEF(Info);
+        __VOID_LOG_FUNC_DEF(Warning);
+        __VOID_LOG_FUNC_DEF(Error);
+        __VOID_LOG_FUNC_DEF(Fatal, abort());
+
         template <typename T>
         static const char *GetClassName() {
             i32 status = -4;
@@ -68,6 +65,18 @@ namespace VOID_NS {
     protected:
         static Level m_Level;
         static struct tm *GetTime();
+        static std::string GetLogPrefix(Level);
+
+        template<typename T>
+        static void Log(T t) {
+            std::cout << t << std::endl;
+        }
+
+        template<typename T, typename ... Ts>
+        static void Log(T t, Ts... ts) {
+            std::cout << t;
+            Log(std::forward<Ts>(ts)...);
+        }
     };
 };
 
