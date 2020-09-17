@@ -48,6 +48,11 @@ namespace VOID_NS {
 
             position = newPosition;
 
+            if(Input::GetKeyDown(Keycode::KeyW)) { distance -= 3.0f * Time::GetDeltaTime(); }
+            if(Input::GetKeyDown(Keycode::KeyS)) { distance += 3.0f * Time::GetDeltaTime(); }
+
+            distance = MAX(distance, 0.1f);
+
             LookAt(orbitPosition);
         }
     };
