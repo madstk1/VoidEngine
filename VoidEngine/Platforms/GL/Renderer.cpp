@@ -65,8 +65,12 @@ namespace VOID_NS {
         m_Dynamic = new ShaderBufferGL(Buffer::BufferUsage::Dynamic);
 
         m_Dynamic->Bind();
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
+
+        m_Static->Bind();
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * s_MaxTriangles, nullptr, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * s_MaxTriangles, nullptr, GL_STATIC_DRAW);
 
         /**
          *  Initialize renderquad buffers.
@@ -182,12 +186,14 @@ namespace VOID_NS {
         ClearColor();
 
         /* Bind entity meshes to buffers. */
-        this->UpdateShaderBuffer(m_Dynamic);
+        PopulateShaderBuffer(m_Dynamic);
+        UpdateShaderBuffer(m_Dynamic);
 
         static bool ff = true;
         if(ff) {
             ff = false;
-            this->UpdateShaderBuffer(m_Static);
+            PopulateShaderBuffer(m_Static);
+            UpdateShaderBuffer(m_Static);
         
             m_DefaultShader = ShaderLibrary::GetShader("Default");
         }
@@ -358,6 +364,22 @@ namespace VOID_NS {
         return extensions;
     }
 
+    void RendererGL::UpdateShaderBuffer(ShaderBufferGL *buffer) {
+        buffer->Bind();
+        for(auto d : buffer->GetData()) {
+            ShaderBuffer::Content content = d.second;
+            Material *material = content.material;
+            material = (!material) ? Material::GetDefault() : material;
+
+            Shader *shader = material->shader;
+            shader = (!shader) ? m_DefaultShader : shader;
+
+            shader->Enable();
+            glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
+        }
+    }
+
     void RendererGL::RenderShaderBuffer(ShaderBufferGL *buffer) {
         buffer->Bind();
         for(auto d : buffer->GetData()) {
@@ -368,9 +390,7 @@ namespace VOID_NS {
             Shader *shader = material->shader;
             shader = (!shader) ? m_DefaultShader : shader;
 
-            glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
-            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
-
+            shader->Enable();
             SetLightMatrix(shader);
 
             /* Basic uniforms. */

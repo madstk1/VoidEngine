@@ -18,8 +18,8 @@ namespace VOID_NS {
         SwapInterval    m_Buffering;
         f32             m_Gamma = 1.8f;
 
-        static void UpdateGeometryBuffer(GeometryBuffer *);
-        static void UpdateShaderBuffer(ShaderBuffer *);
+        static void PopulateGeometryBuffer(GeometryBuffer *);
+        static void PopulateShaderBuffer(ShaderBuffer *);
 
         static void CalculateMVP(MVP *);
 

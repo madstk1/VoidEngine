@@ -47,7 +47,9 @@ namespace VOID_NS {
         Shader             *m_DefaultShader;
         MVP                 m_MVP;
 
+        void UpdateShaderBuffer(ShaderBufferGL *);
         void RenderShaderBuffer(ShaderBufferGL *);
+
         void SetLightMatrix(Shader *);
         void OnResize(i32, i32);
         void ClearColor();

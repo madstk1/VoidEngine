@@ -22,7 +22,7 @@ namespace VOID_NS {
         mvp->view  = glm::lookAt(g_Camera->position, g_Camera->position + g_Camera->Forward(), {0, 1, 0});
     }
 
-    void Renderer::UpdateGeometryBuffer(GeometryBuffer *data) {
+    void Renderer::PopulateGeometryBuffer(GeometryBuffer *data) {
         if(!data) { return; }
 
         u32 indexExtension = 0;
@@ -54,7 +54,7 @@ namespace VOID_NS {
         }
     }
 
-    void Renderer::UpdateShaderBuffer(ShaderBuffer *data) {
+    void Renderer::PopulateShaderBuffer(ShaderBuffer *data) {
         if(!data) { return; }
 
         data->Reset();
