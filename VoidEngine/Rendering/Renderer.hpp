@@ -16,7 +16,7 @@ namespace VOID_NS {
         i32             m_RefreshRate;
         MultiSampling   m_Sampling;
         SwapInterval    m_Buffering;
-        f32             m_Gamma = 1.5f;
+        f32             m_Gamma = 1.8f;
 
         static void UpdateGeometryBuffer(GeometryBuffer *);
         static void UpdateShaderBuffer(ShaderBuffer *);
