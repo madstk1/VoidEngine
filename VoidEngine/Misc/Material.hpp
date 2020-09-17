@@ -9,7 +9,7 @@
 namespace VOID_NS {
     class Material : public Resource {
     public:
-        Color   albedo      = Color::Red();
+        Color   albedo      = Color::White();
         f32     metallic    = 0.0f;
         f32     roughness   = 1.0f;
         f32     occlusion   = 1.0f;
