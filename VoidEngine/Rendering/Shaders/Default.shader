@@ -28,10 +28,14 @@ ShaderCreationInfo k_ShaderDefault = {
             uniform vs_Uniform vs_Void;
             
             void main() {
+                mat3 m_Normal = mat3(vs_Void.u_Projection * vs_Void.u_Model);
+                m_Normal = inverse(m_Normal);
+                m_Normal = transpose(m_Normal);
+
                 gl_Position = vs_Void.u_Projection * vs_Void.u_View * vs_Void.u_Model * vec4(i_Position, 1.0);
                 v_Position  = vec3(vs_Void.u_Model * vec4(i_Position, 1.0));
                 v_Color     = i_Color;
-                v_Normal    = i_Normal;
+                v_Normal    = i_Normal * m_Normal;
                 v_TexCoords = i_TexCoords;
             }
             )"
