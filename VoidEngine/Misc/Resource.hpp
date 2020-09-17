@@ -2,6 +2,7 @@
 #define VOID_MISC_RESOURCE_H__
 
 #include <vector>
+#include <string>
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>

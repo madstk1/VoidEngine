@@ -13,9 +13,8 @@ ShaderCreationInfo k_ShaderSkybox = {
 
             /* Input variables. */
             layout(location = 0) in vec3 i_Position;
-            layout(location = 1) in vec4 i_Color;
-            layout(location = 2) in vec3 i_Normal;
-            layout(location = 3) in vec2 i_TexCoords;
+            layout(location = 1) in vec3 i_Normal;
+            layout(location = 2) in vec2 i_TexCoords;
             
             /* Output variables. */
             layout(location = 0) out vec3 v_TexCoords;
@@ -51,7 +50,6 @@ ShaderCreationInfo k_ShaderSkybox = {
     }, {
         sizeof(Vertex), {
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, position)  },
-            { ShaderLayout::Type::Float, ShaderLayout::Dimension::L4D, false, offsetof(Vertex, color)     },
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, normal)    },
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L2D, false, offsetof(Vertex, texCoords) },
         }

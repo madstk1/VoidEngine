@@ -16,7 +16,7 @@ public:
         Light *light = new Light();
         light->position = Vector3(10.f, 10.f, 10.f);
         light->lightColor = Color::White();
-        light->intensity = 0.01f;
+        light->intensity = 600.0f;
 
         Quad *quad = new Quad();
         quad->position = Vector3(0.f, -3.0f, 0.f);

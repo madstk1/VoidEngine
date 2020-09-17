@@ -1,5 +1,6 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
+#include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
     ResourceMap ResourceManager::m_Resources;

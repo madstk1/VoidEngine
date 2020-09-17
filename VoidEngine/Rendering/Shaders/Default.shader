@@ -14,15 +14,13 @@ ShaderCreationInfo k_ShaderDefault = {
 
             /* Input variables. */
             layout(location = 0) in vec3 i_Position;
-            layout(location = 1) in vec4 i_Color;
-            layout(location = 2) in vec3 i_Normal;
-            layout(location = 3) in vec2 i_TexCoords;
+            layout(location = 1) in vec3 i_Normal;
+            layout(location = 2) in vec2 i_TexCoords;
             
             /* Output variables. */
             layout(location = 0) out vec3 v_Position;
-            layout(location = 1) out vec4 v_Color;
-            layout(location = 2) out vec3 v_Normal;
-            layout(location = 3) out vec2 v_TexCoords;
+            layout(location = 1) out vec3 v_Normal;
+            layout(location = 2) out vec2 v_TexCoords;
             
             /* Uniform variables. */
             uniform vs_Uniform vs_Void;
@@ -30,7 +28,6 @@ ShaderCreationInfo k_ShaderDefault = {
             void main() {
                 gl_Position = vs_Void.u_Projection * vs_Void.u_View * vs_Void.u_Model * vec4(i_Position, 1.0);
                 v_Position  = vec3(vs_Void.u_Model * vec4(i_Position, 1.0));
-                v_Color     = i_Color;
                 v_Normal    = i_Normal * mat3(vs_Void.u_Model);
                 v_TexCoords = i_TexCoords;
             }
@@ -60,9 +57,8 @@ ShaderCreationInfo k_ShaderDefault = {
             
             /* Input variables. */
             layout(location = 0) in vec3 v_Position;
-            layout(location = 1) in vec4 v_Color;
-            layout(location = 2) in vec3 v_Normal;
-            layout(location = 3) in vec2 v_TexCoords;
+            layout(location = 1) in vec3 v_Normal;
+            layout(location = 2) in vec2 v_TexCoords;
             
             /* Output variables. */
             layout(location = 0) out vec4 o_Color;
@@ -150,7 +146,6 @@ ShaderCreationInfo k_ShaderDefault = {
     }, {
         sizeof(Vertex), {
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, position) },
-            { ShaderLayout::Type::Float, ShaderLayout::Dimension::L4D, false, offsetof(Vertex, color)    },
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L3D, false, offsetof(Vertex, normal)   },
             { ShaderLayout::Type::Float, ShaderLayout::Dimension::L2D, false, offsetof(Vertex, texCoords) },
         }
