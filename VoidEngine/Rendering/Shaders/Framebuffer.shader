@@ -13,18 +13,18 @@ ShaderCreationInfo k_ShaderFramebuffer = {
             
             /* Output variables. */
             layout(location = 0) out vec2 v_TexCoords;
-            
-            /* Uniform variables. */
+
             void main() {
                 gl_Position = vec4(i_Position, 1.0);
                 v_TexCoords = i_TexCoords;
-            }
-            )"
+            })"
         },
         { ShaderStage::StageFragment, R"(
             struct fs_Uniform {
                 sampler2D u_ScreenTexture;
             };
+            
+            const float PI = 3.1415926535;
 
             /* Input variables. */
             layout(location = 0) in vec2 v_TexCoords;
@@ -34,11 +34,10 @@ ShaderCreationInfo k_ShaderFramebuffer = {
             
             /* Uniform variables. */
             uniform fs_Uniform fs_Void;
-            
+
             void main() {
                 o_Color = vec4(texture(fs_Void.u_ScreenTexture, v_TexCoords).rgb, 1.0);
-            }
-            )"
+            })"
         },
     }, {
         sizeof(Vertex), {

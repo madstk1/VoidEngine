@@ -25,8 +25,7 @@ ShaderCreationInfo k_ShaderSkybox = {
             void main() {
                 gl_Position = vec4(vs_Void.u_Projection * vs_Void.u_View * vec4(i_Position, 1.0)).xyww;
                 v_TexCoords = i_Position;
-            }
-            )"
+            })"
         },
         { ShaderStage::StageFragment, R"(
             struct fs_Uniform {
@@ -44,8 +43,7 @@ ShaderCreationInfo k_ShaderSkybox = {
             
             void main() {
                 o_Color = vec4(texture(fs_Void.u_Skybox, v_TexCoords).rgb, 1.0);
-            }
-            )"
+            })"
         },
     }, {
         sizeof(Vertex), {
