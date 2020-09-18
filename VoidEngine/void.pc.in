@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: Void Engine
+Description: @VOID_PROJECT_DESC@
+Version: @VOID_PROJECT_VERSION@
+URL: https://github.com/madstk1/VoidEngine
+
+Libs: -L${libdir} @VOID_ADDITIONAL_LIBS@
+Cflags: -I${includedir}
