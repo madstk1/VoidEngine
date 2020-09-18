@@ -55,6 +55,7 @@ Thereafter, you can compile your application like this, using CMake:
     PROJECT(Example)
     
     ADD_SUBDIRECTORY(Engine)
+    INCLUDE_DIRECTORIES(Engine)
     
     ADD_EXECUTABLE(Example "Application.cpp")
     TARGET_LINK_LIBRARIES(Example PUBLIC Void::Void)
