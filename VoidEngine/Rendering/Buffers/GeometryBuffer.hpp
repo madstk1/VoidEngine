@@ -28,6 +28,8 @@ namespace VOID_NS {
 
         ~GeometryBuffer() = default;
 
+        virtual void Bind() {}
+
     protected:
     private:
     };

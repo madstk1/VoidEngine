@@ -15,7 +15,7 @@ namespace VOID_NS {
             GeometryBufferGL(BufferUsage);
             ~GeometryBufferGL();
 
-            void Bind();
+            virtual void Bind() override;
         };
 
         struct ShaderBufferGL : public ShaderBuffer {
@@ -24,7 +24,7 @@ namespace VOID_NS {
             ShaderBufferGL(BufferUsage);
             ~ShaderBufferGL();
 
-            void Bind();
+            virtual void Bind() override;
         };
 
         /* Buffers */

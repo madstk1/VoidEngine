@@ -30,6 +30,8 @@ namespace VOID_NS {
 
         ~ShaderBuffer() = default;
 
+        virtual void Bind() {}
+
         inline void Reset() { m_Content.clear(); }
 
         inline void AppendPair(Material *mat, Mesh mesh) {
