@@ -8,52 +8,8 @@
 #include <VoidEngine/Platforms/GL/Renderer.hpp>
 
 namespace VOID_NS {
-#if defined(VOID_ENABLE_DEBUG)
-    void WindowGL::GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
-        switch(severity) {
-            case GL_DEBUG_SEVERITY_HIGH:         Logger::Fatal   ("GL: ", msg); break;
-            case GL_DEBUG_SEVERITY_MEDIUM:       Logger::Error   ("GL: ", msg); break;
-            case GL_DEBUG_SEVERITY_LOW:          Logger::Warning ("GL: ", msg); break;
-            case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::Info    ("GL: ", msg); break;
-        }
-    }
-#endif
-
-    void WindowGL::ErrorCallback(i32 code, const char *msg) {
-        Logger::Error("GLFW: ", code, " ", msg);
-    }
-
-    void WindowGL::ResizeCallback(GLFWwindow *win, i32 w, i32 h) {
-        glViewport(0, 0, w, h);
-
-        ((RendererGL *) g_Renderer)->OnResize(w, h);
-    }
-
-    void WindowGL::KeyCallback(GLFWwindow *win, i32 key, i32 scancode, i32 action, i32 mods) {
-        switch(key) {
-            case GLFW_KEY_W:      Input::m_Keys[Keycode::KeyW]     = (action != GLFW_RELEASE); break;
-            case GLFW_KEY_S:      Input::m_Keys[Keycode::KeyS]     = (action != GLFW_RELEASE); break;
-            case GLFW_KEY_A:      Input::m_Keys[Keycode::KeyA]     = (action != GLFW_RELEASE); break;
-            case GLFW_KEY_D:      Input::m_Keys[Keycode::KeyD]     = (action != GLFW_RELEASE); break;
-            case GLFW_KEY_SPACE:  Input::m_Keys[Keycode::KeySpace] = (action != GLFW_RELEASE); break;
-            case GLFW_KEY_C:      Input::m_Keys[Keycode::KeyC]     = (action != GLFW_RELEASE); break;
-        }
-    }
-
-    void WindowGL::HandleMouse() {
-        static Vector2d lastMouse = {0.0f, 0.0f};
-        Vector2d mousePosition = {0.0f, 0.0f};
-
-        glfwGetCursorPos(m_Window, &mousePosition.x, &mousePosition.y);
-
-        Input::m_Cursor.x = mousePosition.x - lastMouse.x;
-        Input::m_Cursor.y = lastMouse.y - mousePosition.y;
-
-        lastMouse = mousePosition;
-    }
-
     WindowGL::WindowGL(ApplicationInfo info) : Window(info) {
-        glfwSetErrorCallback(ErrorCallback);
+        glfwSetErrorCallback(ErrorProxy);
 
         VOID_ASSERT(glfwInit(), "Failed to initialize GLFW.");
 
@@ -89,8 +45,8 @@ namespace VOID_NS {
         }
 
         /* NOTE(max): GLFW callbacks */
-        glfwSetFramebufferSizeCallback(this->m_Window, ResizeCallback);
-        glfwSetKeyCallback(this->m_Window, KeyCallback);
+        glfwSetFramebufferSizeCallback(this->m_Window, ResizeProxy);
+        glfwSetKeyCallback(this->m_Window, KeyProxy);
         glfwSetInputMode(this->m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         VOID_ASSERT(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress), "Failed to bind GLAD to GLFW.");
@@ -105,7 +61,7 @@ namespace VOID_NS {
             glEnable(GL_DEBUG_OUTPUT);
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     
-            glDebugMessageCallback(GLDebugCallback, nullptr);
+            glDebugMessageCallback(DebugProxy, nullptr);
             glDebugMessageControl(
                 GL_DONT_CARE,
                 GL_DONT_CARE,
@@ -166,5 +122,57 @@ namespace VOID_NS {
             g_Renderer->GetRefreshRate()
         );
         m_Fullscreen = fullscreen;
+    }
+    
+    /**
+     *  Protected/private methods.
+     */
+
+    void WindowGL::HandleMouse() {
+        static Vector2d lastMouse = {0.0f, 0.0f};
+        Vector2d mousePosition = {0.0f, 0.0f};
+
+        glfwGetCursorPos(m_Window, &mousePosition.x, &mousePosition.y);
+
+        Input::m_Cursor.x = mousePosition.x - lastMouse.x;
+        Input::m_Cursor.y = lastMouse.y - mousePosition.y;
+
+        lastMouse = mousePosition;
+    }
+
+    /**
+     *  Proxy methods.
+     */
+
+#if defined(VOID_ENABLE_DEBUG)
+    void WindowGL::DebugProxy(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
+        switch(severity) {
+            case GL_DEBUG_SEVERITY_HIGH:         Logger::Fatal   ("GL: ", msg); break;
+            case GL_DEBUG_SEVERITY_MEDIUM:       Logger::Error   ("GL: ", msg); break;
+            case GL_DEBUG_SEVERITY_LOW:          Logger::Warning ("GL: ", msg); break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::Info    ("GL: ", msg); break;
+        }
+    }
+#endif
+
+    void WindowGL::ErrorProxy(i32 code, const char *msg) {
+        Logger::Error("GLFW: ", code, " ", msg);
+    }
+
+    void WindowGL::ResizeProxy(GLFWwindow *win, i32 w, i32 h) {
+        glViewport(0, 0, w, h);
+
+        ((RendererGL *) g_Renderer)->OnResize(w, h);
+    }
+
+    void WindowGL::KeyProxy(GLFWwindow *win, i32 key, i32 scancode, i32 action, i32 mods) {
+        switch(key) {
+            case GLFW_KEY_W:      Input::m_Keys[Keycode::KeyW]     = (action != GLFW_RELEASE); break;
+            case GLFW_KEY_S:      Input::m_Keys[Keycode::KeyS]     = (action != GLFW_RELEASE); break;
+            case GLFW_KEY_A:      Input::m_Keys[Keycode::KeyA]     = (action != GLFW_RELEASE); break;
+            case GLFW_KEY_D:      Input::m_Keys[Keycode::KeyD]     = (action != GLFW_RELEASE); break;
+            case GLFW_KEY_SPACE:  Input::m_Keys[Keycode::KeySpace] = (action != GLFW_RELEASE); break;
+            case GLFW_KEY_C:      Input::m_Keys[Keycode::KeyC]     = (action != GLFW_RELEASE); break;
+        }
     }
 };

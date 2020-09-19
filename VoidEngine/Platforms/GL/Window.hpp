@@ -13,20 +13,6 @@
 
 namespace VOID_NS {
     class WindowGL : public Window {
-    protected:
-        GLFWwindow *m_Window;
-        GLFWmonitor *m_Monitor;
-
-        /* Callbacks */
-#if defined(VOID_ENABLE_DEBUG)
-        static void GLDebugCallback(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *);
-#endif
-        static void ErrorCallback(i32, const char *);
-        static void ResizeCallback(GLFWwindow *, i32, i32);
-        static void KeyCallback(GLFWwindow *, i32, i32, i32, i32);
-
-        void HandleMouse();
-
     public:
         WindowGL(ApplicationInfo);
         ~WindowGL();
@@ -37,6 +23,20 @@ namespace VOID_NS {
         virtual void SetBackgroundColor(Color) override;
         virtual void SetResizable(bool) override;
         virtual void SetFullscreen(bool) override;
+
+    protected:
+        GLFWwindow *m_Window;
+        GLFWmonitor *m_Monitor;
+
+        /* Callbacks */
+#if defined(VOID_ENABLE_DEBUG)
+        static void DebugProxy(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *);
+#endif
+        static void ErrorProxy(i32, const char *);
+        static void ResizeProxy(GLFWwindow *, i32, i32);
+        static void KeyProxy(GLFWwindow *, i32, i32, i32, i32);
+
+        void HandleMouse();
 
         friend class RendererGL;
     };
