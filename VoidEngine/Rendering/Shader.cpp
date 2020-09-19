@@ -10,6 +10,10 @@ namespace VOID_NS {
 /* End of default shaders */
 
 namespace VOID_NS {
+    /**
+     *  Shader
+     */
+
     const std::string Shader::TranslateString(ShaderStage e) {
         switch(e) {
             case ShaderStage::Vertex:         return "Vertex";
@@ -45,6 +49,7 @@ namespace VOID_NS {
     /**
      *  SHADER LIBRARY
      */
+
     std::vector<Shader *> ShaderLibrary::m_Shaders;
 
     Shader *ShaderLibrary::AddShader(ShaderCreationInfo info) {
