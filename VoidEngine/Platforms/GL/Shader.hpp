@@ -11,7 +11,7 @@
 namespace VOID_NS {
     class ShaderGL : public Shader {
     protected:
-        u32 m_StageID[ShaderStage::StageCount];
+        u32 m_StageID[(u32) ShaderStage::StageCount];
         u32 m_Program;
 
         i32 m_Status;

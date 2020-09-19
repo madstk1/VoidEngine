@@ -48,6 +48,8 @@ namespace VOID_NS {
         virtual void SetUniformMat4f(std::string, Mat4) = 0;
 
         inline std::string GetName() { return m_Name; }
+
+        static const std::string TranslateString(ShaderStage);
     };
 
     class ShaderLibrary {

@@ -4,12 +4,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace VOID_NS {
-    const static std::string k_StageNames[] = {
-        [ShaderStage::StageVertex]   = "Vertex",
-        [ShaderStage::StageFragment] = "Fragment",
-        [ShaderStage::StageCompute]  = "Compute",
-    };
-
     ShaderGL::ShaderGL(ShaderCreationInfo info) : Shader(info) {
         Compile(info);
         Link(info);
@@ -18,8 +12,8 @@ namespace VOID_NS {
         glObjectLabel(GL_PROGRAM, this->m_Program, -1, info.name.c_str());
 
         for(std::pair<ShaderStage, std::string> src : info.sources) {
-            std::string name = info.name + " (" + k_StageNames[src.first] + ")";
-            glObjectLabel(GL_SHADER, m_StageID[src.first], -1, name.c_str());
+            std::string name = info.name + " (" + TranslateString(src.first) + ")";
+            glObjectLabel(GL_SHADER, m_StageID[(u32) src.first], -1, name.c_str());
         }
 #endif
     }
@@ -218,8 +212,7 @@ namespace VOID_NS {
 
     void ShaderGL::Compile(ShaderCreationInfo info) {
         for(std::pair<ShaderStage, std::string> src : info.sources) {
-            m_StageID[src.first] = glCreateShader(Translate(src.first));
-            u32 id = m_StageID[src.first];
+            u32 id = m_StageID[(u32) src.first] = glCreateShader(Translate(src.first));
 
             src.second = "#version " + info.version + "\n" + src.second;
             const char *src_ = src.second.c_str();
@@ -242,7 +235,7 @@ namespace VOID_NS {
     void ShaderGL::Link(ShaderCreationInfo info) {
         m_Program = glCreateProgram();
         for(std::pair<ShaderStage, std::string> src : info.sources) {
-            glAttachShader(m_Program, m_StageID[src.first]);
+            glAttachShader(m_Program, m_StageID[(u32) src.first]);
         }
 
         glLinkProgram(m_Program);
@@ -254,14 +247,14 @@ namespace VOID_NS {
 
             glDeleteProgram(m_Program);
             for(std::pair<ShaderStage, std::string> src : info.sources) {
-                glDeleteShader(m_StageID[src.first]);
+                glDeleteShader(m_StageID[(u32) src.first]);
             }
             Logger::Fatal("Failed to link shader: ", m_ErrorLog.data());
         }
 
         // Detach linked shaders to free memory.
         for(std::pair<ShaderStage, std::string> src : info.sources) {
-            glDetachShader(m_Program, m_StageID[src.first]);
+            glDetachShader(m_Program, m_StageID[(u32) src.first]);
         }
         Logger::Info("Finished compiling shader: ", info.name.c_str());
     }

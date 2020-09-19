@@ -8,20 +8,20 @@
 namespace VOID_NS {
     class ShaderLayout {
     public:
-        typedef enum {
+        enum Type {
             Byte, UByte,
             Short, UShort,
             Int, UInt,
             HFloat, Float,
             Double
-        } Type;
+        };
 
-        typedef enum {
+        enum Dimension {
             L1D = 1,
             L2D = 2,
             L3D = 3,
             L4D = 4
-        } Dimension;
+        };
 
         typedef struct {
             Type type;
@@ -56,13 +56,13 @@ namespace VOID_NS {
         std::vector<LayoutElement> m_Elements;
     };
 
-    typedef enum {
+    enum class ShaderStage {
         StageVertex = 0,
         StageFragment,
         StageCompute,
 
         StageCount
-    } ShaderStage;
+    };
 
     struct ShaderCreationInfo {
         std::string name;
