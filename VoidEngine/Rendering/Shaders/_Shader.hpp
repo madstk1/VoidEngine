@@ -8,7 +8,7 @@
 namespace VOID_NS {
     class ShaderLayout {
     public:
-        enum Type {
+        enum class Type {
             Byte, UByte,
             Short, UShort,
             Int, UInt,
@@ -16,7 +16,7 @@ namespace VOID_NS {
             Double
         };
 
-        enum Dimension {
+        enum class Dimension {
             L1D = 1,
             L2D = 2,
             L3D = 3,

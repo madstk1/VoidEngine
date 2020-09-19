@@ -34,7 +34,7 @@ namespace VOID_NS {
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(
                 i,
-                le.dimension,
+                (u32) le.dimension,
                 Translate(le.type),
                 (le.normalized) ? GL_TRUE : GL_FALSE,
                 m_Layout.GetPointerSize(),
