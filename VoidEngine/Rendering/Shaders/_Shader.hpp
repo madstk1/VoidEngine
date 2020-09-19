@@ -60,6 +60,9 @@ namespace VOID_NS {
         Vertex = 0,
         Fragment,
         Compute,
+        TessControl,
+        TessEvaluation,
+        Geometry,
 
         StageCount
     };

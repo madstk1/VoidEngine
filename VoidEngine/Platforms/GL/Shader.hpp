@@ -14,10 +14,6 @@ namespace VOID_NS {
         u32 m_StageID[(u32) ShaderStage::StageCount];
         u32 m_Program;
 
-        i32 m_Status;
-        i32 m_LogLength;
-        std::vector<char> m_ErrorLog;
-
         i32 GetUniform(std::string);
         void Compile(ShaderCreationInfo);
         void Link(ShaderCreationInfo);

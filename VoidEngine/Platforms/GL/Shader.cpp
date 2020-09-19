@@ -210,7 +210,11 @@ namespace VOID_NS {
     }
 
 
+
     void ShaderGL::Compile(ShaderCreationInfo info) {
+        i32 m_Status, m_LogLength;
+        std::vector<char> m_ErrorLog;
+
         for(std::pair<ShaderStage, std::string> src : info.sources) {
             u32 id = m_StageID[(u32) src.first] = glCreateShader(Translate(src.first));
 
@@ -233,7 +237,10 @@ namespace VOID_NS {
     }
 
     void ShaderGL::Link(ShaderCreationInfo info) {
+        i32 m_Status, m_LogLength;
+        std::vector<char> m_ErrorLog;
         m_Program = glCreateProgram();
+
         for(std::pair<ShaderStage, std::string> src : info.sources) {
             glAttachShader(m_Program, m_StageID[(u32) src.first]);
         }
