@@ -21,6 +21,25 @@ namespace VOID_NS {
         VOID_ASSERT(false, "Invalid shader-stage enum.");
     }
 
+    const std::string Shader::TranslateString(GLSLVersion e) {
+        switch(e) {
+            case GLSLVersion::V420:  return "420";
+            case GLSLVersion::V430:  return "430";
+            case GLSLVersion::V440:  return "440";
+            case GLSLVersion::V450:  return "450";
+            case GLSLVersion::V460:  return "460";
+        }
+        VOID_ASSERT(false, "Invalid GLSL-version enum.");
+    }
+
+    const std::string Shader::TranslateString(GLSLProfile e) {
+        switch(e) {
+            case GLSLProfile::Core:          return "core";
+            case GLSLProfile::Compatibility: return "compatiblity";
+        }
+        VOID_ASSERT(false, "Invalid GLSL-profile enum.");
+    }
+
     /**
      *  SHADER LIBRARY
      */

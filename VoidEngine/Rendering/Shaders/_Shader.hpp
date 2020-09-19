@@ -67,9 +67,23 @@ namespace VOID_NS {
         StageCount
     };
 
+    enum class GLSLVersion {
+        V420  = (u32) 420,
+        V430  = (u32) 430,
+        V440  = (u32) 440,
+        V450  = (u32) 450,
+        V460  = (u32) 460,
+    };
+
+    enum class GLSLProfile {
+        Core,
+        Compatibility
+    };
+
     struct ShaderCreationInfo {
         std::string name;
-        std::string version;
+        GLSLVersion version;
+        GLSLProfile profile;
         std::vector<std::pair<ShaderStage, std::string>> sources;
         ShaderLayout layout;
     };

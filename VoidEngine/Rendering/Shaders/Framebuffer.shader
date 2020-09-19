@@ -4,7 +4,8 @@
 #include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
 ShaderCreationInfo k_ShaderFramebuffer = {
-    "Framebuffer", "450 core", {
+    "Framebuffer",
+    GLSLVersion::V450, GLSLProfile::Core, {
         { ShaderStage::Vertex, R"(
             /* Input variables. */
             layout(location = 0) in vec3 i_Position;

@@ -50,6 +50,8 @@ namespace VOID_NS {
         inline std::string GetName() { return m_Name; }
 
         static const std::string TranslateString(ShaderStage);
+        static const std::string TranslateString(GLSLVersion);
+        static const std::string TranslateString(GLSLProfile);
     };
 
     class ShaderLibrary {

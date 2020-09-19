@@ -218,9 +218,11 @@ namespace VOID_NS {
         for(std::pair<ShaderStage, std::string> src : info.sources) {
             u32 id = m_StageID[(u32) src.first] = glCreateShader(Translate(src.first));
 
-            src.second = "#version " + info.version + "\n" + src.second;
-            const char *src_ = src.second.c_str();
+            src.second = "#version " +
+                TranslateString(info.version) + " " +
+                TranslateString(info.profile) + "\n" + src.second;
 
+            const char *src_ = src.second.c_str();
             glShaderSource(id, 1, &src_, NULL);
             glCompileShader(id);
 

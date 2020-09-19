@@ -4,7 +4,8 @@
 #include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
 ShaderCreationInfo k_ShaderDefault = {
-    "Default", "450 core", {
+    "Default",
+    GLSLVersion::V450, GLSLProfile::Core, {
         { ShaderStage::Vertex, R"(
             struct vs_Uniform {
                 mat4 u_Model;
