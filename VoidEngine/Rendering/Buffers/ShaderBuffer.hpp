@@ -28,7 +28,7 @@ namespace VOID_NS {
             BufferUsage usage
         ) : Buffer(usage) {}
 
-        ~ShaderBuffer() = default;
+        virtual ~ShaderBuffer() = default;
 
         virtual void Bind() {}
 

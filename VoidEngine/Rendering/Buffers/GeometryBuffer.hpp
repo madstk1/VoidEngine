@@ -26,7 +26,7 @@ namespace VOID_NS {
             Vector<u32> indices
         ) : Buffer(usage), vertices(vertices), indices(indices) {}
 
-        ~GeometryBuffer() = default;
+        virtual ~GeometryBuffer() = default;
 
         virtual void Bind() {}
 

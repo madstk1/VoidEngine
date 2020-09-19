@@ -16,7 +16,7 @@ namespace VOID_NS {
         Buffer(BufferUsage usage)
             : m_Usage(usage) {}
 
-        ~Buffer() = default;
+        virtual ~Buffer() = default;
 
         inline BufferUsage GetUsage() { return m_Usage; }
 
