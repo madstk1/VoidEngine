@@ -31,6 +31,7 @@ namespace VOID_NS {
         virtual ~ShaderBuffer() = default;
 
         virtual void Bind() {}
+        virtual void Unbind() {}
 
         inline void Reset() { m_Content.clear(); }
 

@@ -3,30 +3,13 @@
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Rendering/Renderer.hpp>
+#include <VoidEngine/Platforms/GL/Buffers.hpp>
 
 namespace VOID_NS {
     class WindowGL;
 
     class RendererGL : public Renderer {
     protected:
-        struct GeometryBufferGL : public GeometryBuffer {
-            u32 VBO, EBO, VAO;
-
-            GeometryBufferGL(BufferUsage);
-            ~GeometryBufferGL();
-
-            virtual void Bind() override;
-        };
-
-        struct ShaderBufferGL : public ShaderBuffer {
-            u32 VBO, EBO, VAO;
-
-            ShaderBufferGL(BufferUsage);
-            ~ShaderBufferGL();
-
-            virtual void Bind() override;
-        };
-
         /* Buffers */
         ShaderBufferGL     *m_Dynamic;
         ShaderBufferGL     *m_Static;

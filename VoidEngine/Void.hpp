@@ -44,5 +44,6 @@
 #include <VoidEngine/Rendering/Buffers/Buffer.hpp>
 #include <VoidEngine/Rendering/Buffers/GeometryBuffer.hpp>
 #include <VoidEngine/Rendering/Buffers/ShaderBuffer.hpp>
+#include <VoidEngine/Rendering/Buffers/UniformBuffer.hpp>
 
 #endif /* VOID_H__ */

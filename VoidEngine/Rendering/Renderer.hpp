@@ -5,8 +5,10 @@
 #include <VoidEngine/Misc/Cubemap.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
+
 #include <VoidEngine/Rendering/Buffers/GeometryBuffer.hpp>
 #include <VoidEngine/Rendering/Buffers/ShaderBuffer.hpp>
+#include <VoidEngine/Rendering/Buffers/UniformBuffer.hpp>
 
 namespace VOID_NS {
     class Renderer {
