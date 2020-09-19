@@ -10,9 +10,9 @@
 namespace VOID_NS {
     const std::string Shader::TranslateString(ShaderStage e) {
         switch(e) {
-            case ShaderStage::StageVertex:    return "Vertex";
-            case ShaderStage::StageFragment:  return "Fragment";
-            case ShaderStage::StageCompute:   return "Compute";
+            case ShaderStage::Vertex:    return "Vertex";
+            case ShaderStage::Fragment:  return "Fragment";
+            case ShaderStage::Compute:   return "Compute";
             default: break;
         }
         VOID_ASSERT(false, "Invalid shader-stage enum.");

@@ -57,9 +57,9 @@ namespace VOID_NS {
     };
 
     enum class ShaderStage {
-        StageVertex = 0,
-        StageFragment,
-        StageCompute,
+        Vertex = 0,
+        Fragment,
+        Compute,
 
         StageCount
     };

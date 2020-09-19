@@ -5,7 +5,7 @@
 
 ShaderCreationInfo k_ShaderDefault = {
     "Default", "450 core", {
-        { ShaderStage::StageVertex, R"(
+        { ShaderStage::Vertex, R"(
             struct vs_Uniform {
                 mat4 u_Model;
                 mat4 u_View;
@@ -32,7 +32,7 @@ ShaderCreationInfo k_ShaderDefault = {
                 v_TexCoords = i_TexCoords;
             }
         )"},
-        { ShaderStage::StageFragment, R"(
+        { ShaderStage::Fragment, R"(
             struct PointLight {
                 vec4 color;
                 vec3 position;

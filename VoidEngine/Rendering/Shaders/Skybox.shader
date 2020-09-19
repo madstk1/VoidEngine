@@ -5,7 +5,7 @@
 
 ShaderCreationInfo k_ShaderSkybox = {
     "Skybox", "450 core", {
-        { ShaderStage::StageVertex, R"(
+        { ShaderStage::Vertex, R"(
             struct vs_Uniform {
                 mat4 u_Projection;
                 mat4 u_View;
@@ -27,7 +27,7 @@ ShaderCreationInfo k_ShaderSkybox = {
                 v_TexCoords = i_Position;
             })"
         },
-        { ShaderStage::StageFragment, R"(
+        { ShaderStage::Fragment, R"(
             struct fs_Uniform {
                 samplerCube u_Skybox;
             };

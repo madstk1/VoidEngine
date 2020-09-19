@@ -171,9 +171,9 @@ namespace VOID_NS {
 
     u32 ShaderGL::Translate(ShaderStage e) {
         switch(e) {
-            case ShaderStage::StageVertex:   return GL_VERTEX_SHADER;
-            case ShaderStage::StageFragment: return GL_FRAGMENT_SHADER;
-            case ShaderStage::StageCompute:  return GL_COMPUTE_SHADER;
+            case ShaderStage::Vertex:   return GL_VERTEX_SHADER;
+            case ShaderStage::Fragment: return GL_FRAGMENT_SHADER;
+            case ShaderStage::Compute:  return GL_COMPUTE_SHADER;
 
             default: VOID_ASSERT(false, "Invalid shader-stage.");
         }

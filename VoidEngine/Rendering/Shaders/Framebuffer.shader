@@ -5,7 +5,7 @@
 
 ShaderCreationInfo k_ShaderFramebuffer = {
     "Framebuffer", "450 core", {
-        { ShaderStage::StageVertex, R"(
+        { ShaderStage::Vertex, R"(
             /* Input variables. */
             layout(location = 0) in vec3 i_Position;
             layout(location = 1) in vec3 i_Normal;
@@ -19,7 +19,7 @@ ShaderCreationInfo k_ShaderFramebuffer = {
                 v_TexCoords = i_TexCoords;
             })"
         },
-        { ShaderStage::StageFragment, R"(
+        { ShaderStage::Fragment, R"(
             struct fs_Uniform {
                 sampler2D u_ScreenTexture;
             };
