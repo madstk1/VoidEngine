@@ -1,8 +1,6 @@
 #ifndef VOID_SHADER_SKYBOX_H__
 #define VOID_SHADER_SKYBOX_H__
 
-#include <VoidEngine/Rendering/Shaders/_Shader.hpp>
-
 ShaderCreationInfo k_ShaderSkybox = {
     "Skybox",
     GLSLVersion::V450, GLSLProfile::Core, {

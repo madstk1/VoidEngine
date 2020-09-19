@@ -1,8 +1,6 @@
 #ifndef VOID_SHADER_DEFAULT_H__
 #define VOID_SHADER_DEFAULT_H__
 
-#include <VoidEngine/Rendering/Shaders/_Shader.hpp>
-
 ShaderCreationInfo k_ShaderDefault = {
     "Default",
     GLSLVersion::V450, GLSLProfile::Core, {

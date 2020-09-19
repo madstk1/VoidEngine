@@ -1,8 +1,6 @@
 #ifndef VOID_SHADER_FRAMEBUFFER_H__
 #define VOID_SHADER_FRAMEBUFFER_H__
 
-#include <VoidEngine/Rendering/Shaders/_Shader.hpp>
-
 ShaderCreationInfo k_ShaderFramebuffer = {
     "Framebuffer",
     GLSLVersion::V450, GLSLProfile::Core, {

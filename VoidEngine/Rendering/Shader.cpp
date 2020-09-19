@@ -1,5 +1,6 @@
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
+#include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
 /* Default shaders */
 #include "Shaders/Default.shader"
