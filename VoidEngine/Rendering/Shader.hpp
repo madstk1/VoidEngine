@@ -5,11 +5,79 @@
 #include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
-#include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
 #include <glm/glm.hpp>
 
 namespace VOID_NS {
+    class ShaderLayout {
+    public:
+        enum class Type {
+            Byte, UByte, Short, UShort, Int, UInt, HFloat, Float, Double
+        };
+
+        enum class Dimension {
+            L1D = 1,
+            L2D, L3D, L4D
+        };
+
+        typedef struct {
+            Type type;
+            Dimension dimension;
+            bool normalized;
+            u64 offset;
+        } LayoutElement;
+
+        ShaderLayout() {}
+
+        ShaderLayout(u64 pointerSize)
+            : m_PointerSize(pointerSize) {}
+
+        ShaderLayout(u64 pointerSize, std::initializer_list<LayoutElement> elements)
+            : m_PointerSize(pointerSize),
+              m_Elements(elements) {}
+
+        void AddElement(LayoutElement element) {
+            m_Elements.push_back(element);
+        }
+
+        inline u64 GetPointerSize() {
+            return m_PointerSize;
+        }
+
+        inline std::vector<LayoutElement> GetElements() {
+            return m_Elements;
+        }
+
+    protected:
+        u64 m_PointerSize;
+        std::vector<LayoutElement> m_Elements;
+    };
+
+    enum class ShaderStage {
+        Vertex, Fragment, Compute, TessControl, TessEvaluation, Geometry,
+        StageCount
+    };
+
+    enum class GLSLVersion {
+        V420  = (u32) 420,
+        V430  = (u32) 430,
+        V440  = (u32) 440,
+        V450  = (u32) 450,
+        V460  = (u32) 460,
+    };
+
+    enum class GLSLProfile {
+        Core, Compatibility
+    };
+
+    struct ShaderCreationInfo {
+        std::string name;
+        GLSLVersion version;
+        GLSLProfile profile;
+        std::vector<std::pair<ShaderStage, std::string>> sources;
+        ShaderLayout layout;
+    };
+
     class Shader : Resource {
     protected:
         std::string m_Name;

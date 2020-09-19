@@ -42,6 +42,8 @@ namespace VOID_NS {
     f32              g_FixedUpdateInterval;
 };
 
+using namespace VOID_NS;
+
 int main(int argc, char **argv) {
 #if defined(VOID_ENABLE_DEBUG)
     Logger::Info(

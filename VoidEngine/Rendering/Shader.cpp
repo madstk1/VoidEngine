@@ -1,11 +1,12 @@
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
-#include <VoidEngine/Rendering/Shaders/_Shader.hpp>
 
 /* Default shaders */
-#include "Shaders/Default.shader"
-#include "Shaders/Framebuffer.shader"
-#include "Shaders/Skybox.shader"
+namespace VOID_NS {
+    #include "Shaders/Default.shader"
+    #include "Shaders/Framebuffer.shader"
+    #include "Shaders/Skybox.shader"
+};
 /* End of default shaders */
 
 namespace VOID_NS {
