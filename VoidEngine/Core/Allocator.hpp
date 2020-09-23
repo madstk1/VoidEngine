@@ -3,12 +3,18 @@
 
 #include <memory>
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Core/Errors.hpp>
 #include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
     template<typename T>
-    using Ptr = std::shared_ptr<T>;
+    class Ptr : public std::shared_ptr<T> {
+    public:
+        Ptr() : std::shared_ptr<T>() {}
+        Ptr(T *t) : std::shared_ptr<T>(t) {}
+        Ptr(std::shared_ptr<T> p) : std::shared_ptr<T>(p) {}
+
+        operator T *() { return this->get(); }
+    };
 
     class Allocator {
         friend Logger;

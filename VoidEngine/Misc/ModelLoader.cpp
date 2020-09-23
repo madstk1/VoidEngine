@@ -76,13 +76,13 @@ namespace VOID_NS {
             } else {
                 v.texCoords = {0, 0};
             }
-            mesh->vertices.push_back(v);
+            mesh->vertices.Append(v);
         }
 
         for(u32 i = 0; i < aim->mNumFaces; i++) {
             aiFace face = aim->mFaces[i];
             for(u32 j = 0; j < face.mNumIndices; j++) {
-                mesh->indices.push_back(face.mIndices[j]);
+                mesh->indices.Append(face.mIndices[j]);
             }
         }
     }

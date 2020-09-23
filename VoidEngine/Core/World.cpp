@@ -2,13 +2,17 @@
 #include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
-    World::World(const ApplicationInfo &info) {
+    World::World() {
+    }
+
+    World::~World() {
     }
 
     void World::AddGameObject(Entity *entity) {
         VOID_ASSERT(entity != nullptr, "Trying to add NULL entity to game-world.");
 
         m_WorldObjects.push_back(entity);
+        OnEntityCreate(entity);
     }
     
     void World::DestroyGameObject(Entity *entity) {

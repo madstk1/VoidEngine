@@ -2,6 +2,7 @@
 #define VOID_PLATFORMS_GL_RENDERER_H__
 
 #include <VoidEngine/Core/Common.hpp>
+#include <VoidEngine/Misc/Material.hpp>
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Platforms/GL/Buffers.hpp>
 
@@ -10,10 +11,17 @@ namespace VOID_NS {
 
     class RendererGL : public Renderer {
     protected:
-        /* Buffers */
-        ShaderBufferGL     *m_Dynamic;
-        ShaderBufferGL     *m_Static;
+        struct RenderObjectGL {
+            Entity *entity = nullptr;
+            GeometryBufferGL *buffer = nullptr;
+            Material *material = nullptr;
 
+            bool indexed = true;
+        };
+
+        Vector<RenderObjectGL> m_RenderObjects;
+
+        /* Buffers */
         GeometryBufferGL   *m_Skybox;
         GeometryBufferGL   *m_RenderQuad;
 
@@ -28,13 +36,16 @@ namespace VOID_NS {
         u32                 m_SkyboxCubemap;
 
         Shader             *m_DefaultShader;
+        Shader             *m_FramebufferShader;
+        Shader             *m_SkyboxShader;
         MVP                 m_MVP;
-
-        void UpdateShaderBuffer(ShaderBufferGL *);
-        void RenderShaderBuffer(ShaderBufferGL *);
 
         void SetLightMatrix(Shader *);
         void ClearColor();
+
+        void CreateRenderObject(Entity *);
+        void UpdateRenderObjects();
+        bool CheckRenderObjects(Entity *);
 
         WindowGL *GetWindow();
 

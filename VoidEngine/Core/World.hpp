@@ -6,16 +6,20 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
+#include <VoidEngine/Misc/Delegate.hpp>
+#include <VoidEngine/Misc/Singleton.hpp>
 
 extern int main(int argc, char **argv);
 
 namespace VOID_NS {
     class Light;
 
-    class World {
+    class World : public Singleton<World> {
     public:
-        World(const ApplicationInfo &);
+        World();
         ~World();
+
+        Delegate<Entity *> OnEntityCreate;
 
         inline std::vector<Entity *> GetEntities() { return m_WorldObjects; }
         inline std::vector<Light *> GetLights() { return m_Lights; }

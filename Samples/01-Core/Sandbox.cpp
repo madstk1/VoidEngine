@@ -26,9 +26,8 @@ public:
             for(u32 y = 0; y < 10; y++) {
                 Cube *cube = new Cube();
 
-                cube->position = Vector3(x * 2.0f, 0.0f, y * 2.0f);
-                cube->rotation = Vector3(6.f, 2.f, 5.f) * (f32)(x + y);
-                cube->scale = Vector3(2.0f / (x + y + 1));
+                cube->position = Vector3(x * 2.0f, y * 2.0f, 0.0f);
+                cube->scale = Vector3(0.9f);
             }
         }
 

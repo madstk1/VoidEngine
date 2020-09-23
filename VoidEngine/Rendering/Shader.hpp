@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include <VoidEngine/Math/Vectors.hpp>
-#include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 
 #include <glm/glm.hpp>
@@ -30,24 +29,12 @@ namespace VOID_NS {
 
         ShaderLayout() {}
 
-        ShaderLayout(u64 pointerSize)
-            : m_PointerSize(pointerSize) {}
-
         ShaderLayout(u64 pointerSize, std::initializer_list<LayoutElement> elements)
             : m_PointerSize(pointerSize),
               m_Elements(elements) {}
 
-        void AddElement(LayoutElement element) {
-            m_Elements.push_back(element);
-        }
-
-        inline u64 GetPointerSize() {
-            return m_PointerSize;
-        }
-
-        inline std::vector<LayoutElement> GetElements() {
-            return m_Elements;
-        }
+        inline u64 GetPointerSize() { return m_PointerSize; }
+        inline std::vector<LayoutElement> GetElements() { return m_Elements; }
 
     protected:
         u64 m_PointerSize;
@@ -79,7 +66,7 @@ namespace VOID_NS {
         ShaderLayout layout;
     };
 
-    class Shader : Resource {
+    class Shader {
     protected:
         std::string m_Name;
         ShaderLayout m_Layout;
@@ -89,7 +76,7 @@ namespace VOID_NS {
         static const ShaderLayout DefaultShaderLayout();
 
     public:
-        Shader(ShaderCreationInfo info) : Resource(info.name, Type::ShaderResource) {
+        Shader(ShaderCreationInfo info) {
             m_Name   = info.name;
             m_Layout = info.layout;
         }
@@ -98,6 +85,8 @@ namespace VOID_NS {
 
         virtual void Enable() = 0;
         virtual void Disable() = 0;
+
+        inline std::string GetName() { return m_Name; }
 
         /* Uniform setters. */
         virtual void SetUniform1i(std::string,  i32) = 0;
@@ -120,8 +109,6 @@ namespace VOID_NS {
         virtual void SetUniformMat3f(std::string, Mat3) = 0;
         virtual void SetUniformMat4f(std::string, Mat4) = 0;
 
-        inline std::string GetName() { return m_Name; }
-
         static const std::string TranslateString(ShaderStage);
         static const std::string TranslateString(GLSLVersion);
         static const std::string TranslateString(GLSLProfile);
@@ -134,7 +121,7 @@ namespace VOID_NS {
         static void CreateDefaultShaders();
 
     protected:
-        static std::vector<Shader *> m_Shaders;
+        static std::map<std::string, Shader *> m_Shaders;
 
     private:
         ShaderLibrary() {}
