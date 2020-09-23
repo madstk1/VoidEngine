@@ -49,6 +49,9 @@ namespace VOID_NS {
                 PointLight LightingData[32];
             };
 
+            struct vd_ub_Skybox {
+                samplerCube Skybox;
+            };
 
             /**
              *  Constants
@@ -80,7 +83,7 @@ namespace VOID_NS {
             }
 
             float SchlickBeckmann(float NV, float roughness) {
-                float k = pow(roughness + 1.0, 2.0) / 8.0;
+                float k = pow(roughness + 1.0, 2.0) * 0.125;
 
                 return NV / (NV * (1.0 - k) + k);
             }
@@ -99,6 +102,7 @@ namespace VOID_NS {
             uniform vd_ub_Material ub_Material;
             uniform vd_ub_MVP      ub_MVP;
             uniform vd_ub_Light    ub_Light;
+            uniform vd_ub_Skybox   ub_Skybox;
         )";
     }
 

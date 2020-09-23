@@ -7,16 +7,10 @@ ShaderCreationInfo k_ShaderSkybox = {
         { ShaderStage::Vertex, R"(
             void main() {
                 gl_Position = vec4(ub_MVP.Projection * ub_MVP.View * vec4(i_Position, 1.0)).xyww;
+                o_Position  = i_Position;
             })"
         },
         { ShaderStage::Fragment, R"(
-            struct vd_ub_Skybox {
-                samplerCube Skybox;
-            };
-
-            /* Uniform variables. */
-            uniform vd_ub_Skybox ub_Skybox;
-            
             void main() {
                 o_Color = vec4(texture(ub_Skybox.Skybox, i_Position).rgb, 1.0);
             })"

@@ -206,13 +206,7 @@ namespace VOID_NS {
      */
 
     i32 ShaderGL::GetUniform(std::string identifier) {
-        i32 loc = glGetUniformLocation(m_Program, identifier.c_str());
-        if(loc != -1) {
-            return loc;
-        }
-
-        Logger::Error("Invalid uniform identifier '", identifier, "', ", loc);
-        return -1;
+        return glGetUniformLocation(m_Program, identifier.c_str());
     }
 
     void ShaderGL::Compile(ShaderCreationInfo info) {

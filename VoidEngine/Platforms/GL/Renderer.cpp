@@ -238,7 +238,8 @@ namespace VOID_NS {
             glDisable(GL_CULL_FACE);
     
             m_Skybox->Bind();
-            skyboxShader->Enable();
+            SetLightMatrix(skyboxShader);
+
             skyboxShader->SetUniformMat4f("ub_MVP.Projection", m_MVP.proj);
             skyboxShader->SetUniformMat4f("ub_MVP.View", Mat4(Mat3(m_MVP.view)));
 
@@ -297,22 +298,23 @@ namespace VOID_NS {
         }
 
         std::array<Texture *, 6> textures = skybox->GetTextures();
-        Texture *sample = textures[0];
-
-        u32 width  = sample->GetSize().x;
-        u32 height = sample->GetSize().y;
-        u32 format = (sample->GetChannelCount() == 4) ? GL_RGBA : GL_RGB;
 
         glGenTextures(1, &m_SkyboxCubemap);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
 
         /* Specify face data. */
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textures[0]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textures[1]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textures[2]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textures[3]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textures[4]->GetData());
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textures[5]->GetData());
+        for(u32 i = 0; i < 6; i++) {
+            u32 format = (textures[i]->GetChannelCount() == 4) ? GL_RGBA : GL_RGB;
+            glTexImage2D(
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                0, format,
+                textures[i]->GetSize().x,
+                textures[i]->GetSize().y,
+                0, format,
+                GL_UNSIGNED_BYTE,
+                textures[i]->GetData()
+            );
+        }
 
         /* Filter and wrapping. */
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
