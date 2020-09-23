@@ -239,11 +239,8 @@ namespace VOID_NS {
     
             m_Skybox->Bind();
             SetLightMatrix(skyboxShader);
-
-            skyboxShader->SetUniformMat4f("ub_MVP.Projection", m_MVP.proj);
-            skyboxShader->SetUniformMat4f("ub_MVP.View", Mat4(Mat3(m_MVP.view)));
-
-            skyboxShader->SetUniform1i("ub_Skybox.Skybox", 0);
+            skyboxShader->SetUniformMat4f("ub_MVP.View",        Mat4(Mat3(m_MVP.view)));
+            skyboxShader->SetUniformMat4f("ub_MVP.Projection",  m_MVP.proj);
     
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
@@ -417,6 +414,9 @@ namespace VOID_NS {
             shader->SetUniform1fv("ub_Material.Metallic",  material->metallic);
             shader->SetUniform1fv("ub_Material.Roughness", material->roughness);
             shader->SetUniform1fv("ub_Material.Occlusion", material->occlusion);
+
+            /* Skybox uniforms. */
+            shader->SetUniform1i("ub_Skybox.Skybox", 0);
 
             glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
         }
