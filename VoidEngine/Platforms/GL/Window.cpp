@@ -90,30 +90,36 @@ namespace VOID_NS {
     }
 
     void WindowGL::SetTitle(std::string title) {
+        g_Window->OnTitle(title);
         glfwSetWindowTitle(this->m_Window, title.c_str());
         m_Title = title;
     }
 
     void WindowGL::SetPosition(Vector2i pos) {
+        g_Window->OnPosition(pos);
         glfwSetWindowPos(this->m_Window, pos.x, pos.y);
         m_Position = pos;
     }
 
     void WindowGL::SetSize(Vector2u size) {
+        g_Window->OnSize(size);
         glfwSetWindowSize(this->m_Window, size.x, size.y);
         m_Size = size;
     }
 
     void WindowGL::SetBackgroundColor(Color bg) {
+        g_Window->OnBackground(bg);
         m_Background = bg;
     }
 
     void WindowGL::SetResizable(bool resizable) {
+        g_Window->OnResizable(resizable);
         glfwWindowHint(GLFW_RESIZABLE, resizable);
         m_Resizable = resizable;
     }
 
     void WindowGL::SetFullscreen(bool fullscreen) {
+        g_Window->OnFullscreen(fullscreen);
         glfwSetWindowMonitor(
             this->m_Window,
             (fullscreen) ? this->m_Monitor : nullptr,
@@ -166,8 +172,10 @@ namespace VOID_NS {
 
     void WindowGL::ResizeProxy(GLFWwindow *win, i32 w, i32 h) {
         glViewport(0, 0, w, h);
+        g_Window->OnSize(Vector2u(w, h));
 
-        ((RendererGL *) g_Renderer)->OnResize(w, h);
+        ((WindowGL *) g_Window)->m_Size.x = w;
+        ((WindowGL *) g_Window)->m_Size.y = h;
     }
 
     void WindowGL::KeyProxy(GLFWwindow *win, i32 key, i32 scancode, i32 action, i32 mods) {

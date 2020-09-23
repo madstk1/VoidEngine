@@ -6,6 +6,7 @@
 #include <VoidEngine/Core/World.hpp>
 #include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Math/Color.hpp>
+#include <VoidEngine/Misc/Delegate.hpp>
 
 namespace VOID_NS {
     class Window {
@@ -18,6 +19,13 @@ namespace VOID_NS {
         bool        m_Fullscreen;
 
     public:
+        Delegate<std::string>   OnTitle;
+        Delegate<Vector2i>      OnPosition;
+        Delegate<Vector2u>      OnSize;
+        Delegate<Color>         OnBackground;
+        Delegate<bool>          OnResizable;
+        Delegate<bool>          OnFullscreen;
+
         Window(ApplicationInfo info) {
             m_Title         = info.Title;
             m_Position      = info.Position;

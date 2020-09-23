@@ -34,7 +34,6 @@ namespace VOID_NS {
         void RenderShaderBuffer(ShaderBufferGL *);
 
         void SetLightMatrix(Shader *);
-        void OnResize(i32, i32);
         void ClearColor();
 
         WindowGL *GetWindow();

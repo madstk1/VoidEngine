@@ -1,5 +1,4 @@
 #include "glad/glad.h"
-#include "VoidEngine/Rendering/Shader.hpp"
 
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/Allocator.hpp>
@@ -156,6 +155,23 @@ namespace VOID_NS {
             Logger::Debug("[EXT] ", ext);
         }
 #endif 
+
+        g_Window->OnSize += [=](Vector2u size) {
+            /* Resize multi-sampled texture. */
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorbuffer);
+            glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_Sampling, GL_RGB, size.x, size.y, GL_TRUE);
+            glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
+    
+            /* Resize non-multi-sampled render-texture. */
+            glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+            glBindTexture(GL_TEXTURE_2D, 0);
+    
+            /* Resize renderbuffer. */
+            glBindRenderbuffer(GL_RENDERBUFFER, m_Renderbuffer);
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_Sampling, GL_DEPTH24_STENCIL8, size.x, size.y);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        };
     }
 
     RendererGL::~RendererGL() {
@@ -322,7 +338,7 @@ namespace VOID_NS {
         glGetIntegerv(GL_RENDERBUFFER_BINDING, &rbBinding);
 
         if(rbBinding != 0) {
-            OnResize(GetWindow()->GetSize().x, GetWindow()->GetSize().y);
+            g_Window->OnSize(GetWindow()->GetSize());
         }
     }
 
@@ -343,14 +359,6 @@ namespace VOID_NS {
     /**
      *  PROTECTED/PRIVATE METHODS
      */
-
-    u32 Translate(Buffer::BufferUsage e) {
-        switch(e) {
-            case Buffer::BufferUsage::Dynamic:  return GL_DYNAMIC_DRAW;
-            case Buffer::BufferUsage::Static:   return GL_STATIC_DRAW;
-        }
-        VOID_ASSERT(false, "Invalid buffer-usage enum.");
-    }
 
     std::vector<std::string> RendererGL::GetExtensions() {
         i32 nExtensions = 0;
@@ -429,26 +437,6 @@ namespace VOID_NS {
 
     WindowGL *RendererGL::GetWindow() {
         return (WindowGL *) g_Window;
-    }
-
-    void RendererGL::OnResize(i32 w, i32 h) {
-        GetWindow()->m_Size.x = w;
-        GetWindow()->m_Size.y = h;
-
-        /* Resize multi-sampled texture. */
-        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_TextureColorbuffer);
-        glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_Sampling, GL_RGB, w, h, GL_TRUE);
-        glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-
-        /* Resize non-multi-sampled render-texture. */
-        glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        /* Resize renderbuffer. */
-        glBindRenderbuffer(GL_RENDERBUFFER, m_Renderbuffer);
-        glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_Sampling, GL_DEPTH24_STENCIL8, w, h);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
 
     void RendererGL::ClearColor() {
