@@ -14,6 +14,8 @@ namespace VOID_NS {
         Vector3 tangents;
         Vector3 bitangents;
 
+        Vertex() {}
+
         Vertex(Vector3 pos)
             : position(pos) {}
 
