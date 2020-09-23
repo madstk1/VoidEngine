@@ -25,7 +25,7 @@ namespace VOID_NS {
             return m_ChannelCount;
         }
 
-        static Texture *LoadTexture(std::string, std::string);
+        static Texture *LoadTexture(std::string name, std::string path);
         static void FreeTexture(Texture *);
 
     protected:

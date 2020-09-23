@@ -17,7 +17,7 @@ namespace VOID_NS {
         tex->m_Data = stbi_load(path.c_str(), &tex->m_Size.x, &tex->m_Size.y, &tex->m_ChannelCount, 0);
 
         if(!tex->m_Data) {
-            Logger::Error("Failed to load texture: %s", path.c_str());
+            Logger::Error("Failed to load texture: ", path);
 
             stbi_image_free(tex->m_Data);
             return nullptr;
