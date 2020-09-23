@@ -10,9 +10,9 @@ namespace VOID_NS {
     class Cubemap : public Resource {
     public:
         typedef enum {
-            Front, Back,
-            Top,   Bottom,
-            Left,  Right,
+            Right,  Left,
+            Top,    Bottom,
+            Front,  Back
         } CubemapFaces;
 
         Cubemap(std::string name, std::array<Texture *, 6> textures) : Resource(name, Resource::Type::CubemapResource) {

@@ -31,6 +31,16 @@ public:
                 cube->scale = Vector3(2.0f / (x + y + 1));
             }
         }
+
+        Cubemap *skybox = new Cubemap("Skybox 1", {
+            Texture::LoadTexture("Right",  "../Resources/Skybox/right.jpg"),
+            Texture::LoadTexture("Left",   "../Resources/Skybox/left.jpg"),
+            Texture::LoadTexture("Top",    "../Resources/Skybox/top.jpg"),
+            Texture::LoadTexture("Bottom", "../Resources/Skybox/bottom.jpg"),
+            Texture::LoadTexture("Front",  "../Resources/Skybox/front.jpg"),
+            Texture::LoadTexture("Back",   "../Resources/Skybox/back.jpg"),
+        });
+        g_Renderer->SetSkybox(skybox);
     }
 
     void Update() override {
