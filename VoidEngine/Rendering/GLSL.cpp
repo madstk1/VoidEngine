@@ -69,8 +69,7 @@ namespace VOID_NS {
             }
 
             float NormalDistribution(vec3 N, vec3 H, float roughness) {
-                float a   = pow(roughness, 2.0);
-                float a2  = pow(a, 2.0);
+                float a2  = pow(pow(roughness, 2.0), 2.0);
                 float NH  = max(dot(N, H), 0.0);
                 float NH2 = pow(NH, 2.0);
 
