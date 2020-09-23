@@ -49,6 +49,12 @@ ShaderCreationInfo k_ShaderDefault = {
                     Lo += CalculateLight(ub_Light.LightingData[i], N, V, F0);
                 }
 
+                // Apply skybox reflection
+                vec3 I = normalize(i_Position - ub_Light.CameraPosition);
+                vec3 R = reflect(I, N);
+
+                Lo += ub_Material.Metallic * texture(ub_Skybox.Skybox, R).rgb;
+
                 // Apply ambient light.
                 Lo += vec3(0.03) * ub_Material.Albedo.rgb * ub_Material.Occlusion;
             

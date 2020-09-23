@@ -418,6 +418,8 @@ namespace VOID_NS {
             /* Skybox uniforms. */
             shader->SetUniform1i("ub_Skybox.Skybox", 0);
 
+            glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
             glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
         }
     }
