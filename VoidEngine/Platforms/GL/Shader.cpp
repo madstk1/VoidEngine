@@ -5,6 +5,10 @@
 
 namespace VOID_NS {
     ShaderGL::ShaderGL(ShaderCreationInfo info) : Shader(info) {
+        if(info.layout.GetPointerSize() == 0) {
+            this->m_Layout = Shader::DefaultShaderLayout();
+        }
+
         Compile(info);
         Link(info);
 
@@ -27,7 +31,9 @@ namespace VOID_NS {
 
         /**
          * Enable vertex attributes.
-         * These should be defined in the Shader-file.
+         *
+         * These can be defined in the Shader-file.
+         * If not defined, they are defaulted to Shader::DefaultShaderLayout
          */
         u32 i = 0;
         for(const ShaderLayout::LayoutElement &le : m_Layout.GetElements()) {
@@ -209,21 +215,35 @@ namespace VOID_NS {
         return -1;
     }
 
-
-
     void ShaderGL::Compile(ShaderCreationInfo info) {
+        char *src_c;
+        std::string formattedSource;
         i32 m_Status, m_LogLength;
         std::vector<char> m_ErrorLog;
 
         for(std::pair<ShaderStage, std::string> src : info.sources) {
             u32 id = m_StageID[(u32) src.first] = glCreateShader(Translate(src.first));
 
-            src.second = "#version " +
+            /* Append GLSL version and profile. */
+            formattedSource = "#version " +
                 TranslateString(info.version) + " " +
-                TranslateString(info.profile) + "\n" + src.second;
+                TranslateString(info.profile) + "\n" + 
 
-            const char *src_ = src.second.c_str();
-            glShaderSource(id, 1, &src_, NULL);
+            /* Append default inclusions. */
+                Shader::DefaultGLSLInclude();
+
+            /* Append stage inclusions. */
+            for(auto it : Shader::DefaultStageInclude()) {
+                if(it.first == src.first) {
+                    formattedSource += it.second;
+                }
+            }
+
+            /* Append rest of stage source. */
+            formattedSource += "\n" + src.second;
+            src_c = (char *) formattedSource.c_str();
+
+            glShaderSource(id, 1, &src_c, NULL);
             glCompileShader(id);
 
             glGetShaderiv(id, GL_COMPILE_STATUS, &m_Status);

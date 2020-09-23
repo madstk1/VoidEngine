@@ -223,9 +223,10 @@ namespace VOID_NS {
     
             m_Skybox->Bind();
             skyboxShader->Enable();
-            skyboxShader->SetUniformMat4f("vs_Void.u_Projection", m_MVP.proj);
-            skyboxShader->SetUniformMat4f("vs_Void.u_View", Mat4(Mat3(m_MVP.view)));
-            skyboxShader->SetUniform1i("fs_Void.u_Skybox", 0);
+            skyboxShader->SetUniformMat4f("ub_MVP.Projection", m_MVP.proj);
+            skyboxShader->SetUniformMat4f("ub_MVP.View", Mat4(Mat3(m_MVP.view)));
+
+            skyboxShader->SetUniform1i("ub_Skybox.Skybox", 0);
     
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
@@ -261,7 +262,7 @@ namespace VOID_NS {
 
         m_RenderQuad->Bind();
         framebufferShader->Enable();
-        framebufferShader->SetUniform1i("fs_Void.u_ScreenTexture", 0);
+        framebufferShader->SetUniform1i("ub_Framebuffer.ScreenTexture", 0);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
@@ -394,17 +395,18 @@ namespace VOID_NS {
             SetLightMatrix(shader);
 
             /* Basic uniforms. */
-            shader->SetUniform1fv("fs_Void.u_Gamma",          m_Gamma);
-            shader->SetUniform3fv("fs_Void.u_CameraPosition", g_Camera->position);
-            shader->SetUniformMat4f("vs_Void.u_Model",        m_MVP.model);
-            shader->SetUniformMat4f("vs_Void.u_View",         m_MVP.view);
-            shader->SetUniformMat4f("vs_Void.u_Projection",   m_MVP.proj);
+            shader->SetUniform1fv("ub_Light.Gamma",          m_Gamma);
+            shader->SetUniform3fv("ub_Light.CameraPosition", g_Camera->position);
+
+            shader->SetUniformMat4f("ub_MVP.Model",        m_MVP.model);
+            shader->SetUniformMat4f("ub_MVP.View",         m_MVP.view);
+            shader->SetUniformMat4f("ub_MVP.Projection",   m_MVP.proj);
 
             /* Material uniforms. */
-            shader->SetUniform4fv("fs_Mat.u_Albedo",    material->albedo);
-            shader->SetUniform1fv("fs_Mat.u_Metallic",  material->metallic);
-            shader->SetUniform1fv("fs_Mat.u_Roughness", material->roughness);
-            shader->SetUniform1fv("fs_Mat.u_Occlusion", material->occlusion);
+            shader->SetUniform4fv("ub_Material.Albedo",    material->albedo);
+            shader->SetUniform1fv("ub_Material.Metallic",  material->metallic);
+            shader->SetUniform1fv("ub_Material.Roughness", material->roughness);
+            shader->SetUniform1fv("ub_Material.Occlusion", material->occlusion);
 
             glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
         }
@@ -416,13 +418,13 @@ namespace VOID_NS {
         u32 i = 0;
         for(Light *light : g_World->GetLights()) {
             if(i >= 32) { break; }
-            shader->SetUniform4fv("fs_Void.u_LightingData[" + std::to_string(i) + "].color",     light->lightColor);
-            shader->SetUniform3fv("fs_Void.u_LightingData[" + std::to_string(i) + "].position",  light->position);
-            shader->SetUniform1fv("fs_Void.u_LightingData[" + std::to_string(i) + "].intensity", light->intensity);
+            shader->SetUniform4fv("ub_Light.LightingData[" + std::to_string(i) + "].Color",     light->lightColor);
+            shader->SetUniform3fv("ub_Light.LightingData[" + std::to_string(i) + "].Position",  light->position);
+            shader->SetUniform1fv("ub_Light.LightingData[" + std::to_string(i) + "].Intensity", light->intensity);
             i++;
         }
     
-        shader->SetUniform1ui("fs_Void.u_LightCount",     i);
+        shader->SetUniform1ui("ub_Light.LightCount", i);
     }
 
     WindowGL *RendererGL::GetWindow() {

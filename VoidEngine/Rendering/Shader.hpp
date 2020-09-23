@@ -2,6 +2,7 @@
 #define VOID_RENDERING_SHADER_H__
 
 #include <vector>
+#include <map>
 #include <VoidEngine/Math/Vectors.hpp>
 #include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
@@ -82,6 +83,10 @@ namespace VOID_NS {
     protected:
         std::string m_Name;
         ShaderLayout m_Layout;
+
+        static const std::string DefaultGLSLInclude();
+        static const std::map<ShaderStage, std::string> DefaultStageInclude();
+        static const ShaderLayout DefaultShaderLayout();
 
     public:
         Shader(ShaderCreationInfo info) : Resource(info.name, Type::ShaderResource) {
