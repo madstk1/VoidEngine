@@ -1,7 +1,7 @@
 #ifndef VOID_ECS_ENTITY_H__
 #define VOID_ECS_ENTITY_H__
 
-#include <vector>
+#include <map>
 #include <utility>
 #include <typeindex>
 #include <type_traits>
@@ -14,7 +14,7 @@ namespace VOID_NS {
     class Entity {
     private:
     protected:
-        std::vector<std::pair<std::type_index, Component *>> m_Components;
+        std::map<std::type_index, Component *> m_Components;
 
     public:
         std::string name = "Void Entity";
@@ -61,18 +61,19 @@ namespace VOID_NS {
 
         static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
-        for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
-            if(c_.first.name() == tindex.name()) {
-                Logger::Error("Can't add %s to %s: component already exists", Logger::GetClassName<T>(), this->name.c_str());
-                return NULL;
+        T *c = new T();
+
+        if(((Component *) c)->m_SingleComponent) {
+            for(auto c_ : this->m_Components) {
+                if(c_.first == tindex) {
+                    Logger::Error("Can't add ", Logger::GetClassName<T>(), " to ", this->name, ": component already exists");
+                    return NULL;
+                }
             }
         }
 
-        T *c = new T();
         ((Component *) c)->m_GameObject = this;
-
-        this->m_Components.push_back(std::make_pair(tindex, (Component *) c));
-
+        this->m_Components.emplace(std::make_pair(tindex, (Component *) c));
         return c;
     }
 
@@ -82,8 +83,8 @@ namespace VOID_NS {
 
         static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
-        for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
-            if(c_.first.name() == tindex.name()) {
+        for(auto c_ : this->m_Components) {
+            if(c_.first == tindex) {
                 return (T *) c_.second;
             }
         }
@@ -97,9 +98,9 @@ namespace VOID_NS {
         static_assert(std::is_base_of<Component, T>(), "Can't add component: component is not derived from Void::Component");
 
         u32 i = 0;
-        for(std::pair<std::type_index, Component *> &c_ : this->m_Components) {
-            if(c_.first.name() == tindex.name()) {
-                this->m_Components.erase(this->m_Components.begin() + i);
+        for(auto c_ : this->m_Components) {
+            if(c_.first == tindex) {
+                this->m_Components.erase(tindex);
                 return;
             }
             i++;
