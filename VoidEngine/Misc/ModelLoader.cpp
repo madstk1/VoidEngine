@@ -45,7 +45,7 @@ namespace VOID_NS {
 
     void ProcessMesh(Mesh *mesh, const aiScene *scene, aiMesh *aim) {
         for(u32 i = 0; i < aim->mNumVertices; i++) {
-            Vertex v = Vertex(Vector3());
+            Vertex v;
 
             v.position.x = aim->mVertices[i].x;
             v.position.y = aim->mVertices[i].y;
