@@ -13,32 +13,6 @@ ShaderCreationInfo k_ShaderDefault = {
             }
         )"},
         { ShaderStage::Fragment, R"(
-            float DistributionGGX(vec3 N, vec3 H, float roughness) {
-                float a   = pow(roughness, 2.0);
-                float a2  = pow(a, 2.0);
-                float NH  = max(dot(N, H), 0.0);
-                float NH2 = pow(NH, 2.0);
-
-                float den = (NH2 * (a2 - 1.0) + 1.0);
-                den = PI * den * den;
-
-                return a2 / den;
-            }
-
-            float SchlickGGX(float NV, float roughness) {
-                float r = roughness + 1.0;
-                float k = pow(r, 2.0) / 8.0;
-
-                return (NV) / (NV * (1.0 - k) + k);
-            }
-
-            float SmithGGX(vec3 N, vec3 V, vec3 L, float roughness) {
-                float NV = max(dot(N, V), 0.0);
-                float NL = max(dot(N, L), 0.0);
-                
-                return SchlickGGX(NV, roughness) * SchlickGGX(NL, roughness);
-            }
-
             vec3 CalculateLight(PointLight light, vec3 N, vec3 V, vec3 F0) {
                 vec3 L = normalize(light.Position - i_Position);
                 vec3 H = normalize(V + L);
@@ -48,7 +22,7 @@ ShaderCreationInfo k_ShaderDefault = {
                 vec3  radiance = light.Color.rgb * attenuation;
                 vec3  F = Fresnel(max(dot(H, V), 0.0), F0);
 
-                float NDF = DistributionGGX(N, H, ub_Material.Roughness);
+                float NDF = NormalDistribution(N, H, ub_Material.Roughness);
                 float G   = SmithGGX(N, V, L, ub_Material.Roughness);
 
                 /* Cook-Torrance BRDF */

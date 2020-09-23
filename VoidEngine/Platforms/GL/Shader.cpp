@@ -253,7 +253,7 @@ namespace VOID_NS {
                 glGetShaderInfoLog(id, m_LogLength, &m_LogLength, &m_ErrorLog[0]);
                 
                 glDeleteShader(id);
-                Logger::Fatal("Failed to compile shader: ", m_ErrorLog.data());
+                Logger::Error("Failed to compile shader (", info.name, ", ", TranslateString(src.first),  ") ", m_ErrorLog.data());
             }
         }
     }

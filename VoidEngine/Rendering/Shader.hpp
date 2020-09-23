@@ -75,7 +75,7 @@ namespace VOID_NS {
         std::string name;
         GLSLVersion version;
         GLSLProfile profile;
-        std::vector<std::pair<ShaderStage, std::string>> sources;
+        std::map<ShaderStage, std::string> sources;
         ShaderLayout layout;
     };
 

@@ -68,6 +68,31 @@ namespace VOID_NS {
                 return F + (1.0 - F) * pow(1.0 - theta, 5.0);
             }
 
+            float NormalDistribution(vec3 N, vec3 H, float roughness) {
+                float a   = pow(roughness, 2.0);
+                float a2  = pow(a, 2.0);
+                float NH  = max(dot(N, H), 0.0);
+                float NH2 = pow(NH, 2.0);
+
+                float den = (NH2 * (a2 - 1.0) + 1.0);
+                den = PI * den * den;
+
+                return a2 / den;
+            }
+
+            float SchlickBeckmann(float NV, float roughness) {
+                float k = pow(roughness + 1.0, 2.0) / 8.0;
+
+                return NV / (NV * (1.0 - k) + k);
+            }
+
+            float SmithGGX(vec3 N, vec3 V, vec3 L, float roughness) {
+                float NV = max(dot(N, V), 0.0);
+                float NL = max(dot(N, L), 0.0);
+
+                return SchlickBeckmann(NV, roughness) * SchlickBeckmann(NL, roughness);
+            }
+
             /**
              *  Uniforms.
              */

@@ -146,6 +146,11 @@ namespace VOID_NS {
 
 #if defined(VOID_ENABLE_DEBUG)
     void WindowGL::DebugProxy(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
+        if(source == GL_DEBUG_SOURCE_SHADER_COMPILER || source == GL_DEBUG_SOURCE_SHADER_COMPILER_ARB) {
+            Logger::Debug("Debug fallthrough: shader error");
+            return;
+        }
+
         switch(severity) {
             case GL_DEBUG_SEVERITY_HIGH:         Logger::Fatal   ("GL: ", msg); break;
             case GL_DEBUG_SEVERITY_MEDIUM:       Logger::Error   ("GL: ", msg); break;
