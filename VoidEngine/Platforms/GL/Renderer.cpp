@@ -239,7 +239,7 @@ namespace VOID_NS {
     
             m_Skybox->Bind();
             SetLightMatrix(skyboxShader);
-            skyboxShader->SetUniformMat4f("ub_MVP.View",        Mat4(Mat3(m_MVP.view)));
+            skyboxShader->SetUniformMat4f("ub_MVP.View",        m_MVP.view);
             skyboxShader->SetUniformMat4f("ub_MVP.Projection",  m_MVP.proj);
     
             glActiveTexture(GL_TEXTURE0);

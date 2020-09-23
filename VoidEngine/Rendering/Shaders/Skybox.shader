@@ -6,7 +6,7 @@ ShaderCreationInfo k_ShaderSkybox = {
     GLSLVersion::V450, GLSLProfile::Core, {
         { ShaderStage::Vertex, R"(
             void main() {
-                gl_Position = vec4(ub_MVP.Projection * ub_MVP.View * vec4(i_Position, 1.0)).xyww;
+                gl_Position = vec4(ub_MVP.Projection * mat4(mat3(ub_MVP.View)) * vec4(i_Position, 1.0)).xyww;
                 o_Position  = i_Position;
             })"
         },
