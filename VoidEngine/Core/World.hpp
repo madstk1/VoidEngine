@@ -1,6 +1,7 @@
 #ifndef VOID_CORE_WORLD_H__
 #define VOID_CORE_WORLD_H__
 
+#include <vector>
 #include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/Time.hpp>
