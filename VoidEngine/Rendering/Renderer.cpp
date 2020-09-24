@@ -50,7 +50,7 @@ namespace VOID_NS {
                 data->indices.Append(i + indexExtension);
             }
 
-            indexExtension += mc->mesh->vertices.size();
+            indexExtension += mc->mesh->vertices.Length();
         }
     }
 
@@ -70,18 +70,18 @@ namespace VOID_NS {
             Mat4 transform = GetRotationScaleMatrix(e);
             Material *mat = (mc->material) ? mc->material : Material::GetDefault();
 
-            mesh.vertices.clear();
-            mesh.indices.clear();
+            mesh.vertices.Clear();
+            mesh.indices.Clear();
             
             for(Vertex v : mc->mesh->vertices) {
                 Vector4 v4 = Vector4(v.position, 1.0f) * transform;
 
                 v.position = Vector3(v4) + e->position;
-                mesh.vertices.push_back(v);
+                mesh.vertices.Append(v);
             }
 
             for(const u32 &i : mc->mesh->indices) {
-                mesh.indices.push_back(i);
+                mesh.indices.Append(i);
             }
 
             data->AppendPair(mat, mesh);

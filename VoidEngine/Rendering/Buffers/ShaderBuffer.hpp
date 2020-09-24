@@ -42,16 +42,16 @@ namespace VOID_NS {
             if(iter != m_Content.end()) {
                 /* Handle vertices. */
                 for(Vertex v : mesh.vertices) {
-                    m_Content[key].mesh.vertices.push_back(v);
+                    m_Content[key].mesh.vertices.Append(v);
                 }
 
                 /* Handle indices. */
                 for(u32 i : mesh.indices) {
-                    m_Content[key].mesh.indices.push_back(i + iter->second.indexExtension);
+                    m_Content[key].mesh.indices.Append(i + iter->second.indexExtension);
                 }
 
                 /* Handle index extenion. */
-                m_Content[key].indexExtension += mesh.vertices.size();
+                m_Content[key].indexExtension += mesh.vertices.Length();
             } else {
                 Content c;
                 c.material = mat;
@@ -60,16 +60,16 @@ namespace VOID_NS {
                 
                 /* Handle vertices. */
                 for(Vertex v : mesh.vertices) {
-                    c.mesh.vertices.push_back(v);
+                    c.mesh.vertices.Append(v);
                 }
 
                 /* Handle indices. */
                 for(u32 i : mesh.indices) {
-                    c.mesh.indices.push_back(i + c.indexExtension);
+                    c.mesh.indices.Append(i + c.indexExtension);
                 }
 
                 /* Handle index extenion. */
-                c.indexExtension += c.mesh.vertices.size();
+                c.indexExtension += c.mesh.vertices.Length();
 
                 m_Content.emplace(std::make_pair(key, c));
             }
