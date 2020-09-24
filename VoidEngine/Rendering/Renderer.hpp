@@ -15,10 +15,10 @@ namespace VOID_NS {
     protected:
         static const u32 s_MaxTriangles = 800000;
 
-        i32             m_RefreshRate;
-        MultiSampling   m_Sampling;
-        SwapInterval    m_Buffering;
-        f32             m_Gamma = 1.8f;
+        i32             m_RefreshRate   = 144;
+        MultiSampling   m_Sampling      = MultiSampling::x4;
+        SwapInterval    m_Buffering     = SwapInterval::SingleBuffer;
+        f32             m_Gamma         = 1.8f;
 
         static void PopulateGeometryBuffer(GeometryBuffer *);
         static void PopulateShaderBuffer(ShaderBuffer *);
