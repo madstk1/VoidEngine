@@ -12,8 +12,8 @@
 #include "../../ThirdParty/stb/stb_image.h"
 
 namespace VOID_NS {
-    Texture *Texture::LoadTexture(std::string name, std::string path) {
-        Texture *tex = Allocator::Allocate<Texture>(name);
+    Texture *Texture::LoadTexture(std::string path) {
+        Texture *tex = Allocator::Allocate<Texture>();
         tex->m_Data = stbi_load(path.c_str(), &tex->m_Size.x, &tex->m_Size.y, &tex->m_ChannelCount, 0);
 
         if(!tex->m_Data) {

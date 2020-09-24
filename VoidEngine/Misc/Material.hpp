@@ -3,11 +3,10 @@
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
-#include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>
 
 namespace VOID_NS {
-    class Material : public Resource {
+    class Material {
     protected:
         static u32 m_MaterialCount;
 
@@ -17,14 +16,17 @@ namespace VOID_NS {
         f32     roughness   = 1.0f;
         f32     occlusion   = 1.0f;
 
+        std::string name    = "Material";
+
         Shader *shader;
 
         Material() : Material("Material " + std::to_string(m_MaterialCount)) {
             m_MaterialCount++;
         }
 
-        Material(std::string name) : Resource(name, Resource::Type::MaterialResource) {
+        Material(std::string name) {
             shader = ShaderLibrary::GetShader("Default");
+            this->name = name;
         }
 
         virtual ~Material() = default;

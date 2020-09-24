@@ -33,7 +33,6 @@
 #include <VoidEngine/Misc/File.hpp>
 #include <VoidEngine/Misc/Mesh.hpp>
 #include <VoidEngine/Misc/ModelLoader.hpp>
-#include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Misc/Vector.hpp>
 #include <VoidEngine/Misc/Texture.hpp>
 #include <VoidEngine/Misc/String.hpp>

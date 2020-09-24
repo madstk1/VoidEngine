@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include <VoidEngine/Math/Vectors.hpp>
-#include <VoidEngine/Misc/Resource.hpp>
 #include <VoidEngine/Rendering/Window.hpp>
 
 #include <glm/glm.hpp>
@@ -79,7 +78,7 @@ namespace VOID_NS {
         ShaderLayout layout;
     };
 
-    class Shader : Resource {
+    class Shader {
     protected:
         std::string m_Name;
         ShaderLayout m_Layout;
@@ -89,7 +88,7 @@ namespace VOID_NS {
         static const ShaderLayout DefaultShaderLayout();
 
     public:
-        Shader(ShaderCreationInfo info) : Resource(info.name, Type::ShaderResource) {
+        Shader(ShaderCreationInfo info) {
             m_Name   = info.name;
             m_Layout = info.layout;
         }

@@ -32,13 +32,13 @@ public:
             }
         }
 
-        Cubemap *skybox = new Cubemap("Skybox 1", {
-            Texture::LoadTexture("Right",  "../Resources/Skybox/right.jpg"),
-            Texture::LoadTexture("Left",   "../Resources/Skybox/left.jpg"),
-            Texture::LoadTexture("Top",    "../Resources/Skybox/top.jpg"),
-            Texture::LoadTexture("Bottom", "../Resources/Skybox/bottom.jpg"),
-            Texture::LoadTexture("Front",  "../Resources/Skybox/front.jpg"),
-            Texture::LoadTexture("Back",   "../Resources/Skybox/back.jpg"),
+        Cubemap *skybox = new Cubemap({
+            Texture::LoadTexture("../Resources/Skybox/right.jpg"),
+            Texture::LoadTexture("../Resources/Skybox/left.jpg"),
+            Texture::LoadTexture("../Resources/Skybox/top.jpg"),
+            Texture::LoadTexture("../Resources/Skybox/bottom.jpg"),
+            Texture::LoadTexture("../Resources/Skybox/front.jpg"),
+            Texture::LoadTexture("../Resources/Skybox/back.jpg"),
         });
         g_Renderer->SetSkybox(skybox);
     }

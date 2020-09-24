@@ -4,10 +4,9 @@
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
-#include <VoidEngine/Misc/Resource.hpp>
 
 namespace VOID_NS {
-    class Texture : public Resource {
+    class Texture {
         friend Allocator;
 
     public:
@@ -25,7 +24,7 @@ namespace VOID_NS {
             return m_ChannelCount;
         }
 
-        static Texture *LoadTexture(std::string name, std::string path);
+        static Texture *LoadTexture(std::string path);
         static void FreeTexture(Texture *);
 
     protected:
@@ -33,7 +32,7 @@ namespace VOID_NS {
         i32 m_ChannelCount;
         uchar *m_Data;
 
-        Texture(std::string name) : Resource(name, Type::TextureResource) {}
+        Texture() {}
 
     private:
     };

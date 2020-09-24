@@ -7,7 +7,7 @@
 #include <VoidEngine/Misc/Texture.hpp>
 
 namespace VOID_NS {
-    class Cubemap : public Resource {
+    class Cubemap {
     public:
         typedef enum {
             Right,  Left,
@@ -15,7 +15,7 @@ namespace VOID_NS {
             Front,  Back
         } CubemapFaces;
 
-        Cubemap(std::string name, std::array<Texture *, 6> textures) : Resource(name, Resource::Type::CubemapResource) {
+        Cubemap(std::array<Texture *, 6> textures) {
             m_Textures = textures;
         }
 

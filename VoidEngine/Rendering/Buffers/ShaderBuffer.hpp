@@ -36,7 +36,7 @@ namespace VOID_NS {
         inline void Reset() { m_Content.clear(); }
 
         inline void AppendPair(Material *mat, Mesh mesh) {
-            std::string key = mat->GetName();
+            std::string key = mat->name;
             auto iter = m_Content.find(key);
 
             if(iter != m_Content.end()) {
