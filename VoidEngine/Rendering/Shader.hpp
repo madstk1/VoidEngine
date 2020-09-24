@@ -134,7 +134,7 @@ namespace VOID_NS {
         static void CreateDefaultShaders();
 
     protected:
-        static std::vector<Shader *> m_Shaders;
+        static std::map<std::string, Shader *> m_Shaders;
 
     private:
         ShaderLibrary() {}

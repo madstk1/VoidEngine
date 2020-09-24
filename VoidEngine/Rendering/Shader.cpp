@@ -50,7 +50,7 @@ namespace VOID_NS {
      *  SHADER LIBRARY
      */
 
-    std::vector<Shader *> ShaderLibrary::m_Shaders;
+    std::map<std::string, Shader *> ShaderLibrary::m_Shaders;
 
     Shader *ShaderLibrary::AddShader(ShaderCreationInfo info) {
         if(GetShader(info.name) != nullptr) {
@@ -59,15 +59,15 @@ namespace VOID_NS {
         }
 
         Shader *shader = g_Renderer->CreateShader(info);
-        m_Shaders.push_back(shader);
+        m_Shaders.emplace(info.name, shader);
 
         return shader;
     }
 
     Shader *ShaderLibrary::GetShader(std::string name) {
-        for(Shader *shader : m_Shaders) {
-            if(shader->GetName() == name) {
-                return shader;
+        for(auto s : m_Shaders) {
+            if(s.first == name) {
+                return s.second;
             }
         }
         return nullptr;
