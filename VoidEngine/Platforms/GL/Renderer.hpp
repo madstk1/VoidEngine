@@ -57,8 +57,6 @@ namespace VOID_NS {
         virtual void SetSwapInterval(SwapInterval) override;
 
         Vector<std::string> GetExtensions() override;
-
-        friend WindowGL;
     };
 };
 

@@ -29,9 +29,7 @@ namespace VOID_NS {
         GLFWmonitor *m_Monitor;
 
         /* Callbacks */
-#if defined(VOID_ENABLE_DEBUG)
         static void DebugProxy(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *);
-#endif
         static void ErrorProxy(i32, const char *);
         static void ResizeProxy(GLFWwindow *, i32, i32);
         static void KeyProxy(GLFWwindow *, i32, i32, i32, i32);

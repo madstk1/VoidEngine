@@ -150,7 +150,6 @@ namespace VOID_NS {
      *  Proxy methods.
      */
 
-#if defined(VOID_ENABLE_DEBUG)
     void WindowGL::DebugProxy(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
         if(source == GL_DEBUG_SOURCE_SHADER_COMPILER || source == GL_DEBUG_SOURCE_SHADER_COMPILER_ARB) {
             Logger::Debug("Debug fallthrough: shader error");
@@ -164,7 +163,6 @@ namespace VOID_NS {
             case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::Info    ("GL: ", msg); break;
         }
     }
-#endif
 
     void WindowGL::ErrorProxy(i32 code, const char *msg) {
         Logger::Error("GLFW: ", code, " ", msg);
