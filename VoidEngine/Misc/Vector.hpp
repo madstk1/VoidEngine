@@ -12,6 +12,11 @@ namespace VOID_NS {
         Vector() {}
         ~Vector() = default;
 
+        Vector(std::vector<T> v) : m_Data(v) {}
+        Vector(std::initializer_list<T> il) {
+            Append(il);
+        }
+
         bool Empty() const { return m_Data.empty(); }
         u32  Length() const { return m_Data.size(); }
 
@@ -30,7 +35,11 @@ namespace VOID_NS {
         void Prepend(std::initializer_list<T>) {}
 
         void Append(const T elem) { m_Data.push_back(elem); }
-        void Append(std::initializer_list<T>) {}
+        void Append(std::initializer_list<T> il) {
+            for(const T t : il) {
+                Append(t);
+            }
+        }
 
         void Erase(i32 i) { m_Data.erase(m_Data.begin() + i); }
         void Remove(const T elem) {
