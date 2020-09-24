@@ -5,6 +5,9 @@ namespace VOID_NS {
     World::World(const ApplicationInfo &info) {
     }
 
+    World::~World() {
+    }
+
     void World::AddGameObject(Entity *entity) {
         VOID_ASSERT(entity != nullptr, "Trying to add NULL entity to game-world.");
 
