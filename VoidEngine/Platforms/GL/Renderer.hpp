@@ -56,7 +56,7 @@ namespace VOID_NS {
         virtual void SetSampling(MultiSampling) override;
         virtual void SetSwapInterval(SwapInterval) override;
 
-        std::vector<std::string> GetExtensions() override;
+        Vector<std::string> GetExtensions() override;
 
         friend WindowGL;
     };

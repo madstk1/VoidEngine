@@ -23,7 +23,7 @@ namespace VOID_NS {
         bool Contains(const T elem) const { return FindIndex(elem) != -1; }
         i32  FindIndex(const T elem) const {
             for(u32 i = 0; i < this->Length(); i++) {
-                if(this[i] == elem) { return i; }
+                if(m_Data[i] == elem) { return i; }
             }
             return -1;
         }

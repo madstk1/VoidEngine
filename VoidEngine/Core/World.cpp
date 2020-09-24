@@ -11,20 +11,13 @@ namespace VOID_NS {
     void World::AddGameObject(Entity *entity) {
         VOID_ASSERT(entity != nullptr, "Trying to add NULL entity to game-world.");
 
-        m_WorldObjects.push_back(entity);
+        m_WorldObjects.Append(entity);
     }
     
     void World::DestroyGameObject(Entity *entity) {
         VOID_ASSERT(entity != nullptr, "Trying to destroy NULL entity from game-world.");
 
-        u32 i = 0;
-        for(const Entity *e : m_WorldObjects) {
-            if(e == entity) {
-                m_WorldObjects.erase(m_WorldObjects.begin() + i);
-                return;
-            }
-            i++;
-        }
+        m_WorldObjects.Remove(entity);
     }
 
     void World::Start() {

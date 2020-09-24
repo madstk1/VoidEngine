@@ -57,7 +57,7 @@ namespace VOID_NS {
          * Disable vertex attributes.
          * Read ShaderGL::Enable().
          */
-        for(u64 i = 0; i < m_Layout.GetElements().size(); i++) {
+        for(u64 i = 0; i < m_Layout.GetElements().Length(); i++) {
             glDisableVertexAttribArray(i);
         }
     }

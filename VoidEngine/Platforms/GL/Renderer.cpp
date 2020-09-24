@@ -359,15 +359,15 @@ namespace VOID_NS {
      *  PROTECTED/PRIVATE METHODS
      */
 
-    std::vector<std::string> RendererGL::GetExtensions() {
+    Vector<std::string> RendererGL::GetExtensions() {
         i32 nExtensions = 0;
-        std::vector<std::string> extensions;
+        Vector<std::string> extensions;
 
         glGetIntegerv(GL_NUM_EXTENSIONS, &nExtensions);
 
         for(i32 i = 0; i < nExtensions; i++) {
             const uchar *ext = glGetStringi(GL_EXTENSIONS, i);
-            extensions.push_back(std::string((char *) ext));
+            extensions.Append(std::string((char *) ext));
         }
         return extensions;
     }

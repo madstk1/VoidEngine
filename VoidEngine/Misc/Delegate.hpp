@@ -1,9 +1,9 @@
 #ifndef VOID_MISC_DELEGATE_H__
 #define VOID_MISC_DELEGATE_H__
 
-#include <vector>
 #include <functional>
 #include <VoidEngine/Core/Common.hpp>
+#include <VoidEngine/Misc/Vector.hpp>
 
 namespace VOID_NS {
     template<typename ... A>
@@ -15,7 +15,7 @@ namespace VOID_NS {
         virtual ~Delegate() = default;
 
         void operator += (func f) {
-            m_Callbacks.push_back(f);
+            m_Callbacks.Append(f);
         }
 
         void operator () (A... args) {
@@ -25,7 +25,7 @@ namespace VOID_NS {
         }
         
     protected:
-        std::vector<func> m_Callbacks;
+        Vector<func> m_Callbacks;
     };
 };
 

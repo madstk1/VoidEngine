@@ -37,20 +37,20 @@ namespace VOID_NS {
               m_Elements(elements) {}
 
         void AddElement(LayoutElement element) {
-            m_Elements.push_back(element);
+            m_Elements.Append(element);
         }
 
         inline u64 GetPointerSize() {
             return m_PointerSize;
         }
 
-        inline std::vector<LayoutElement> GetElements() {
+        inline Vector<LayoutElement> GetElements() {
             return m_Elements;
         }
 
     protected:
         u64 m_PointerSize;
-        std::vector<LayoutElement> m_Elements;
+        Vector<LayoutElement> m_Elements;
     };
 
     enum class ShaderStage {

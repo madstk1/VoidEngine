@@ -5,6 +5,7 @@
 #include <string>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Debug/Log.hpp>
+#include <VoidEngine/Misc/Vector.hpp>
 
 namespace VOID_NS {
     class String {
@@ -12,8 +13,8 @@ namespace VOID_NS {
         static std::string k_DefaultWhitespace;
 
     public:
-        static std::vector<std::string> Split(std::string str, char delimiter);
-        static std::vector<std::string> Split(std::string str, std::string delimiter);
+        static Vector<std::string> Split(std::string str, char delimiter);
+        static Vector<std::string> Split(std::string str, std::string delimiter);
 
         static std::string TrimStart(std::string str, std::string whitespace = k_DefaultWhitespace);
         static std::string TrimEnd(std::string str, std::string whitespace = k_DefaultWhitespace);

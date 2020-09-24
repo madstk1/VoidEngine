@@ -6,6 +6,7 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
+#include <VoidEngine/Misc/Vector.hpp>
 
 extern int main(int argc, char **argv);
 
@@ -17,12 +18,12 @@ namespace VOID_NS {
         World(const ApplicationInfo &);
         ~World();
 
-        inline std::vector<Entity *> GetEntities() { return m_WorldObjects; }
-        inline std::vector<Light *> GetLights() { return m_Lights; }
+        inline Vector<Entity *> GetEntities() { return m_WorldObjects; }
+        inline Vector<Light *> GetLights() { return m_Lights; }
 
     protected:
-        std::vector<Entity *> m_WorldObjects;
-        std::vector<Light *> m_Lights;
+        Vector<Entity *> m_WorldObjects;
+        Vector<Light *> m_Lights;
 
         void AddGameObject(Entity *);
         void DestroyGameObject(Entity *);

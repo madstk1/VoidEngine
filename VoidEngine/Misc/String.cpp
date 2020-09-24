@@ -8,16 +8,16 @@ namespace VOID_NS {
     const std::string k_LowerCase = "abcdefghijklmnopqrstuvwxyz";
     const std::string k_UpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    std::vector<std::string> String::Split(std::string str, char delimiter) {
+    Vector<std::string> String::Split(std::string str, char delimiter) {
         return Split(str, std::string(&delimiter));
     }
 
-    std::vector<std::string> String::Split(std::string str, std::string delimiter) {
-        std::vector<std::string> substrings;
+    Vector<std::string> String::Split(std::string str, std::string delimiter) {
+        Vector<std::string> substrings;
         char *pch = strtok((char *) str.c_str(), delimiter.c_str());
 
         while(pch) {
-            substrings.push_back(std::string(pch));
+            substrings.Append(std::string(pch));
             pch = strtok(nullptr, delimiter.c_str());
         }
         return substrings;
