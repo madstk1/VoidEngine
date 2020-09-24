@@ -1,6 +1,5 @@
 #include "glad/glad.h"
 
-#include <cstring>
 #include <VoidEngine/Core/Application.hpp>
 #include <VoidEngine/Core/Allocator.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
@@ -58,11 +57,27 @@ namespace VOID_NS {
         SetSwapInterval(info.Buffering);
 
         /**
+         *  Initialize vertex-buffers.
+         */
+
+        m_Static  = new ShaderBufferGL(Buffer::BufferUsage::Static);
+        m_Dynamic = new ShaderBufferGL(Buffer::BufferUsage::Dynamic);
+
+        m_Dynamic->Bind();
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * s_MaxTriangles, nullptr, GL_DYNAMIC_DRAW);
+
+        m_Static->Bind();
+        glBufferData(GL_ARRAY_BUFFER,         sizeof(Vertex) * s_MaxTriangles, nullptr, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32)    * s_MaxTriangles, nullptr, GL_STATIC_DRAW);
+
+        /**
          *  Initialize renderquad buffers.
          */
 
-        m_RenderQuad = new GeometryBufferGL(0, 0, Buffer::BufferUsage::Static);
+        m_RenderQuad = new GeometryBufferGL(Buffer::BufferUsage::Static);
         m_RenderQuad->Bind();
+
         glBufferData(GL_ARRAY_BUFFER,         sizeof(k_QuadVertices), k_QuadVertices, GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(k_QuadIndices),  k_QuadIndices,  GL_STATIC_DRAW);
 
@@ -70,8 +85,9 @@ namespace VOID_NS {
          *  Initialize skybox-buffers.
          */
 
-        m_Skybox = new GeometryBufferGL(0, 0, Buffer::BufferUsage::Static);
+        m_Skybox = new GeometryBufferGL(Buffer::BufferUsage::Static);
         m_Skybox->Bind();
+
         glBufferData(GL_ARRAY_BUFFER, sizeof(k_SkyboxVertices), k_SkyboxVertices, GL_STATIC_DRAW);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(k_SkyboxIndices), k_SkyboxIndices, GL_STATIC_DRAW);
         
@@ -156,10 +172,6 @@ namespace VOID_NS {
             glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_Sampling, GL_DEPTH24_STENCIL8, size.x, size.y);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
         };
-
-        World::Get()->OnEntityCreate += [=](Entity *e) {
-            CreateRenderObject(e);
-        };
     }
 
     RendererGL::~RendererGL() {
@@ -172,6 +184,8 @@ namespace VOID_NS {
         glDeleteTextures(1, &m_TextureColorbuffer);
         glDeleteTextures(1, &m_ScreenTexture);
             
+        Allocator::Free(m_Dynamic);
+        Allocator::Free(m_Static);
         Allocator::Free(GetWindow());
     }
 
@@ -188,39 +202,32 @@ namespace VOID_NS {
         ClearColor();
 
         /* Bind entity meshes to buffers. */
-        UpdateRenderObjects();
+        PopulateShaderBuffer(m_Dynamic);
+        UpdateShaderBuffer(m_Dynamic);
 
         static bool ff = true;
         if(ff) {
             ff = false;
-
-            m_DefaultShader     = ShaderLibrary::GetShader("Default");
-            m_FramebufferShader = ShaderLibrary::GetShader("Framebuffer");
-            m_SkyboxShader      = ShaderLibrary::GetShader("Skybox");
+            PopulateShaderBuffer(m_Static);
+            UpdateShaderBuffer(m_Static);
+        
+            m_DefaultShader = ShaderLibrary::GetShader("Default");
         }
     }
 
     void RendererGL::Render() {
+        Shader *skyboxShader       = ShaderLibrary::GetShader("Skybox");
+        Shader *framebufferShader  = ShaderLibrary::GetShader("Framebuffer");
+
+        /* Calculate camera MVP. */
         CalculateMVP(&m_MVP);
 
         /**
          *  Render entites.
          */
 
-        for(const RenderObjectGL ro : m_RenderObjects) {
-            Shader *shader = (ro.material->shader) ?
-                              ro.material->shader  :
-                              m_DefaultShader;
-
-            ro.buffer->Bind();
-            SetLightMatrix(shader);
-
-            if(ro.indexed) {
-                glDrawElements(GL_TRIANGLES, ro.buffer->indices.Length(), GL_UNSIGNED_INT, nullptr);
-            } else {
-                glDrawArrays(GL_TRIANGLES, 0, ro.buffer->vertices.Length());
-            }
-        }
+        RenderShaderBuffer(m_Dynamic);
+        RenderShaderBuffer(m_Static);
 
         /**
          *  Draw skybox.
@@ -231,9 +238,9 @@ namespace VOID_NS {
             glDisable(GL_CULL_FACE);
     
             m_Skybox->Bind();
-            SetLightMatrix(m_SkyboxShader);
-            m_SkyboxShader->SetUniformMat4f("ub_MVP.View",        m_MVP.view);
-            m_SkyboxShader->SetUniformMat4f("ub_MVP.Projection",  m_MVP.proj);
+            SetLightMatrix(skyboxShader);
+            skyboxShader->SetUniformMat4f("ub_MVP.View",        m_MVP.view);
+            skyboxShader->SetUniformMat4f("ub_MVP.Projection",  m_MVP.proj);
     
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_CUBE_MAP, m_SkyboxCubemap);
@@ -268,8 +275,8 @@ namespace VOID_NS {
          */
 
         m_RenderQuad->Bind();
-        m_FramebufferShader->Enable();
-        m_FramebufferShader->SetUniform1i("ub_Framebuffer.ScreenTexture", 0);
+        framebufferShader->Enable();
+        framebufferShader->SetUniform1i("ub_Framebuffer.ScreenTexture", 0);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_ScreenTexture);
@@ -352,71 +359,6 @@ namespace VOID_NS {
      *  PROTECTED/PRIVATE METHODS
      */
 
-    
-    void RendererGL::CreateRenderObject(Entity *e) {
-        MeshComponent *mc = e->GetComponent<MeshComponent>();
-
-        if(!mc || !mc->mesh || !e->renderable) {
-            return;
-        }
-
-        RenderObjectGL ro;
-        ro.entity   = e;
-        ro.indexed  = (mc->mesh->indices.Length() != 0);
-        ro.material = (mc->material) ? mc->material : Material::GetDefault();
-
-        if(e->isStatic) {
-            ro.buffer = new GeometryBufferGL(
-                mc->mesh->vertices.Length(),
-                mc->mesh->indices.Length(),
-                Buffer::BufferUsage::Static
-            );
-        } else {
-            ro.buffer = new GeometryBufferGL(
-                mc->mesh->vertices.Length() * 3,
-                mc->mesh->indices.Length()  * 3,
-                Buffer::BufferUsage::Dynamic
-            );
-        }
-
-        ro.buffer->Update(mc->mesh->vertices, 0);
-        ro.buffer->Update(mc->mesh->indices, 0);
-
-        m_RenderObjects.Append(ro);
-    }
-
-    bool RendererGL::CheckRenderObjects(Entity *e) {
-        for(RenderObjectGL &ro : m_RenderObjects) {
-            if(ro.entity == e) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    void RendererGL::UpdateRenderObjects() {
-        MeshComponent *mc;
-
-        for(Entity *e : g_World->GetEntities()) {
-            if(!CheckRenderObjects(e)) {
-                CreateRenderObject(e);
-            }
-        }
-
-        for(RenderObjectGL &ro : m_RenderObjects) {
-            if(!ro.entity) { continue; }
-            mc = ro.entity->GetComponent<MeshComponent>();
-
-            if(!mc) { continue; }
-
-            ro.buffer->Update(mc->mesh->vertices, 0);
-            ro.buffer->Update(mc->mesh->indices, 0);
-
-            ro.indexed  = (mc->mesh->indices.Length() > 0);
-            ro.material = (mc->material) ? mc->material : Material::GetDefault();
-        }
-    }
-
     std::vector<std::string> RendererGL::GetExtensions() {
         i32 nExtensions = 0;
         std::vector<std::string> extensions;
@@ -428,6 +370,58 @@ namespace VOID_NS {
             extensions.push_back(std::string((char *) ext));
         }
         return extensions;
+    }
+
+    void RendererGL::UpdateShaderBuffer(ShaderBufferGL *buffer) {
+        buffer->Bind();
+        for(auto d : buffer->GetData()) {
+            ShaderBuffer::Content content = d.second;
+            Material *material = content.material;
+            material = (!material) ? Material::GetDefault() : material;
+
+            Shader *shader = material->shader;
+            shader = (!shader) ? m_DefaultShader : shader;
+
+            shader->Enable();
+            glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
+        }
+    }
+
+    void RendererGL::RenderShaderBuffer(ShaderBufferGL *buffer) {
+        buffer->Bind();
+        for(auto d : buffer->GetData()) {
+            ShaderBuffer::Content content = d.second;
+            Material *material = content.material;
+            material = (!material) ? Material::GetDefault() : material;
+
+            Shader *shader = material->shader;
+            shader = (!shader) ? m_DefaultShader : shader;
+
+            shader->Enable();
+            SetLightMatrix(shader);
+
+            /* Basic uniforms. */
+            shader->SetUniform1fv("ub_Light.Gamma",          m_Gamma);
+            shader->SetUniform3fv("ub_Light.CameraPosition", g_Camera->position);
+
+            shader->SetUniformMat4f("ub_MVP.Model",        m_MVP.model);
+            shader->SetUniformMat4f("ub_MVP.View",         m_MVP.view);
+            shader->SetUniformMat4f("ub_MVP.Projection",   m_MVP.proj);
+
+            /* Material uniforms. */
+            shader->SetUniform4fv("ub_Material.Albedo",    material->albedo);
+            shader->SetUniform1fv("ub_Material.Metallic",  material->metallic);
+            shader->SetUniform1fv("ub_Material.Roughness", material->roughness);
+            shader->SetUniform1fv("ub_Material.Occlusion", material->occlusion);
+
+            /* Skybox uniforms. */
+            shader->SetUniform1i("ub_Skybox.Skybox", 0);
+
+            glBufferSubData(GL_ARRAY_BUFFER,         0, sizeof(Vertex) * content.mesh.vertices.size(), content.mesh.vertices.data());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(u32)    * content.mesh.indices.size(),  content.mesh.indices.data());
+            glDrawElements(GL_TRIANGLES, content.mesh.indices.size(), GL_UNSIGNED_INT, (const void *) 0);
+        }
     }
 
     void RendererGL::SetLightMatrix(Shader *shader) {

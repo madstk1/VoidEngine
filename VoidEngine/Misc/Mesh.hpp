@@ -5,23 +5,22 @@
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
-#include <VoidEngine/Misc/Vector.hpp>
 
 namespace VOID_NS {
     class Mesh {
     public:
-        Vector<Vertex>  vertices;
-        Vector<u32>     indices;
+        std::vector<Vertex>  vertices;
+        std::vector<u32>     indices;
 
         Mesh() {}
 
         Mesh(
-            Vector<Vertex> vertices
+            std::vector<Vertex> vertices
         ) : vertices(vertices) {}
 
         Mesh(
-            Vector<Vertex> vertices,
-            Vector<u32> indices
+            std::vector<Vertex> vertices,
+            std::vector<u32> indices
         ) : vertices(vertices), indices(indices) {}
 
         virtual ~Mesh() = default;

@@ -15,12 +15,12 @@ namespace VOID_NS {
             MeshComponent *mc = AddComponent<MeshComponent>();
             Mesh *mesh = mc->mesh = new Mesh();
 
-            mesh->vertices.Append(Vertex(Vector3(-1.0f, 0.0f, -1.0f), Vector3(0.0f, 1.0f, 0.0f)));
-            mesh->vertices.Append(Vertex(Vector3(-1.0f, 0.0f,  1.0f), Vector3(0.0f, 1.0f, 0.0f)));
-            mesh->vertices.Append(Vertex(Vector3( 1.0f, 0.0f,  1.0f), Vector3(0.0f, 1.0f, 0.0f)));
-            mesh->vertices.Append(Vertex(Vector3( 1.0f, 0.0f, -1.0f), Vector3(0.0f, 1.0f, 0.0f)));
+            mesh->vertices.push_back(Vertex(Vector3(-1.0f, 0.0f, -1.0f), Vector3(0.0f, 1.0f, 0.0f)));
+            mesh->vertices.push_back(Vertex(Vector3(-1.0f, 0.0f,  1.0f), Vector3(0.0f, 1.0f, 0.0f)));
+            mesh->vertices.push_back(Vertex(Vector3( 1.0f, 0.0f,  1.0f), Vector3(0.0f, 1.0f, 0.0f)));
+            mesh->vertices.push_back(Vertex(Vector3( 1.0f, 0.0f, -1.0f), Vector3(0.0f, 1.0f, 0.0f)));
 
-            mesh->indices.Append({
+            mesh->indices.insert(mesh->indices.begin(), {
                 0, 1, 2,
                 2, 3, 0
             });

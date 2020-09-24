@@ -15,6 +15,7 @@ namespace VOID_NS {
 
     Application::Application(ApplicationInfo info) {
         g_FixedUpdateInterval = info.FixedUpdateInterval;
+        g_World = Allocator::Allocate<World>(info);
 
         switch(info.API) {
 #if defined(VOID_ENABLE_OPENGL)
@@ -53,13 +54,13 @@ int main(int argc, char **argv) {
     );
 #endif
 
-    Void::g_World = new Void::World();
     Void::ApplicationInfo k_DefaultInfo = Void::ApplicationInfo::GetDefault();
     Void::g_Application = Void::CreateApplication(k_DefaultInfo);
     ShaderLibrary::CreateDefaultShaders();
 
     Void::SignalHandler::Initialize();
     Void::g_Application->Initialize();
+
 
     /* This will create a Camera, and assign g_Camera. */ 
     if(!Void::g_Camera) {

@@ -16,35 +16,13 @@ namespace VOID_NS {
      *  Geometry buffer
      */
 
-    GeometryBufferGL::GeometryBufferGL(u32 vSize, u32 iSize, BufferUsage usage) : GeometryBuffer(vSize, iSize, usage) {
+    GeometryBufferGL::GeometryBufferGL(BufferUsage usage) : GeometryBuffer(usage) {
         glCreateBuffers(1, &VBO);
         glCreateBuffers(1, &EBO);
         glCreateVertexArrays(1, &VAO);
-
-        Bind();
-        if(vSize != 0) {
-            glBufferData(
-                GL_ARRAY_BUFFER,
-                vSize * sizeof(Vertex),
-                nullptr,
-                Translate(usage)
-            );
-        }
-
-        if(iSize != 0) {
-            glBufferData(
-                GL_ELEMENT_ARRAY_BUFFER,
-                iSize * sizeof(Index),
-                nullptr,
-                Translate(usage)
-            );
-        }
-        Unbind();
     }
 
     GeometryBufferGL::~GeometryBufferGL() {
-        Unbind();
-
         glDeleteBuffers(1, &VBO);
         glDeleteBuffers(1, &EBO);
         glDeleteVertexArrays(1, &VAO);
@@ -62,29 +40,73 @@ namespace VOID_NS {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    void GeometryBufferGL::Update(Vector<Vertex> vertices, u32 offset) {
-        Bind();
-        glBufferSubData(
-            GL_ARRAY_BUFFER,
-            offset,
-            vertices.Length() * sizeof(Vertex),
-            vertices.GetData()
-        );
-        Unbind();
-
-        this->vertices = vertices;
+    /**
+     *  Shader buffer
+     */
+ 
+    ShaderBufferGL::ShaderBufferGL(BufferUsage usage) : ShaderBuffer(usage) {
+        glCreateBuffers(1, &VBO);
+        glCreateBuffers(1, &EBO);
+        glCreateVertexArrays(1, &VAO);
     }
 
-    void GeometryBufferGL::Update(Vector<Index> indices, u32 offset) {
-        Bind();
-        glBufferSubData(
-            GL_ELEMENT_ARRAY_BUFFER,
-            offset,
-            indices.Length() * sizeof(Index),
-            indices.GetData()
-        );
-        Unbind();
+    ShaderBufferGL::~ShaderBufferGL() {
+        glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &EBO);
+        glDeleteVertexArrays(1, &VAO);
+    }
 
-        this->indices = indices;
+    void ShaderBufferGL::Bind() {
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    }
+
+    void ShaderBufferGL::Unbind() {
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    /**
+     *  Uniform buffer
+     */
+
+    UniformBufferGL::UniformBufferGL(BufferUsage usage, u64 size) : UniformBuffer(usage, size) {
+        glCreateBuffers(1, &UBO);
+        m_Size = size;
+
+        Bind();
+        glBufferData(GL_UNIFORM_BUFFER, m_Size, nullptr, Translate(usage));
+    }
+
+    UniformBufferGL::UniformBufferGL(u64 size)
+        : UniformBufferGL(BufferUsage::Dynamic, size) {}
+
+    UniformBufferGL::~UniformBufferGL() {
+        glDeleteBuffers(1, &UBO);
+    }
+
+    void UniformBufferGL::Bind() {
+        glBindBuffer(GL_UNIFORM_BUFFER, UBO);
+    }
+
+    void UniformBufferGL::Unbind() {
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    }
+
+    void UniformBufferGL::Update(u64 size, void *data) {
+        VOID_ASSERT(size <= m_Size, "Buffer subdata size exceeds allocated size.");
+
+        Bind();
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, size, data);
+    }
+
+    void UniformBufferGL::Update(u64 size, u64 offset, void *data) {
+        VOID_ASSERT(size <= m_Size, "Buffer subdata size exceeds allocated size.");
+        VOID_ASSERT(size + offset <= m_Size, "Buffer subdata size and offset exceeds allocated size.");
+
+        Bind();
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
     }
 };
