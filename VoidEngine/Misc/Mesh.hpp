@@ -1,5 +1,4 @@
-#ifndef VOID_MISC_MESH_H__
-#define VOID_MISC_MESH_H__
+#pragma once
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
@@ -8,8 +7,8 @@
 namespace VOID_NS {
     class Mesh {
     public:
-        Vector<Vertex>  vertices;
-        Vector<u32>     indices;
+        Vector<Vertex> vertices;
+        Vector<Index>  indices;
 
         Mesh() {}
 
@@ -19,14 +18,9 @@ namespace VOID_NS {
 
         Mesh(
             Vector<Vertex> vertices,
-            Vector<u32> indices
+            Vector<Index> indices
         ) : vertices(vertices), indices(indices) {}
 
         virtual ~Mesh() = default;
-
-    protected:
-    private:
     };
 };
-
-#endif /* VOID_MISC_MESH_H__ */

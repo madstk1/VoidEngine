@@ -43,7 +43,7 @@ namespace VOID_NS {
 
         void Erase(i32 i) { m_Data.erase(m_Data.begin() + i); }
         void Remove(const T elem) {
-            u32 i = FindIndex(elem);
+            i32 i = FindIndex(elem);
             if(i != -1) {
                 Erase(i);
             }

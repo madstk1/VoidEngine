@@ -3,7 +3,7 @@ ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 
 SET(LIBRARIES
     glm
-    assimp
+    # assimp
     dl
     pthread
 )
@@ -11,22 +11,11 @@ SET(PRIVATE_LIBRARIES "")
 
 SET(VOID_SOURCES
     "Core/Application.cpp"
-    "Core/Allocator.cpp"
-    "Core/Time.cpp"
     "Core/World.cpp"
     "Debug/Log.cpp"
-    "Debug/SignalHandler.cpp"
     "ECS/Entity.cpp"
+    "Graphics/Shader.cpp"
     "Math/Color.cpp"
-    "Misc/File.cpp"
-    "Misc/Material.cpp"
-    "Misc/ModelLoader.cpp"
-    "Misc/Texture.cpp"
-    "Misc/String.cpp"
-    "Input/InputManager.cpp"
-    "Rendering/GLSL.cpp"
-    "Rendering/Shader.cpp"
-    "Rendering/Renderer.cpp"
 )
 
 ##
@@ -42,10 +31,7 @@ IF(${VOID_ENABLE_OPENGL})
 
     SET(VOID_SOURCES
         ${VOID_SOURCES}
-        "Platforms/GL/Buffers.cpp"
-        "Platforms/GL/Shader.cpp"
-        "Platforms/GL/Window.cpp"
-        "Platforms/GL/Renderer.cpp"
+        "Graphics/GL/Renderer.cpp"
     )
 
     SET(LIBRARIES

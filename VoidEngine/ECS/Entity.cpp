@@ -1,25 +1,35 @@
-#include <VoidEngine/Core/Application.hpp>
-#include <VoidEngine/Debug/Log.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
 namespace VOID_NS {
-    Entity::Entity() {
-        World::Get()->AddGameObject(this);
-    }
+    Entity::Entity() : Entity("Void Engine") {}
 
-    Entity::Entity(std::string entityName) : Entity() {
-        this->name = entityName;
+    Entity::Entity(string name) {
+        this->name = name;
     }
 
     Entity::~Entity() {
-        World::Get()->DestroyGameObject(this);
+
+    }
+    
+    Vector3 Entity::Up() {
+        return Vector3::Up();
     }
 
+    Vector3 Entity::Forward() {
+        Vector3 dir = {
+            static_cast<f32>(cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y))), /* X */
+            static_cast<f32>(sin(glm::radians(rotation.y))),                                 /* Y */
+            static_cast<f32>(sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y))), /* Z */
+        };
+        return glm::normalize(dir);
+    }
+
+    Vector3 Entity::Right() {
+        return Vector3::Normalize(Vector3::Cross(Forward(), Up()));
+    }
+    
     void Entity::LookAt(Vector3 target) {
         Quaternion fin;
         Vector3    eur;
@@ -50,22 +60,5 @@ namespace VOID_NS {
             rotation.x = -eur.y + 270;
             rotation.y =  eur.x;
         }
-    }
-
-    Vector3 Entity::Up() {
-        return Vector3(0, 1, 0);
-    }
-    
-    Vector3 Entity::Forward() {
-        Vector3 dir = {
-            static_cast<f32>(cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y))), /* X */
-            static_cast<f32>(sin(glm::radians(rotation.y))),                                 /* Y */
-            static_cast<f32>(sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y))), /* Z */
-        };
-        return glm::normalize(dir);
-    }
-    
-    Vector3 Entity::Right() {
-        return Vector3::Normalize(Vector3::Cross(Forward(), Up()));
     }
 };

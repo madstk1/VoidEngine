@@ -1,42 +1,28 @@
-#ifndef VOID_CORE_WORLD_H__
-#define VOID_CORE_WORLD_H__
+#pragma once
 
-#include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
 #include <VoidEngine/Misc/Vector.hpp>
 #include <VoidEngine/Misc/Singleton.hpp>
 
-extern int main(int argc, char **argv);
-
 namespace VOID_NS {
-    class Light;
-
     class World : public Singleton<World> {
-    public:
-        World();
-        ~World();
-
-        inline Vector<Entity *> GetEntities() { return m_WorldObjects; }
-        inline Vector<Light *> GetLights() { return m_Lights; }
-
     protected:
         Vector<Entity *> m_WorldObjects;
-        Vector<Light *> m_Lights;
 
-        void AddGameObject(Entity *);
-        void DestroyGameObject(Entity *);
+    public:
+        World() {}
+        virtual ~World() = default;
 
         void Start();
         void Update();
         void FixedUpdate();
 
-        friend int ::main(int argc, char **argv);
-        friend Time;
-        friend Entity;
-        friend Light;
+        void AddGameObject(Entity *);
+        void DestroyGameObject(Entity *);
+
+        inline Vector<Entity *> GetWorldObjects() {
+            return m_WorldObjects;
+        }
     };
 };
-
-#endif /* VOID_CORE_WORLD_H__ */

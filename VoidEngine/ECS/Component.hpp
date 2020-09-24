@@ -1,5 +1,4 @@
-#ifndef VOID_ECS_COMPONENT_H__
-#define VOID_ECS_COMPONENT_H__
+#pragma once
 
 #include <VoidEngine/Core/Common.hpp>
 
@@ -7,20 +6,16 @@ namespace VOID_NS {
     class Entity;
 
     class Component {
-    private:
     protected:
-        Entity *m_GameObject = nullptr;
-        bool m_SingleComponent = true;
+        Entity *m_Entity;
 
-        Component(bool single) : m_SingleComponent(single) {}
+        Component() {}
 
     public:
-        ~Component() {}
+        virtual ~Component() = default;
 
-        inline Entity *GameObject() { return m_GameObject; }
+        Entity *GameObject() { return m_Entity; }
 
         friend Entity;
     };
 };
-
-#endif /* VOID_ECS_COMPONENT_H__ */

@@ -12,7 +12,7 @@
 
 #define VOID_ASSERT(expr, fmt, ...)                         \
     if(!(expr)) {                                           \
-        fprintf(stderr, "[ASSERT] %s,%d ", __FILE__, __LINE__);     \
+        fprintf(stderr, "[ASSERT] %s:%d, ", __FILE__, __LINE__);     \
         fprintf(stderr, fmt , ##__VA_ARGS__);               \
         fprintf(stderr, "\n");                              \
         abort();                                            \

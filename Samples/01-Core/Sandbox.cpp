@@ -6,55 +6,13 @@ class Game : public Application {
 private:
 protected:
 public:
-    Game(const ApplicationInfo &info) : Application(info) {}
-
-    void Initialize() override {
-        g_Camera = new FirstPersonCamera();
-    };
+    Game() {}
 
     void Start() override {
-        Light *light = new Light();
-        light->position = Vector3(10.f, 10.f, 10.f);
-        light->lightColor = Color::White();
-        light->intensity = 600.0f;
-
-        Quad *quad = new Quad();
-        quad->position = Vector3(0.f, -3.0f, 0.f);
-        quad->scale = Vector3(30, 1, 30);
-
-        for(u32 x = 0; x < 10; x++) {
-            for(u32 y = 0; y < 10; y++) {
-                Cube *cube = new Cube();
-
-                cube->position = Vector3(x * 2.0f, 0.0f, y * 2.0f);
-                cube->rotation = Vector3(6.f, 2.f, 5.f) * (f32)(x + y);
-                cube->scale = Vector3(2.0f / (x + y + 1));
-            }
-        }
-
-        Cubemap *skybox = new Cubemap({
-            Texture::LoadTexture("../Resources/Skybox/right.jpg"),
-            Texture::LoadTexture("../Resources/Skybox/left.jpg"),
-            Texture::LoadTexture("../Resources/Skybox/top.jpg"),
-            Texture::LoadTexture("../Resources/Skybox/bottom.jpg"),
-            Texture::LoadTexture("../Resources/Skybox/front.jpg"),
-            Texture::LoadTexture("../Resources/Skybox/back.jpg"),
-        });
-        g_Renderer->SetSkybox(skybox);
-    }
-
-    void Update() override {
-    }
-
-    void FixedUpdate() override {
+        std::cout << "nice\n";
     }
 };
 
-Application *Void::CreateApplication(ApplicationInfo info) {
-    Logger::SetLogLevel(Logger::Level::Debug);
-
-    info.Buffering  = SwapInterval::SingleBuffer;
-    info.Background = Color(0.25f, 0.1f, 0.1, 1.0f);
-
-    return new Game(info);
+Void::Application *Void::CreateApplication() {
+    return new Game();
 }

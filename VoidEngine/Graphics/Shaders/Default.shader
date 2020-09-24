@@ -1,5 +1,4 @@
-#ifndef VOID_SHADER_DEFAULT_H__
-#define VOID_SHADER_DEFAULT_H__
+#pragma once
 
 ShaderCreationInfo k_ShaderDefault = {
     "Default",
@@ -67,5 +66,3 @@ ShaderCreationInfo k_ShaderDefault = {
         )"},
     }
 };
-
-#endif /* VOID_SHADER_DEFAULT_H__ */

@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 #include <glm/glm.hpp>
 
 #include <VoidEngine/Core/Errors.hpp>
@@ -16,6 +17,7 @@
 #define LEN(x)      (sizeof(x)/sizeof(x[0]))
 #define MAX(a,b)    (a > b ? a : b)
 #define MIN(a,b)    (a < b ? a : b)
+#define HASBIT(a,b) ((a & b) != 0)
 
 namespace VOID_NS {
     using u64   = uint64_t;
@@ -29,9 +31,13 @@ namespace VOID_NS {
     using f64   = double;
     using f32   = float;
     using uchar = unsigned char;
+    using string = std::string;
 
     using BufferID = u32;
     using ShaderID = u32;
+    using FramebufferID = u32;
+    using TextureID = u32;
+    using CubemapID = u32;
     using Index = u32;
 
     static const u64 U64_MAX = std::numeric_limits<u64>::max();

@@ -1,5 +1,4 @@
-#ifndef VOID_SHADER_SKYBOX_H__
-#define VOID_SHADER_SKYBOX_H__
+#pragma once
 
 ShaderCreationInfo k_ShaderSkybox = {
     "Skybox",
@@ -17,5 +16,3 @@ ShaderCreationInfo k_ShaderSkybox = {
         },
     }
 };
-
-#endif /* VOID_SHADER_FRAMEBUFFER_H__ */

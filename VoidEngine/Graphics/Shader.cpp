@@ -1,5 +1,5 @@
-#include <VoidEngine/Core/Application.hpp>
-#include <VoidEngine/Rendering/Shader.hpp>
+#include <VoidEngine/Debug/Log.hpp>
+#include <VoidEngine/Graphics/Shader.hpp>
 
 /* Default shaders */
 namespace VOID_NS {
@@ -20,8 +20,8 @@ namespace VOID_NS {
             case ShaderStage::Fragment:       return "Fragment";
             case ShaderStage::Compute:        return "Compute";
             case ShaderStage::Geometry:       return "Geometry";
-            case ShaderStage::TessControl:    return "Tessellation Control";
-            case ShaderStage::TessEvaluation: return "Tessellation Evaluation";
+            case ShaderStage::TesselationControl:    return "Tessellation Control";
+            case ShaderStage::TesselationEvaluation: return "Tessellation Evaluation";
             default: break;
         }
         VOID_ASSERT(false, "Invalid shader-stage enum.");
@@ -29,6 +29,7 @@ namespace VOID_NS {
 
     const std::string Shader::TranslateString(GLSLVersion e) {
         switch(e) {
+            case GLSLVersion::V410:  return "410";
             case GLSLVersion::V420:  return "420";
             case GLSLVersion::V430:  return "430";
             case GLSLVersion::V440:  return "440";
@@ -58,10 +59,10 @@ namespace VOID_NS {
             return nullptr;
         }
 
-        Shader *shader = g_Renderer->CreateShader(info);
-        m_Shaders.emplace(info.name, shader);
-
-        return shader;
+        VOID_ASSERT(false, "fix this, you daft cunt");
+        // Shader *shader = g_Renderer->CreateShader(info);
+        //m_Shaders.emplace(info.name, shader);
+        //return shader;
     }
 
     Shader *ShaderLibrary::GetShader(std::string name) {

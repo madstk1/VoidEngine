@@ -1,9 +1,9 @@
-#ifndef VOID_MISC_MATERIAL_H__
-#define VOID_MISC_MATERIAL_H__
+#pragma once
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
-#include <VoidEngine/Rendering/Shader.hpp>
+#include <VoidEngine/Math/Color.hpp>
+// #include <VoidEngine/Rendering/Shader.hpp>
 
 namespace VOID_NS {
     class Material {
@@ -18,14 +18,14 @@ namespace VOID_NS {
 
         std::string name    = "Material";
 
-        Shader *shader;
+        // Shader *shader;
 
         Material() : Material("Material " + std::to_string(m_MaterialCount)) {
             m_MaterialCount++;
         }
 
         Material(std::string name) {
-            shader = ShaderLibrary::GetShader("Default");
+            // shader = ShaderLibrary::GetShader("Default");
             this->name = name;
         }
 
@@ -37,5 +37,3 @@ namespace VOID_NS {
         }
     };
 };
-
-#endif /* VOID_MISC_MATERIAL_H__ */

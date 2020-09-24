@@ -1,6 +1,4 @@
 #include <cstring>
-#include <VoidEngine/Core/Allocator.hpp>
-#include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
@@ -34,11 +32,13 @@ namespace VOID_NS {
     }
 
     f32 Logger::GetFramesPerSecond() {
-        return 1.0f / Time::GetDeltaTime();
+        return 0.0f;
+        //return 1.0f / Time::GetDeltaTime();
     }
 
     u64 Logger::GetMemoryAllocations() {
-        return Allocator::m_AllocatedSize;
+        return 0;
+        // return Allocator::m_AllocatedSize;
     }
     
     void Logger::SetLogLevel(Logger::Level level) {

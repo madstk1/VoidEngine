@@ -1,5 +1,4 @@
-#ifndef VOID_SHADER_FRAMEBUFFER_H__
-#define VOID_SHADER_FRAMEBUFFER_H__
+#pragma once
 
 ShaderCreationInfo k_ShaderFramebuffer = {
     "Framebuffer",
@@ -24,5 +23,3 @@ ShaderCreationInfo k_ShaderFramebuffer = {
         },
     }
 };
-
-#endif /* VOID_SHADER_FRAMEBUFFER_H__ */
