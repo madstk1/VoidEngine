@@ -10,7 +10,7 @@ namespace VOID_NS {
     class Light : public Entity {
     public:
         Light() {
-            g_World->m_Lights.Append(this);
+            World::Get()->m_Lights.Append(this);
         }
 
         Color lightColor = Color::White();

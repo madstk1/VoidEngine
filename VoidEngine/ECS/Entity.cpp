@@ -9,7 +9,7 @@
 
 namespace VOID_NS {
     Entity::Entity() {
-        g_World->AddGameObject(this);
+        World::Get()->AddGameObject(this);
     }
 
     Entity::Entity(std::string entityName) : Entity() {
@@ -17,7 +17,7 @@ namespace VOID_NS {
     }
 
     Entity::~Entity() {
-        g_World->DestroyGameObject(this);
+        World::Get()->DestroyGameObject(this);
     }
 
     void Entity::LookAt(Vector3 target) {

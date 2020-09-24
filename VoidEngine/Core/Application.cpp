@@ -15,7 +15,7 @@ namespace VOID_NS {
 
     Application::Application(ApplicationInfo info) {
         g_FixedUpdateInterval = info.FixedUpdateInterval;
-        g_World = Allocator::Allocate<World>(info);
+        g_World = Allocator::Allocate<World>();
 
         switch(info.API) {
 #if defined(VOID_ENABLE_OPENGL)
@@ -69,13 +69,13 @@ int main(int argc, char **argv) {
     VOID_ASSERT(Void::g_Camera != nullptr, "g_Camera is nullptr.");
 
     Void::g_Application->Start();
-    Void::g_World->Start();
+    Void::World::Get()->Start();
 
     while(Void::g_Renderer->IsRunning()) {
         Void::Time::HandleDeltaTime();
 
         Void::g_Application->Update();
-        Void::g_World->Update();
+        Void::World::Get()->Update();
 
         Void::g_Renderer->Begin();
         Void::g_Renderer->Render();

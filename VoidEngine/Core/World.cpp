@@ -2,7 +2,7 @@
 #include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
-    World::World(const ApplicationInfo &info) {
+    World::World() {
     }
 
     World::~World() {

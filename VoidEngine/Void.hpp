@@ -36,6 +36,7 @@
 #include <VoidEngine/Misc/Vector.hpp>
 #include <VoidEngine/Misc/Texture.hpp>
 #include <VoidEngine/Misc/String.hpp>
+#include <VoidEngine/Misc/Singleton.hpp>
 
 #include <VoidEngine/Rendering/Renderer.hpp>
 #include <VoidEngine/Rendering/Shader.hpp>

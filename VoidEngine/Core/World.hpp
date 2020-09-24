@@ -1,21 +1,21 @@
 #ifndef VOID_CORE_WORLD_H__
 #define VOID_CORE_WORLD_H__
 
-#include <vector>
 #include <VoidEngine/Core/ApplicationInfo.hpp>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/Time.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
 #include <VoidEngine/Misc/Vector.hpp>
+#include <VoidEngine/Misc/Singleton.hpp>
 
 extern int main(int argc, char **argv);
 
 namespace VOID_NS {
     class Light;
 
-    class World {
+    class World : public Singleton<World> {
     public:
-        World(const ApplicationInfo &);
+        World();
         ~World();
 
         inline Vector<Entity *> GetEntities() { return m_WorldObjects; }

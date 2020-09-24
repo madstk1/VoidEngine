@@ -18,7 +18,7 @@ namespace VOID_NS {
             Time::m_FixedTimestep = 0.0f;
 
             g_Application->FixedUpdate();
-            g_World->FixedUpdate();
+            World::Get()->FixedUpdate();
         }
     }
 

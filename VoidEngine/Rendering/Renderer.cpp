@@ -30,7 +30,7 @@ namespace VOID_NS {
         data->vertices.Clear();
         data->indices.Clear();
 
-        for(Entity *e : g_World->GetEntities()) {
+        for(Entity *e : World::Get()->GetEntities()) {
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
             if(!e->renderable || e->isStatic != (data->GetUsage() == Buffer::BufferUsage::Static) || mc == nullptr || mc->mesh == nullptr) {
@@ -59,7 +59,7 @@ namespace VOID_NS {
 
         data->Reset();
 
-        for(Entity *e : g_World->GetEntities()) {
+        for(Entity *e : World::Get()->GetEntities()) {
             Mesh mesh;
             MeshComponent *mc = e->GetComponent<MeshComponent>();
 
