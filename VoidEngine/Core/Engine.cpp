@@ -36,6 +36,9 @@ namespace VOID_NS {
                 m_Renderer = new RendererGL();
                 break;
 #endif
+            case RenderingAPI::Vulkan:
+                Logger::Fatal(TranslateString(Error::InvalidEnum));
+
             default:
                 Logger::Fatal(TranslateString(Error::InvalidEnum));
         }

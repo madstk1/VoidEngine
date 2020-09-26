@@ -10,7 +10,9 @@ namespace VOID_NS {
         static void Initialize();
         static void Destroy();
 
-        static void ProcessShader(Ptr<Shader>);
+        static void ProcessShader(ShaderCreationInfo *, RenderingAPI);
+
+        static string TranslateString(ShaderStage);
 
     protected:
     };

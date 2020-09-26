@@ -26,7 +26,8 @@ namespace VOID_NS {
     };
 
     enum class RenderingAPI {
-        OpenGL
+        OpenGL,
+        Vulkan
     };
 
     inline string TranslateString(Error e) {

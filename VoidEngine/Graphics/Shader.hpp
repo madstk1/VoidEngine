@@ -1,16 +1,22 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Graphics/RendererTypes.hpp>
 
 namespace VOID_NS {
     struct ShaderCreationInfo {
+        struct Source {
+            std::vector<u32> assembly;
+            string human;
+        };
+
         string name;
         ShaderVersion version;
         ShaderProfile profile;
 
-        std::map<ShaderStage, string> sources;
+        std::map<ShaderStage, Source> sources;
     };
 
     class Shader {

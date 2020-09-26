@@ -24,6 +24,7 @@ namespace VOID_NS {
     };
 
     class Allocator {
+    public:
         static inline void *Allocate(u64 size) {
             return calloc(1, size);
         }

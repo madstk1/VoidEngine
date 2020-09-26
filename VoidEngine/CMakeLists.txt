@@ -3,9 +3,12 @@ ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 
 SET(LIBRARIES
     glm
-    # assimp
+    assimp
     dl
     pthread
+    glslang
+    spirv-cross-core
+    spirv-cross-glsl
 )
 SET(PRIVATE_LIBRARIES "")
 
@@ -15,6 +18,7 @@ SET(VOID_SOURCES
     "Debug/Signal.cpp"
     "Math/Color.cpp"
     "Graphics/Renderer.cpp"
+    "Graphics/ShaderProcessor.cpp"
     "Input/InputManager.cpp"
 )
 
