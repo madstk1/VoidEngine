@@ -1,15 +1,17 @@
 #ifndef VOID_CORE_COMMON_H__
 #define VOID_CORE_COMMON_H__
 
-#include <cstddef>
-#include <cstdint>
 #include <string>
-#include <glm/glm.hpp>
-
-#include <VoidEngine/Core/Errors.hpp>
+#include <limits>
 
 #if ! defined(NDEBUG)
 #define VOID_ENABLE_DEBUG
+#endif
+
+#ifdef VOID_ENABLE_DEBUG
+#define VOID_ENABLE_DEBUG_FLAG 1
+#else
+#define VOID_ENABLE_DEBUG_FLAG 0
 #endif
 
 #define VOID_NS     Void
@@ -32,6 +34,8 @@ namespace VOID_NS {
     using f32   = float;
     using uchar = unsigned char;
     using string = std::string;
+
+    using Time = f64;
 
     using BufferID = u32;
     using ShaderID = u32;

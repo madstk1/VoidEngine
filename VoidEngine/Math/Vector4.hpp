@@ -1,5 +1,4 @@
-#ifndef VOID_MATH_VECTOR4_H__
-#define VOID_MATH_VECTOR4_H__
+#pragma once
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Math/Vector2.hpp>
@@ -52,9 +51,8 @@ namespace VOID_NS {
     };
 
     typedef vec4<f32> Vector4;
+    typedef vec4<f32> Vector4f;
     typedef vec4<f64> Vector4d;
     typedef vec4<i32> Vector4i;
     typedef vec4<u64> Vector4u;
 };
-
-#endif /* VOID_MATH_VECTOR4_H__ */

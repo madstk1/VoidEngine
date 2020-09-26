@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <VoidEngine/Core/Common.hpp>
+#include <VoidEngine/Debug/Log.hpp>
 
 namespace VOID_NS {
     template<class T>
@@ -18,7 +19,7 @@ namespace VOID_NS {
 	    Singleton & operator = (Singleton &&) noexcept = default;
 
         static T *Get() {
-            VOID_ASSERT(std::is_default_constructible<T>::value, "T is not constructable.");
+            Logger::Assert(std::is_default_constructible<T>::value, "T is not constructable.");
 
             static T m_Instance;
             return &m_Instance;

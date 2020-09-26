@@ -1,8 +1,7 @@
-#ifndef VOID_MATH_SHAPES_H__
-#define VOID_MATH_SHAPES_H__
+#pragma once
 
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Math/Vectors.hpp>
+#include <VoidEngine/Math/Linear.hpp>
 
 namespace VOID_NS {
     class Vertex {
@@ -30,10 +29,8 @@ namespace VOID_NS {
     };
 
     struct MVP {
-        Mat4 model = Mat4(0.0f);
-        Mat4 view  = Mat4(0.0f);
-        Mat4 proj  = Mat4(0.0f);
+        Matrix4 model = Matrix4(0.0f);
+        Matrix4 view  = Matrix4(0.0f);
+        Matrix4 proj  = Matrix4(0.0f);
     };
 };
-
-#endif /* VOID_MATH_SHAPES_H__ */

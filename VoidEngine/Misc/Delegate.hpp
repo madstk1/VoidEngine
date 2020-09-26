@@ -1,5 +1,4 @@
-#ifndef VOID_MISC_DELEGATE_H__
-#define VOID_MISC_DELEGATE_H__
+#pragma once
 
 #include <functional>
 #include <VoidEngine/Core/Common.hpp>
@@ -28,5 +27,3 @@ namespace VOID_NS {
         Vector<func> m_Callbacks;
     };
 };
-
-#endif /* VOID_MISC_DELEGATE_H__ */

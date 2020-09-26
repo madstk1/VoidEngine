@@ -1,14 +1,71 @@
+#include "glad/glad.h"
+#include <GLFW/glfw3.h>
+
+#include <VoidEngine/Core/Engine.hpp>
 #include <VoidEngine/Graphics/GL/Renderer.hpp>
 #include <VoidEngine/Graphics/GL/Helper.hpp>
 
 namespace VOID_NS {
     RendererGL::RendererGL() {
-    }
+        glfwSetErrorCallback(ErrorProxy);
 
-    RendererGL::~RendererGL() {
+        Logger::Assert(glfwInit(), "GLFW failed to initialize.");
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, VOID_ENABLE_DEBUG_FLAG);
     }
     
+    void RendererGL::InitializeInt() {
+        this->m_Monitor = glfwGetPrimaryMonitor();
+        this->m_Window = glfwCreateWindow(
+            Engine::Get()->Size.Get().x,
+            Engine::Get()->Size.Get().y,
+            Engine::Get()->Title.Get().c_str(),
+            Engine::Get()->Fullscreen.Get() ? this->m_Monitor : nullptr,
+            nullptr
+        );
+        Logger::Assert(this->m_Window != nullptr, "Failed to create GLFW window.");
+
+        glfwMakeContextCurrent(this->m_Window);
+
+        Logger::Assert(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress), "Failed to bind GLAD to GLFW.");
+
+#if defined(VOID_ENABLE_DEBUG)
+        i32 flags;
+        glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+
+        if(!(flags & GL_CONTEXT_FLAG_DEBUG_BIT) || !GLAD_GL_ARB_debug_output) {
+            Logger::Error("Debugging is enabled, but the GL-context does not support it.");
+        } else {
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+            glDebugMessageCallback(DebugProxy, nullptr);
+            glDebugMessageControl(
+                GL_DONT_CARE,
+                GL_DONT_CARE,
+                GL_DEBUG_SEVERITY_NOTIFICATION,
+                0, nullptr,
+                GL_FALSE
+            );
+        }
+#endif
+
+        HandleCallbacks(m_Window, m_Monitor);
+        Logger::Info("Finished initializing GLFW.");
+    }
+
+    void RendererGL::DestroyInt() {
+        glfwDestroyWindow(this->m_Window);
+        glfwTerminate();
+
+        Logger::Info("Destroyed GLFW instance.");
+    }
+
     void RendererGL::Begin() {
+        HandleMouse(this->m_Window);
     }
 
     void RendererGL::Draw() {
@@ -16,105 +73,18 @@ namespace VOID_NS {
 
     void RendererGL::End() {
     }
-    
-    f64 RendererGL::RenderTime() {
-        return glfwGetTime();
-    }
 
-    bool RendererGL::IsRunning() {
-        return !glfwWindowShouldClose(m_Window);
-    }
+    void RendererGL::SwapBuffers() {
+        glfwSwapBuffers(this->m_Window);
+        glfwPollEvents();
 
-    Vector<string> RendererGL::GetExtensions() {
-        i32 nExtensions = 0;
-        Vector<std::string> extensions;
-
-        glGetIntegerv(GL_NUM_EXTENSIONS, &nExtensions);
-
-        for(i32 i = 0; i < nExtensions; i++) {
-            const uchar *ext = glGetStringi(GL_EXTENSIONS, i);
-            extensions.Append(std::string((char *) ext));
-        }
-        return extensions;
-    }
-    
-    void RendererGL::Clear(ClearFlag f) {
-        u32 flag = Translate(f);
-        glClear(flag);
-        glClearColor(
-            m_Background.r,
-            m_Background.g,
-            m_Background.b,
-            m_Background.a
-        );
-    }
-
-    /**
-     *  Setters
-     */
-
-    void RendererGL::SetTitle(std::string title) {
-        m_Title = title;
-        glfwSetWindowTitle(m_Window, title.c_str());
-    }
-    
-    void RendererGL::SetSize(Vector2u size) {
-        m_Size = size;
-        glfwSetWindowSize(this->m_Window, size.x, size.y);
-    }
-    
-    void RendererGL::SetPosition(Vector2i pos) {
-        m_Position = pos;
-        glfwSetWindowPos(this->m_Window, pos.x, pos.y);
-    }
-    
-    void RendererGL::SetMaxFPS(i32 fps) {
-        m_MaxFPS = fps;
-        glfwWindowHint(GLFW_REFRESH_RATE, (fps == -1) ? GLFW_DONT_CARE : fps);
-    }
-    
-    void RendererGL::SetBackground(Color bg) {
-        m_Background = bg;
-    }
-    
-    void RendererGL::SetFullscreen(bool fs) {
-        m_Fullscreen = fs;
-        glfwSetWindowMonitor(
-            this->m_Window,
-            (fs) ? this->m_Monitor : nullptr,
-            GetPosition().x, GetPosition().y,
-            GetSize().x,     GetSize().y,
-            GetMaxFPS()
-        );
-    }
-    
-    void RendererGL::SetResizable(bool rs) {
-        m_Resizable = rs;
-        glfwWindowHint(GLFW_RESIZABLE, rs);
-    }
-    
-    void RendererGL::SetSampling(MultiSampling samples) {
-        /* NOTE: OpenGL does not like a sample-count of 0, in glTexImage2DMultisample. */
-        m_Sampling = ((u32) samples > 1) ? samples : (MultiSampling) 1;
-
-        /* In case no renderbuffer is found, don't update it. */
-        i32 rbBinding = 0;
-        glGetIntegerv(GL_RENDERBUFFER_BINDING, &rbBinding);
-
-        if(rbBinding != 0) {
-            SetSize(GetSize());
+        /* Handle exit request. */
+        if(glfwWindowShouldClose(this->m_Window)) {
+            Engine::Get()->Exit();
         }
     }
-    
-    void RendererGL::SetBuffering(SwapInterval buffering) {
-        m_Buffering = buffering;
-        glfwWindowHint(GLFW_DOUBLEBUFFER, m_Buffering == SwapInterval::Double);
-        glfwSwapInterval((u32) m_Buffering);
-    }
-    
-    void RendererGL::SetCulling(CullFace face) {
-        m_Culling = face;
 
+    void RendererGL::SetCullFace(CullFace face) {
         if(face != CullFace::Disabled) {
             glEnable(GL_CULL_FACE);
             glCullFace(Translate(face));
@@ -122,15 +92,131 @@ namespace VOID_NS {
             glDisable(GL_CULL_FACE);
         }
     }
-    
-    void RendererGL::SetDepthTestFunc(DepthTest depth) {
-        m_DepthTestFunc = depth;
 
-        if(depth != DepthTest::Disabled) {
+    void RendererGL::SetFrontFace(FrontFace face) {
+        glFrontFace(Translate(face));
+    }
+
+    void RendererGL::SetDepthTest(DepthTest dt) {
+        if(dt != DepthTest::Disabled) {
             glEnable(GL_DEPTH_TEST);
-            glDepthFunc(Translate(depth));
+            glDepthFunc(Translate(dt));
         } else {
             glDisable(GL_DEPTH_TEST);
         }
     }
+
+    void RendererGL::Clear(ClearFlag flag) {
+        glClear(Translate(flag));
+
+        if(HASBIT((u32) flag, ClearColor)) {
+            Color bg = Engine::Get()->BackgroundColor.Get();
+            glClearColor(
+                bg.r,
+                bg.g,
+                bg.b,
+                bg.a
+            );
+        }
+    }
+    
+    const f64 RendererGL::GetTime() const {
+        return glfwGetTime();
+    }
+
+    Vector<string> RendererGL::GetExtensions() {
+        i32 extensionCount = 0;
+        Vector<string> extensions;
+        
+        glGetIntegerv(GL_NUM_EXTENSIONS, &extensionCount);
+        for(i32 i = 0; i < extensionCount; i++) {
+            const uchar *ext = glGetStringi(GL_EXTENSIONS, i);
+            extensions.Append((char *) ext);
+        }
+        return extensions;
+    }
+
+    /**
+     *  Proxy methods
+     */
+
+extern "C" {
+        void RendererGL::HandleCallbacks(GLFWwindow *window, GLFWmonitor *monitor) {
+            /* GLFW callbacks */
+            glfwSetFramebufferSizeCallback(window, ResizeProxy);
+            glfwSetKeyCallback(window, KeyProxy);
+
+            /* Title */
+            Engine::Get()->Title.OnChange += [=](string r) {
+                glfwSetWindowTitle(window, r.c_str());
+            };
+
+            /* Position */
+            Engine::Get()->Position.OnChange += [=](Vector2i r) {
+                glfwSetWindowPos(window, r.x, r.y);
+            };
+
+            /* Resizable */
+            Engine::Get()->Resizable.OnChange += [=](bool r) {
+                glfwWindowHint(GLFW_RESIZABLE, r);
+            };
+
+            /* Fullscreen */
+            Engine::Get()->Fullscreen.OnChange += [=](bool r) {
+                const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+                glfwSetWindowMonitor(
+                    window,
+                    (r) ? monitor : nullptr,
+                    0, 0,
+                    mode->width, mode->height,
+                    mode->refreshRate
+                );
+            };
+
+            /* Multisampling */
+            Engine::Get()->Sampling.OnChange += [=](MultiSampling r) {
+                glfwWindowHint(GLFW_SAMPLES, (u32) r);
+
+                i32 bind = 0;
+                glGetIntegerv(GL_RENDERBUFFER_BINDING, &bind);
+                if(bind != 0) {
+                    Engine::Get()->Size.Set(Engine::Get()->Size.Get());
+                }
+            };
+
+            /* Buffering */
+            Engine::Get()->Buffering.OnChange += [=](SwapInterval r) {
+                glfwWindowHint(GLFW_DOUBLEBUFFER, r == SwapInterval::Double);
+                glfwSwapInterval((i32) r);
+            };
+        }
+
+        void RendererGL::ErrorProxy(i32 code, const char *msg) {
+            Logger::Error("GLFW Error: ", code, ", ", msg);
+        }
+    
+        void RendererGL::ResizeProxy(GLFWwindow *, i32 w, i32 h) {
+            glViewport(0, 0, w, h);
+            Engine::Get()->Size.Set(Vector2u(w, h));
+        }
+    
+        void RendererGL::KeyProxy(GLFWwindow *, i32 key, i32, i32 action, i32 mods) {
+            HandleKeyboard(key, action, mods);
+        }
+    
+        void RendererGL::DebugProxy(u32 source, u32 type, u32 id, u32 severity, i32 length, const char *msg, const void *) {
+            if(source == GL_DEBUG_SOURCE_SHADER_COMPILER || source == GL_DEBUG_SOURCE_SHADER_COMPILER_ARB) {
+                Logger::Debug("Debug fallthrough: shader error.");
+                return;
+            }
+    
+            switch(severity) {
+                case GL_DEBUG_SEVERITY_HIGH:         Logger::Fatal   ("[", id, "] GL: ", msg); break;
+                case GL_DEBUG_SEVERITY_MEDIUM:       Logger::Error   ("[", id, "] GL: ", msg); break;
+                case GL_DEBUG_SEVERITY_LOW:          Logger::Warning ("[", id, "] GL: ", msg); break;
+                case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::Info    ("[", id, "] GL: ", msg); break;
+            }
+        }
+    };
 };

@@ -1,5 +1,4 @@
-#ifndef VOID_DEBUG_LOG_H__
-#define VOID_DEBUG_LOG_H__
+#pragma once
 
 #include <iostream>
 #include <type_traits>
@@ -10,13 +9,8 @@
 #include <cxxabi.h>
 #endif
 
-#define VOID_ASSERT(expr, fmt, ...)                         \
-    if(!(expr)) {                                           \
-        fprintf(stderr, "[ASSERT] %s:%d, ", __FILE__, __LINE__);     \
-        fprintf(stderr, fmt , ##__VA_ARGS__);               \
-        fprintf(stderr, "\n");                              \
-        abort();                                            \
-    }
+#define VOID_ASSERT(expr, fmt, ...) \
+    Logger::Assert(expr, __FILE__, ", ", __LINE__, ": ", fmt __VA_OPT__(,) __VA_ARGS__)
 
 #define __VOID_LOG_FUNC_DEF(lvl, ...)                               \
     template<typename T, typename... Ts>                            \
@@ -35,20 +29,25 @@ namespace VOID_NS {
             Warning,
             Error,
             Fatal,
+            Assert
         };
 
         static Level GetLogLevel();
         static void  SetLogLevel(Level);
-
-        static f32 GetFramesPerSecond();
-        static u64 GetMemoryAllocations();
-
 
         __VOID_LOG_FUNC_DEF(Debug);
         __VOID_LOG_FUNC_DEF(Info);
         __VOID_LOG_FUNC_DEF(Warning);
         __VOID_LOG_FUNC_DEF(Error);
         __VOID_LOG_FUNC_DEF(Fatal, abort());
+
+        template<typename T, typename... Ts>
+        static void Assert(bool expr, T t, Ts... ts) {
+            if(!(expr)) {
+                Log(GetLogPrefix(Level::Assert), t, ts...);
+                abort();
+            }
+        }
 
         template <typename T>
         static const char *GetClassName() {
@@ -79,5 +78,3 @@ namespace VOID_NS {
         }
     };
 };
-
-#endif /* VOID_DEBUG_LOG_H__ */

@@ -1,5 +1,4 @@
-#ifndef VOID_MISC_VECTOR_H__
-#define VOID_MISC_VECTOR_H__
+#pragma once
 
 #include <vector>
 #include <VoidEngine/Core/Common.hpp>
@@ -62,5 +61,3 @@ namespace VOID_NS {
         std::vector<T> m_Data;
     };
 };
-
-#endif /* VOID_MISC_VECTOR_H__ */

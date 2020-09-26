@@ -2,17 +2,17 @@
 
 using namespace Void;
 
-class Game : public Application {
-private:
-protected:
+class Game : public App {
 public:
-    Game() {}
+    Game() : App("Void Example 01") {}
 
-    void Start() override {
-        std::cout << "nice\n";
+    void Update() override {
     }
 };
 
-Void::Application *Void::CreateApplication() {
-    return new Game();
+int main() {
+    Logger::SetLogLevel(Logger::Level::Debug);
+
+    Engine::Get()->SetApp(new Game());
+    Engine::Get()->Run();
 }

@@ -1,5 +1,4 @@
-#ifndef VOID_MATH_VECTOR2_H__
-#define VOID_MATH_VECTOR2_H__
+#pragma once
 
 #include <VoidEngine/Core/Common.hpp>
 #include <glm/glm.hpp>
@@ -41,9 +40,8 @@ namespace VOID_NS {
     };
 
     typedef vec2<f32> Vector2;
+    typedef vec2<f32> Vector2f;
     typedef vec2<f64> Vector2d;
     typedef vec2<i32> Vector2i;
     typedef vec2<u64> Vector2u;
 };
-
-#endif /* VOID_MATH_VECTOR2_H__ */

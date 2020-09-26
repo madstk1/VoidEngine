@@ -1,56 +1,41 @@
 #pragma once
 
-#include "glad/glad.h"
+#include <VoidEngine/Graphics/Renderer.hpp>
 #include <GLFW/glfw3.h>
 
-#include <VoidEngine/Core/Application.hpp>
-#include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Graphics/Renderer.hpp>
-#include <VoidEngine/Misc/Vector.hpp>
-#include <VoidEngine/Misc/Singleton.hpp>
-
 namespace VOID_NS {
-    class RendererGL : public Renderer, Singleton<RendererGL> {
+    class RendererGL : public Renderer {
     protected:
         GLFWwindow  *m_Window;
         GLFWmonitor *m_Monitor;
 
-        /* Buffers */
+        static void ErrorProxy(i32, const char *);
+        static void ResizeProxy(GLFWwindow *, i32, i32);
+        static void KeyProxy(GLFWwindow *, i32, i32, i32, i32);
+        static void DebugProxy(u32, u32, u32, u32, i32, const char *, const void *);
 
-        /* Framebuffers / renderbuffers. */
-
-        /* Textures / cubemaps */
-
-        /* Shaders */
+        static void HandleCallbacks(GLFWwindow *, GLFWmonitor *);
+        static void HandleMouse(GLFWwindow *);
+        static void HandleKeyboard(i32, i32, i32);
 
     public:
         RendererGL();
-        ~RendererGL();
+        virtual ~RendererGL() = default;
+
+        virtual void InitializeInt() override;
+        virtual void DestroyInt() override;
 
         virtual void Begin() override;
         virtual void Draw() override;
         virtual void End() override;
+        virtual void SwapBuffers() override;
 
-        virtual f64 RenderTime() override;
-        virtual bool IsRunning() override;
-        virtual Vector<string> GetExtensions() override;
-
+        virtual void SetCullFace(CullFace) override;
+        virtual void SetFrontFace(FrontFace) override;
+        virtual void SetDepthTest(DepthTest) override;
         virtual void Clear(ClearFlag) override;
-        
-        /**
-         *  Setters
-         */
 
-        virtual void SetTitle(std::string) override;
-        virtual void SetSize(Vector2u) override;
-        virtual void SetPosition(Vector2i) override;
-        virtual void SetMaxFPS(i32) override;
-        virtual void SetBackground(Color) override;
-        virtual void SetFullscreen(bool) override;
-        virtual void SetResizable(bool) override;
-        virtual void SetSampling(MultiSampling) override;
-        virtual void SetBuffering(SwapInterval) override;
-        virtual void SetCulling(CullFace) override;
-        virtual void SetDepthTestFunc(DepthTest) override;
+        virtual const f64 GetTime() const override;
+        virtual Vector<string> GetExtensions() override;
     };
 };

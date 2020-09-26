@@ -2,78 +2,45 @@
 
 #include <map>
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Math/Vectors.hpp>
-#include <VoidEngine/Graphics/RenderTypes.hpp>
+#include <VoidEngine/Graphics/RendererTypes.hpp>
 
 namespace VOID_NS {
     struct ShaderCreationInfo {
         string name;
-
-        GLSLVersion version;
-        GLSLProfile profile;
+        ShaderVersion version;
+        ShaderProfile profile;
 
         std::map<ShaderStage, string> sources;
     };
 
     class Shader {
+    public:
+        Shader(string name)
+            : m_Name(name) {}
+
+        Shader(
+            string name,
+            ShaderVersion version
+        ) : m_Name(name), m_Version(version) {}
+
+        Shader(
+            string name,
+            ShaderVersion version,
+            ShaderProfile profile
+        ) : m_Name(name), m_Version(version), m_Profile(profile) {}
+
+        inline const ShaderID GetID() const { return m_ID; }
+        inline const string GetName() const { return m_Name; }
+        inline const ShaderVersion GetVersion() const { return m_Version; }
+        inline const ShaderProfile GetProfile() const { return m_Profile; }
+
     protected:
+        Shader() = delete;
+
+        ShaderID m_ID;
+
         string m_Name;
-
-    public:
-        Shader(ShaderCreationInfo info) {
-            m_Name = info.name;
-        }
-
-        virtual ~Shader() = default;
-
-        virtual void Enable() = 0;
-        virtual void Disable() = 0;
-
-        /**
-         *  Uniform setters
-         */
-
-        virtual void SetUniform1i(string,  i32) = 0;
-        virtual void SetUniform1ui(string, u32) = 0;
-        virtual void SetUniform1fv(string, f32) = 0;
-
-        virtual void SetUniform2i(string,  Vector2i) = 0;
-        virtual void SetUniform2ui(string, Vector2u) = 0;
-        virtual void SetUniform2fv(string, Vector2) = 0;
-
-        virtual void SetUniform3i(string,  Vector3i) = 0;
-        virtual void SetUniform3ui(string, Vector3u) = 0;
-        virtual void SetUniform3fv(string, Vector3) = 0;
-
-        virtual void SetUniform4i(string,  Vector4i) = 0;
-        virtual void SetUniform4ui(string, Vector4u) = 0;
-        virtual void SetUniform4fv(string, Vector4) = 0;
-
-        virtual void SetUniformMat2f(string, Mat2) = 0;
-        virtual void SetUniformMat3f(string, Mat3) = 0;
-        virtual void SetUniformMat4f(string, Mat4) = 0;
-
-        inline string GetName() { return m_Name; }
-
-        static const std::string TranslateString(ShaderStage);
-        static const std::string TranslateString(GLSLVersion);
-        static const std::string TranslateString(GLSLProfile);
-
-        static const string GLSLInclude();
-        static const std::map<ShaderStage, string> StageInclude();
-    };
-
-    class ShaderLibrary {
-    public:
-        static Shader *AddShader(ShaderCreationInfo);
-        static Shader *GetShader(string);
-        static void CreateDefaultShaders();
-
-    protected:
-        static std::map<std::string, Shader *> m_Shaders;
-
-    private:
-        ShaderLibrary() {}
-        ~ShaderLibrary() = default;
+        ShaderVersion m_Version = ShaderVersion::V450;
+        ShaderProfile m_Profile = ShaderProfile::Core;
     };
 };

@@ -1,10 +1,9 @@
-#ifndef VOID_MATH_COLOR_H__
-#define VOID_MATH_COLOR_H__
+#pragma once
 
 #include <type_traits>
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Debug/Log.hpp>
-#include <VoidEngine/Math/Vectors.hpp>
+#include <VoidEngine/Math/Linear.hpp>
 
 namespace VOID_NS {
     class Color : public Vector4 {
@@ -34,5 +33,3 @@ namespace VOID_NS {
         void operator = (const Color &);
     };
 };
-
-#endif /* VOID_MATH_COLOR_H__ */

@@ -17,6 +17,7 @@ namespace VOID_NS {
             case Level::Warning:    lvs = "[WARNING]";  break;
             case Level::Error:      lvs = "[ERROR]";    break;
             case Level::Fatal:      lvs = "[FATAL]";    break;
+            case Level::Assert:     lvs = "[ASSERT]";   break;
         }
 
         /* Format: "[HH:MM:SS] " */
@@ -31,16 +32,6 @@ namespace VOID_NS {
         return Logger::m_Level;
     }
 
-    f32 Logger::GetFramesPerSecond() {
-        return 0.0f;
-        //return 1.0f / Time::GetDeltaTime();
-    }
-
-    u64 Logger::GetMemoryAllocations() {
-        return 0;
-        // return Allocator::m_AllocatedSize;
-    }
-    
     void Logger::SetLogLevel(Logger::Level level) {
         Logger::m_Level = level;
     }

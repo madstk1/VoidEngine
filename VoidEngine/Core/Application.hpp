@@ -1,22 +1,25 @@
 #pragma once
 
-#include <string>
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Math/Vectors.hpp>
-#include <VoidEngine/Math/Color.hpp>
-#include <VoidEngine/Graphics/RenderTypes.hpp>
+#include <VoidEngine/Core/EngineTypes.hpp>
 
 namespace VOID_NS {
-    class Application {
-    protected:
+    class App {
     public:
-        Application();
-        virtual ~Application();
+        App(string name, RenderingAPI api = RenderingAPI::OpenGL) :
+            m_Name(name), m_API(api) {}
+
+        virtual ~App() = default;
 
         virtual void Start() {}
         virtual void Update() {}
         virtual void FixedUpdate() {}
-    };
 
-    extern Application *CreateApplication();
+        inline string GetName() { return m_Name; }
+        inline RenderingAPI GetAPI() { return m_API; }
+
+    protected:
+        string m_Name;
+        const RenderingAPI m_API;
+    };
 };

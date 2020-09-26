@@ -10,12 +10,12 @@ SET(LIBRARIES
 SET(PRIVATE_LIBRARIES "")
 
 SET(VOID_SOURCES
-    "Core/Application.cpp"
-    "Core/World.cpp"
+    "Core/Engine.cpp"
     "Debug/Log.cpp"
-    "ECS/Entity.cpp"
-    "Graphics/Shader.cpp"
+    "Debug/Signal.cpp"
     "Math/Color.cpp"
+    "Graphics/Renderer.cpp"
+    "Input/InputManager.cpp"
 )
 
 ##
@@ -31,6 +31,7 @@ IF(${VOID_ENABLE_OPENGL})
 
     SET(VOID_SOURCES
         ${VOID_SOURCES}
+        "Graphics/GL/Input.cpp"
         "Graphics/GL/Renderer.cpp"
     )
 
