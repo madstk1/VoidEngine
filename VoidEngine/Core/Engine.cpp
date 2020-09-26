@@ -2,6 +2,7 @@
 #include <VoidEngine/Core/EngineTypes.hpp>
 #include <VoidEngine/Debug/Signal.hpp>
 #include <VoidEngine/Graphics/Renderer.hpp>
+#include <VoidEngine/Graphics/ShaderProcessor.hpp>
 #include <VoidEngine/Misc/Delta.hpp>
 
 #if defined(VOID_ENABLE_OPENGL)
@@ -73,6 +74,8 @@ namespace VOID_NS {
         m_Running = true;
 
         SignalHandler::Initialize();
+        ShaderProcessor::Initialize();
+
         m_Renderer->Initialize();
         m_App->Start();
 
@@ -89,6 +92,7 @@ namespace VOID_NS {
          *  Destruction
          */
 
+        ShaderProcessor::Destroy();
         m_Renderer->Destroy();
 
         return Error::NoError;

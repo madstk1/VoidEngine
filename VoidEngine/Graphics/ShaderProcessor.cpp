@@ -54,7 +54,7 @@ namespace VOID_NS {
 
     void ShaderProcessor::ProcessShader(ShaderCreationInfo *info, RenderingAPI api) {
         Logger::Assert(info != nullptr, "Inputted ShaderCreationInfo is null.");
-        Logger::Assert(info->name == "", "ShaderCreationInfo has no name.");
+        Logger::Assert(info->name != "", "ShaderCreationInfo has no name.");
         Logger::Assert(info->sources.size() > 0, "ShaderCreationInfo has no sources.");
 
         /**
@@ -78,7 +78,6 @@ namespace VOID_NS {
             const char *shaderName = info->name.c_str();
 
             shader->setStringsWithLengthsAndNames(&sourceStr, &sourceLength, &shaderName, 1);
-            shader->setSourceEntryPoint("main");
             shader->setAutoMapBindings(true);
             shader->setAutoMapLocations(true);
 
@@ -94,10 +93,12 @@ namespace VOID_NS {
         }
 
         if(!program->link(msg)) {
-            Logger::Fatal("Failed to link program ", info->name, ": ", program->getInfoLog());
+            Logger::Fatal("Failed to link program:\n", info->name, ": ", program->getInfoLog());
         }
 
         spvOptions.generateDebugInfo = VOID_ENABLE_DEBUG_FLAG;
+        spvOptions.disableOptimizer = VOID_ENABLE_DEBUG_FLAG;
+        spvOptions.optimizeSize = !(VOID_ENABLE_DEBUG_FLAG);
         spvOptions.validate = true;
 
         for(auto &src : info->sources) {

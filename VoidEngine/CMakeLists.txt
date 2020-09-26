@@ -7,6 +7,7 @@ SET(LIBRARIES
     dl
     pthread
     glslang
+    SPIRV
     spirv-cross-core
     spirv-cross-glsl
 )
