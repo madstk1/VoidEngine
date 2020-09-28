@@ -6,7 +6,7 @@ class Game : public App {
 public:
     Game() : App("Void Example 01") {}
 
-    void Update() override {
+    void Start() override {
     }
 };
 

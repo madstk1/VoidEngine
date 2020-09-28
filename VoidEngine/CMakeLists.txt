@@ -17,6 +17,7 @@ SET(VOID_SOURCES
     "Core/Engine.cpp"
     "Debug/Log.cpp"
     "Debug/Signal.cpp"
+    "ECS/Entity.cpp"
     "Math/Color.cpp"
     "Graphics/Renderer.cpp"
     "Graphics/ShaderProcessor.cpp"

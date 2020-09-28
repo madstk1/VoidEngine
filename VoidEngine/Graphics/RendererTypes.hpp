@@ -58,4 +58,9 @@ namespace VOID_NS {
         V450 = 450,
         V460 = 460
     };
+
+    enum class BufferUsage {
+        Dynamic,
+        Static
+    };
 };

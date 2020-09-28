@@ -1,5 +1,6 @@
 #include <VoidEngine/Core/Engine.hpp>
 #include <VoidEngine/Core/EngineTypes.hpp>
+#include <VoidEngine/Core/World.hpp>
 #include <VoidEngine/Debug/Signal.hpp>
 #include <VoidEngine/Graphics/Renderer.hpp>
 #include <VoidEngine/Graphics/ShaderProcessor.hpp>
@@ -78,9 +79,10 @@ namespace VOID_NS {
 
         SignalHandler::Initialize();
         ShaderProcessor::Initialize();
-
         m_Renderer->Initialize();
+
         m_App->Start();
+        World::Get()->Start();
 
         /**
          *  Game loop
@@ -88,6 +90,8 @@ namespace VOID_NS {
 
         while(m_Running) {
             m_App->Update();
+            World::Get()->Update();
+
             m_Renderer->Render();
         }
 
