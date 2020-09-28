@@ -1,7 +1,7 @@
 #pragma once
 
-#include <VoidEngine/Graphics/Renderer.hpp>
 #include <GLFW/glfw3.h>
+#include <VoidEngine/Graphics/Renderer.hpp>
 
 namespace VOID_NS {
     class RendererGL : public Renderer {
@@ -19,23 +19,21 @@ namespace VOID_NS {
         static void HandleKeyboard(i32, i32, i32);
 
     public:
-        RendererGL();
+        RendererGL() {}
         virtual ~RendererGL() = default;
 
-        virtual void InitializeInt() override;
-        virtual void DestroyInt() override;
+        virtual void Initialize() override;
+        virtual void Destroy() override;
 
         virtual void Begin() override;
         virtual void Draw() override;
         virtual void End() override;
+
+        virtual void Clear(ClearFlag) override;
         virtual void SwapBuffers() override;
 
         virtual void SetCullFace(CullFace) override;
         virtual void SetFrontFace(FrontFace) override;
         virtual void SetDepthTest(DepthTest) override;
-        virtual void Clear(ClearFlag) override;
-
-        virtual const f64 GetTime() const override;
-        virtual Vector<string> GetExtensions() override;
     };
 };

@@ -23,6 +23,10 @@ namespace VOID_NS {
             OnChange(this->value);
         }
 
+        void operator = (T value) {
+            Set(value);
+        }
+
     protected:
         T value;
     };

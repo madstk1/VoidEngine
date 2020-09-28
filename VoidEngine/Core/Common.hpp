@@ -35,8 +35,6 @@ namespace VOID_NS {
     using uchar = unsigned char;
     using string = std::string;
 
-    using Time = f64;
-
     using BufferID = u32;
     using ShaderID = u32;
     using FramebufferID = u32;

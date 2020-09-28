@@ -7,6 +7,14 @@ public:
     Game() : App("Void Example 01") {}
 
     void Start() override {
+        //new Entity();
+        //new Entity();
+        //new Entity();
+        //new Entity();
+    }
+
+    void Update() override {
+        Logger::Debug(Engine::Get()->GetTime());
     }
 };
 

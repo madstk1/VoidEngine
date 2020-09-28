@@ -47,5 +47,14 @@ namespace VOID_NS {
 
         Renderer *m_Renderer;
         RenderingAPI m_API;
+
+        void SetDefaultSettings() {
+            Title           = "Void Engine Application";
+            Size            = Vector2u(800, 600);
+            Position        = Vector2i(-1);
+            BackgroundColor = Color(0.1f, 0.1f, 0.1f, 1.0f);
+            Fullscreen      = false;
+            Resizable       = true;
+        }
     };
 };

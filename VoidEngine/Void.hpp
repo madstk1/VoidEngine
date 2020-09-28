@@ -20,7 +20,6 @@
 #include <VoidEngine/Memory/Allocator.hpp>
 
 #include <VoidEngine/Misc/Delegate.hpp>
-#include <VoidEngine/Misc/Delta.hpp>
 #include <VoidEngine/Misc/GetSet.hpp>
 #include <VoidEngine/Misc/Singleton.hpp>
 #include <VoidEngine/Misc/Vector.hpp>

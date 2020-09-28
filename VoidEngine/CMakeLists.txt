@@ -2,6 +2,7 @@ INCLUDE(GNUInstallDirs)
 ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 
 SET(LIBRARIES
+    uuid
     glm
     assimp
     dl
@@ -19,7 +20,6 @@ SET(VOID_SOURCES
     "Debug/Signal.cpp"
     "ECS/Entity.cpp"
     "Math/Color.cpp"
-    "Graphics/Renderer.cpp"
     "Graphics/ShaderProcessor.cpp"
     "Input/InputManager.cpp"
 )
