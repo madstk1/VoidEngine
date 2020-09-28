@@ -29,8 +29,8 @@ namespace VOID_NS {
     };
 
     struct MVP {
-        Matrix4 model = Matrix4(0.0f);
-        Matrix4 view  = Matrix4(0.0f);
-        Matrix4 proj  = Matrix4(0.0f);
+        Matrix4 model = Matrix4();
+        Matrix4 view  = Matrix4();
+        Matrix4 proj  = Matrix4();
     };
 };
