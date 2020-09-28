@@ -39,6 +39,7 @@ IF(${VOID_ENABLE_OPENGL})
         ${VOID_SOURCES}
         "Graphics/GL/Input.cpp"
         "Graphics/GL/Renderer.cpp"
+        "Graphics/GL/Window.cpp"
     )
 
     SET(LIBRARIES
