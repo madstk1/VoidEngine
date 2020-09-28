@@ -39,11 +39,13 @@ namespace VOID_NS {
         const f32 GetFramesPerSecond() const;
 
         const Renderer *GetRenderer() const { return m_Renderer; }
+        const RenderingAPI GetAPI() const { return m_API; }
 
     protected:
         Ptr<App> m_App = nullptr;
         bool m_Running = false;
 
         Renderer *m_Renderer;
+        RenderingAPI m_API;
     };
 };

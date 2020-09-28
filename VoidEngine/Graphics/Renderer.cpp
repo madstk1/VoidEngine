@@ -1,3 +1,4 @@
+#include <VoidEngine/Core/EngineTypes.hpp>
 #include <VoidEngine/Graphics/Renderer.hpp>
 
 namespace VOID_NS {

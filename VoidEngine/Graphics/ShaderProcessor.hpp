@@ -12,8 +12,8 @@ namespace VOID_NS {
 
         static void ProcessShader(ShaderCreationInfo *, RenderingAPI);
 
-        static string TranslateString(ShaderStage);
-
     protected:
+        static string GetDefaultGLSLInclude();
+        static string GetDefaultStageInclude(ShaderStage);
     };
 };

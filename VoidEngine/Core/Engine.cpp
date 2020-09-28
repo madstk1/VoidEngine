@@ -4,6 +4,7 @@
 #include <VoidEngine/Graphics/Renderer.hpp>
 #include <VoidEngine/Graphics/ShaderProcessor.hpp>
 #include <VoidEngine/Misc/Delta.hpp>
+#include <VoidEngine/Misc/Translations.hpp>
 
 #if defined(VOID_ENABLE_OPENGL)
 #include <VoidEngine/Graphics/GL/Renderer.hpp>
@@ -24,6 +25,7 @@ namespace VOID_NS {
 
         Logger::Assert(app != nullptr, "Application is null.");
         m_App = std::move(app);
+        m_API = m_App->GetAPI();
 
         Logger::Info("Void Engine, v",
             VOID_VERSION_MAJOR, ".",
@@ -31,17 +33,17 @@ namespace VOID_NS {
             VOID_VERSION_PATCH, "."
         );
 
-        switch(m_App->GetAPI()) {
+        switch(m_API) {
 #if defined(VOID_ENABLE_OPENGL)
             case RenderingAPI::OpenGL:
                 m_Renderer = new RendererGL();
                 break;
 #endif
             case RenderingAPI::Vulkan:
-                Logger::Fatal(TranslateString(Error::InvalidEnum));
+                Logger::Fatal(Translator::TranslateString(Error::InvalidEnum));
 
             default:
-                Logger::Fatal(TranslateString(Error::InvalidEnum));
+                Logger::Fatal(Translator::TranslateString(Error::InvalidEnum));
         }
 
         /* Re-run callbacks, just for measure. */

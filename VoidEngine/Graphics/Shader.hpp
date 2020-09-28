@@ -17,6 +17,17 @@ namespace VOID_NS {
         ShaderProfile profile;
 
         std::map<ShaderStage, Source> sources;
+
+        ShaderCreationInfo(string name, ShaderVersion version, ShaderProfile profile, std::map<ShaderStage, string> sources) {
+            this->name = name;
+            this->version = version;
+            this->profile = profile;
+            
+            for(const auto &s : sources) {
+                Source src = {{}, s.second};
+                this->sources.emplace(s.first, src);
+            }
+        }
     };
 
     class Shader {
@@ -35,10 +46,10 @@ namespace VOID_NS {
             ShaderProfile profile
         ) : m_Name(name), m_Version(version), m_Profile(profile) {}
 
-        inline const ShaderID GetID() const { return m_ID; }
+        inline ShaderID GetID() const { return m_ID; }
         inline const string GetName() const { return m_Name; }
-        inline const ShaderVersion GetVersion() const { return m_Version; }
-        inline const ShaderProfile GetProfile() const { return m_Profile; }
+        inline ShaderVersion GetVersion() const { return m_Version; }
+        inline ShaderProfile GetProfile() const { return m_Profile; }
 
     protected:
         Shader() = delete;

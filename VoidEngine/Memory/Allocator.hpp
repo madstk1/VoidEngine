@@ -5,6 +5,7 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Core/EngineTypes.hpp>
 #include <VoidEngine/Debug/Log.hpp>
+#include <VoidEngine/Misc/Translations.hpp>
 
 namespace VOID_NS {
     template<typename T>
@@ -36,7 +37,7 @@ namespace VOID_NS {
         template<typename T, typename ... Args>
         static inline T *Allocate(Args&& ... args) {
             T *ptr = ::new T(std::forward<Args>(args)...);
-            Logger::Assert(ptr != nullptr, TranslateString(Error::ErrorAllocation));
+            Logger::Assert(ptr != nullptr, Translator::TranslateString(Error::ErrorAllocation));
 
             return ptr;
         }

@@ -29,15 +29,4 @@ namespace VOID_NS {
         OpenGL,
         Vulkan
     };
-
-    inline string TranslateString(Error e) {
-        switch(e) {
-            case Error::NoError:          return "No error.";
-            case Error::InvalidAPI:       return "Unsupported or unknown rendering API.";
-            case Error::ErrorAllocation:  return "Failed to allocate memory.";
-            case Error::NullPointer:      return "Passed value is nullptr.";
-            case Error::InvalidEnum:      return "Invalid enum.";
-        }
-        return TranslateString(Error::InvalidEnum);
-    }
 };
