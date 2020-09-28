@@ -8,6 +8,10 @@
 #include <VoidEngine/Debug/Log.hpp>
 #include <VoidEngine/Debug/Signal.hpp>
 
+#include <VoidEngine/ECS/Component.hpp>
+#include <VoidEngine/ECS/Components/MeshComponent.hpp>
+#include <VoidEngine/ECS/Entity.hpp>
+
 #include <VoidEngine/Math/Color.hpp>
 #include <VoidEngine/Math/Shapes.hpp>
 #include <VoidEngine/Math/Linear.hpp>
