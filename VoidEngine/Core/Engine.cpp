@@ -40,11 +40,12 @@ namespace VOID_NS {
                 break;
 #endif
             case RenderingAPI::Vulkan:
-                Logger::Fatal(Translator::TranslateString(Error::InvalidEnum));
+                break;
 
             default:
-                Logger::Fatal(Translator::TranslateString(Error::InvalidEnum));
+                break;
         }
+        Logger::Assert(m_Renderer != nullptr, "Renderer hasn't been initialized!");
 
         /* Re-run callbacks, just for measure. */
         this->Title.OnChange(this->Title.Get());
