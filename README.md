@@ -25,6 +25,16 @@ As of now, the building process has only been tested on Linux.
 * CMake v3.11+
 * OpenGL 4.5+, can be acquired from Mesa or from your GPU-driver
 
+### Optional
+
+These dependencies are required for Void to build, but they will be built, if not found on the system.
+
+* Assimp
+* GLFW3
+* glm
+* glslang
+* SPIRV-Cross
+
 ## Building Void
 
 Before anything else, you must checkout the third-party dependencies.
