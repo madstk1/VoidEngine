@@ -49,10 +49,4 @@ namespace VOID_NS {
         static self      Forward() { return { 0,  0,  1, 0}; }
         static self      Back()    { return { 0,  0, -1, 0}; }
     };
-
-    typedef vec4<f32> Vector4;
-    typedef vec4<f32> Vector4f;
-    typedef vec4<f64> Vector4d;
-    typedef vec4<i32> Vector4i;
-    typedef vec4<u64> Vector4u;
 };

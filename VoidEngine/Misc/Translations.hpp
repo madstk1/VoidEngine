@@ -6,8 +6,14 @@
 #include <VoidEngine/Graphics/RendererTypes.hpp>
 
 namespace VOID_NS {
+    /**
+     *  Translation class, for common enums.
+     */
     class Translator {
     public:
+        /**
+         *  Translate errors into strings.
+         */
         static inline string TranslateString(Error e) {
             switch(e) {
                 case Error::NoError:          return "No error.";
@@ -19,6 +25,9 @@ namespace VOID_NS {
             return TranslateString(Error::InvalidEnum);
         }
 
+        /**
+         *  Translate shader stages into strings.
+         */
         static inline string TranslateString(ShaderStage e) {
             switch(e) {
                 case ShaderStage::Vertex:                return "Vertex";
@@ -33,6 +42,9 @@ namespace VOID_NS {
             return "INVALID";
         }
 
+        /**
+         *  Translate shader versions into strings.
+         */
         static inline string TranslateString(ShaderVersion e) {
             switch(e) {
                 case ShaderVersion::V420: return "420";
@@ -45,6 +57,9 @@ namespace VOID_NS {
             return "";
         }
 
+        /**
+         *  Translate shader profiles into strings.
+         */
         static inline string TranslateString(ShaderProfile e) {
             switch(e) {
                 case ShaderProfile::Core:          return "core";

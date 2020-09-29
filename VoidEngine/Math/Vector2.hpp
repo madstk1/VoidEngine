@@ -38,10 +38,4 @@ namespace VOID_NS {
         static self      Up()    { return { 0,  1}; }
         static self      Down()  { return { 0, -1}; }
     };
-
-    typedef vec2<f32> Vector2;
-    typedef vec2<f32> Vector2f;
-    typedef vec2<f64> Vector2d;
-    typedef vec2<i32> Vector2i;
-    typedef vec2<u64> Vector2u;
 };

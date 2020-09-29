@@ -46,10 +46,4 @@ namespace VOID_NS {
         static self      Forward() { return { 0,  0,  1}; }
         static self      Back()    { return { 0,  0, -1}; }
     };
-
-    typedef vec3<f32> Vector3;
-    typedef vec3<f32> Vector3f;
-    typedef vec3<f64> Vector3d;
-    typedef vec3<i32> Vector3i;
-    typedef vec3<u64> Vector3u;
 };

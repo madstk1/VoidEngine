@@ -1,7 +1,5 @@
 #pragma once
 
-#include <VoidEngine/Core/Common.hpp>
-
 #include <VoidEngine/Math/Vector2.hpp>
 #include <VoidEngine/Math/Vector3.hpp>
 #include <VoidEngine/Math/Vector4.hpp>
@@ -11,6 +9,28 @@
 #include <VoidEngine/Math/Matrix4.hpp>
 
 namespace VOID_NS {
+    /**
+     *  Vectors
+     */
+
+    typedef vec2<f32> Vector2;
+    typedef vec2<f32> Vector2f;
+    typedef vec2<f64> Vector2d;
+    typedef vec2<i32> Vector2i;
+    typedef vec2<u64> Vector2u;
+
+    typedef vec3<f32> Vector3;
+    typedef vec3<f32> Vector3f;
+    typedef vec3<f64> Vector3d;
+    typedef vec3<i32> Vector3i;
+    typedef vec3<u64> Vector3u;
+
+    typedef vec4<f32> Vector4;
+    typedef vec4<f32> Vector4f;
+    typedef vec4<f64> Vector4d;
+    typedef vec4<i32> Vector4i;
+    typedef vec4<u64> Vector4u;
+
     /**
      *  Matrices
      */

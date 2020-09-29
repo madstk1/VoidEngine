@@ -8,6 +8,10 @@
 #include <VoidEngine/Misc/Translations.hpp>
 
 namespace VOID_NS {
+    /**
+     *  Custom pointer for Void.
+     *  While inherited from std::shared_ptr, it contains extra methods.
+     */
     template<typename T>
     class Ptr : public std::shared_ptr<T> {
     protected:
@@ -24,6 +28,10 @@ namespace VOID_NS {
         operator const T *() const { return this->get(); }
     };
 
+    /**
+     *  Custom allocator for Void.
+     *  The allocator is used to measure memory allocations in Void.
+     */
     class Allocator {
     public:
         static inline void *Allocate(u64 size) {

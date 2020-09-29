@@ -21,7 +21,7 @@ namespace VOID_NS {
 
         self operator - () const { return *this * -1.0f; }
 
-        static self TransformationMatrix(const Vector3f &position, const Vector3f &rotation, const Vector3f &scale) {
+        static self TransformationMatrix(const vec3<f32> &position, const vec3<f32> &rotation, const vec3<f32> &scale) {
             return self(1.0f)
                 + position
                 * glm::rotate(self(1.0f), glm::radians(rotation.x), { 1.0f, 0.0f, 0.0f })
@@ -34,7 +34,7 @@ namespace VOID_NS {
             return glm::perspective(glm::radians(fov), aspectRatio, zNear, zFar);
         }
 
-        static self ViewMatrix(const Vector3f &position, const Vector3f &direction) {
+        static self ViewMatrix(const vec3<f32> &position, const vec3<f32> &direction) {
             return glm::lookAt(position, position + direction, {0, 1, 0});
         }
     };

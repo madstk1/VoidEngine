@@ -27,12 +27,4 @@ namespace VOID_NS {
 
         return std::string(fmt) + lvs + " ";
     }
-
-    Logger::Level Logger::GetLogLevel() {
-        return Logger::m_Level;
-    }
-
-    void Logger::SetLogLevel(Logger::Level level) {
-        Logger::m_Level = level;
-    }
 };

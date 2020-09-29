@@ -5,6 +5,10 @@
 #include <VoidEngine/Misc/Vector.hpp>
 
 namespace VOID_NS {
+    /**
+     *  Delegate class.
+     *  This is a more streamlined version of a callback.
+     */
     template<typename ... A>
     class Delegate {
     public:
@@ -13,10 +17,16 @@ namespace VOID_NS {
         Delegate() {}
         virtual ~Delegate() = default;
 
+        /**
+         *  Append callback to the delegate.
+         */
         void operator += (func f) {
             m_Callbacks.Append(f);
         }
 
+        /**
+         *  Execute all callbacks, with the specified parameters.
+         */
         void operator () (A... args) {
             for(auto callback : m_Callbacks) {
                 callback(std::forward<A>(args)...);

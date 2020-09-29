@@ -21,8 +21,15 @@
     }
 
 namespace VOID_NS {
+    /**
+     *  Main logger class for Void.
+     *  Any message sent with a level lower than the Level won't be printed.
+     */
     class Logger {
     public:
+        /**
+         *  All log-levels for Logger.
+         */
         enum class Level {
             Debug,
             Info,
@@ -32,8 +39,20 @@ namespace VOID_NS {
             Assert
         };
 
-        static Level GetLogLevel();
-        static void  SetLogLevel(Level);
+        /**
+         *  Returns the current log-level.
+         */
+        static Level GetLogLevel() { return m_Level; }
+
+        /**
+         *  Sets the current log-level of the Logger.
+         *  NOTE: The level cannot be higher than Level::Error.
+         */
+        static void  SetLogLevel(Level lvl) {
+            if(lvl > Level::Error) { return; }
+
+            Logger::m_Level = lvl;
+        }
 
         __VOID_LOG_FUNC_DEF(Debug);
         __VOID_LOG_FUNC_DEF(Info);
@@ -41,6 +60,10 @@ namespace VOID_NS {
         __VOID_LOG_FUNC_DEF(Error);
         __VOID_LOG_FUNC_DEF(Fatal, abort());
 
+        /**
+         *  Assert expression.
+         *  If the passed expression is false, log the message and abort.
+         */
         template<typename T, typename... Ts>
         static void Assert(bool expr, T t, Ts... ts) {
             if(!(expr)) {
@@ -49,6 +72,10 @@ namespace VOID_NS {
             }
         }
 
+        /**
+         *  Converts class to class-name. Useful for logging.
+         *  NOTE: If not using the C++ ABI, this method will return the mangled C++ name.
+         */
         template <typename T>
         static const char *GetClassName() {
             i32 status = -4;

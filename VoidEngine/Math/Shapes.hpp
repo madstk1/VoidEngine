@@ -4,6 +4,10 @@
 #include <VoidEngine/Math/Linear.hpp>
 
 namespace VOID_NS {
+    /**
+     *  Vertex class.
+     *  This is used primarily for meshes and rendering.
+     */
     class Vertex {
     public:
         Vector3 position;
@@ -28,6 +32,10 @@ namespace VOID_NS {
               texCoords(texCoords) {}
     };
 
+    /**
+     *  MVP class.
+     *  Short for Model-View-Projection, this is used for matrix manipulation.
+     */
     struct MVP {
         Matrix4 model = Matrix4();
         Matrix4 view  = Matrix4();

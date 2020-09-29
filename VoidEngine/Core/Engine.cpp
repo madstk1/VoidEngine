@@ -28,7 +28,7 @@ namespace VOID_NS {
 
     }
 
-    const Ptr<App> Engine::GetApp() const {
+    const Ptr<App> &Engine::GetApp() const {
         return m_App;
     }
 
@@ -63,7 +63,9 @@ namespace VOID_NS {
         m_Renderer->SetDepthTest(DepthTest::Less);
 
         m_App->Start();
-        World::Get()->Start();
+        World::Get()->OnEntityCreation += [=](Entity *e) {
+            e->Start();
+        };
 
         /**
          *  Game loop

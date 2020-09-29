@@ -9,14 +9,31 @@
 namespace VOID_NS {
     class Input {
     public:
+        /**
+         *  Executed every time a new key is pressed down.
+         */
         static Delegate<Keycode> OnKeyDown;
+
+        /**
+         *  Executed every time a new key is released.
+         */
         static Delegate<Keycode> OnKeyUp;
 
+        /**
+         *  Returns the current state of a key.
+         */
         static inline bool GetKeyDown(Keycode key) {
-            VOID_ASSERT(key != Keycode::Unknown, "Keycode::Unknown is not a valid key.");
+            Logger::Assert(key != Keycode::Unknown, "Keycode::Unknown is not a valid key.");
             return m_Keys[(i32) key];
         }
 
+        /**
+         *  Returns the current value for the passed axis.
+         *
+         *  Current axes:
+         *   - Mouse X
+         *   - Mouse Y
+         */
         static inline f32 GetAxis(std::string axis) {
             if(axis == "Mouse X") { return m_Cursor.x; }
             if(axis == "Mouse Y") { return m_Cursor.y; }
