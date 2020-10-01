@@ -14,8 +14,7 @@ namespace VOID_NS {
     }
 
     void ExitProxyFatal() {
-        Logger::Error(Logger::GetBacktrace());
-        ExitProxy();
+        Logger::Fatal("===[ BACKTRACE ]===\n", Logger::GetBacktrace());
     }
     
     const std::map<i32, SignalHandler::Declaration> m_Signals = {
