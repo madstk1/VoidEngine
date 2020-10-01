@@ -1,27 +1,29 @@
 INCLUDE(GNUInstallDirs)
+FIND_PACKAGE(Threads)
 ADD_DEFINITIONS("-DGLFW_INCLUDE_NONE")
 
 SET(LIBRARIES
-    uuid
     glm
-    assimp
     dl
-    pthread
+)
+SET(PRIVATE_LIBRARIES
+    uuid
+    assimp
+    ${CMAKE_THREAD_LIBS_INIT}
     glslang
     SPIRV
     spirv-cross-core
     spirv-cross-glsl
 )
-SET(PRIVATE_LIBRARIES "")
 
 SET(VOID_SOURCES
-    "Core/Engine.cpp"
-    "Debug/Log.cpp"
-    "Debug/Signal.cpp"
-    "ECS/Entity.cpp"
-    "Math/Color.cpp"
-    "Graphics/ShaderProcessor.cpp"
-    "Input/InputManager.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Core/Engine.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Debug/Log.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Debug/Signal.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ECS/Entity.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Math/Color.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Graphics/ShaderProcessor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Input/InputManager.cpp"
 )
 
 ##
@@ -35,31 +37,21 @@ ADD_DEFINITIONS("-DVOID_VERSION_PATCH=${PROJECT_VERSION_PATCH}")
 IF(${VOID_ENABLE_OPENGL})
     PKG_SEARCH_MODULE(OPENGL REQUIRED gl)
 
-    SET(VOID_SOURCES
-        ${VOID_SOURCES}
+    SET(VOID_SOURCES ${VOID_SOURCES}
         "Graphics/GL/glad/glad.c"
         "Graphics/GL/Input.cpp"
         "Graphics/GL/Renderer.cpp"
         "Graphics/GL/Window.cpp"
     )
-    INCLUDE_DIRECTORIES("Graphics/GL/")
 
-    SET(LIBRARIES
-        ${LIBRARIES}
-        glfw
+    SET(PRIVATE_LIBRARIES ${PRIVATE_LIBRARIES}
         ${OPENGL_LIBRARIES}
-    )
-
-    SET(PRIVATE_LIBRARIES
-        ${PRIVATE_LIBRARIES}
+        glfw3
     )
 
     ADD_DEFINITIONS("-DVOID_ENABLE_OPENGL")
+    INCLUDE_DIRECTORIES("Graphics/GL/")
 ENDIF()
-
-FOREACH(LIB ${LIBRARIES})
-    SET(VOID_ADDITIONAL_LIBS "${VOID_ADDITIONAL_LIBS} -l${LIB}")
-ENDFOREACH()
 
 ##
 ## LINKING DEPENDENCIES
@@ -67,9 +59,9 @@ ENDFOREACH()
 
 CONFIGURE_FILE("void.pc.in" "void.pc" @ONLY)
 
-ADD_LIBRARY(Void STATIC ${VOID_SOURCES})
-ADD_LIBRARY(Void::Void ALIAS Void)
-TARGET_LINK_LIBRARIES(Void
+ADD_LIBRARY(void STATIC ${VOID_SOURCES})
+ADD_LIBRARY(Void::Void ALIAS void)
+TARGET_LINK_LIBRARIES(void
     PUBLIC  ${LIBRARIES}
     PRIVATE ${PRIVATE_LIBRARIES}
 )
@@ -79,7 +71,7 @@ TARGET_LINK_LIBRARIES(Void
 ##
 
 INSTALL(
-    TARGETS       Void
+    TARGETS       void
     EXPORT        VoidTargets
     LIBRARY       DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
