@@ -106,7 +106,7 @@ namespace VOID_NS {
         /**
          *  Remove element via index.
          */
-        void Erase(i32 i) {
+        void Erase(u32 i) {
             if(i >= Length()) { return; }
             m_Data.erase(m_Data.begin() + i);
         }

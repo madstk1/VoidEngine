@@ -1,3 +1,4 @@
+#include <execinfo.h>
 #include <cstring>
 #include <VoidEngine/Debug/Log.hpp>
 
@@ -26,5 +27,23 @@ namespace VOID_NS {
         snprintf(fmt, 12, "[%02d:%02d:%02d] ", time->tm_hour, time->tm_min, time->tm_sec);
 
         return std::string(fmt) + lvs + " ";
+    }
+
+    string Logger::GetBacktrace() {
+        string output = "";
+        char buffer[1024];
+        const u32 backtraceSize = 64;
+        void *callstack[backtraceSize];
+
+        int frameCount = backtrace(callstack, backtraceSize);
+        char **symbols = backtrace_symbols(callstack, frameCount);
+
+        for(u32 i = 0; i < frameCount; i++) {
+            snprintf(buffer, LEN(buffer), "  %-5d %p  %s\n", i, callstack[i], symbols[i]);
+            output += buffer;
+        }
+
+        free(symbols);
+        return output;
     }
 };

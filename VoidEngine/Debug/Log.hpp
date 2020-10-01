@@ -48,7 +48,7 @@ namespace VOID_NS {
          *  Sets the current log-level of the Logger.
          *  NOTE: The level cannot be higher than Level::Error.
          */
-        static void  SetLogLevel(Level lvl) {
+        static void SetLogLevel(Level lvl) {
             if(lvl > Level::Error) { return; }
 
             Logger::m_Level = lvl;
@@ -71,6 +71,11 @@ namespace VOID_NS {
                 abort();
             }
         }
+
+        /**
+         *  Return the backtrace, with the last 64 symbols.
+         */
+        static string GetBacktrace();
 
         /**
          *  Converts class to class-name. Useful for logging.

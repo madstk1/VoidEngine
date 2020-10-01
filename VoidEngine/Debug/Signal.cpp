@@ -12,13 +12,19 @@ namespace VOID_NS {
         Logger::Warning("Exit proxy.");
         Engine::Get()->Exit();
     }
+
+    void ExitProxyFatal() {
+        Logger::Error(Logger::GetBacktrace());
+        ExitProxy();
+    }
     
     const std::map<i32, SignalHandler::Declaration> m_Signals = {
         DEFINE_SIGNAL(SIGHUP,   ExitProxy),
         DEFINE_SIGNAL(SIGTERM,  ExitProxy),
         DEFINE_SIGNAL(SIGINT,   ExitProxy),
         DEFINE_SIGNAL(SIGABRT,  ExitProxy),
-        DEFINE_SIGNAL(SIGILL,   ExitProxy),
+        DEFINE_SIGNAL(SIGILL,   ExitProxyFatal),
+        DEFINE_SIGNAL(SIGSEGV,  ExitProxyFatal),
     };
 
     void SignalHandler::Initialize() {
