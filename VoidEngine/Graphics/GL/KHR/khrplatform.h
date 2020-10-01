@@ -1,1 +1,1 @@
-../../../../build/ThirdParty/glad/include/KHR/khrplatform.h
+../../../../ThirdParty/glad/khrplatform.h

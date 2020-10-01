@@ -37,10 +37,12 @@ IF(${VOID_ENABLE_OPENGL})
 
     SET(VOID_SOURCES
         ${VOID_SOURCES}
+        "Graphics/GL/glad/glad.c"
         "Graphics/GL/Input.cpp"
         "Graphics/GL/Renderer.cpp"
         "Graphics/GL/Window.cpp"
     )
+    INCLUDE_DIRECTORIES("Graphics/GL/")
 
     SET(LIBRARIES
         ${LIBRARIES}
@@ -50,7 +52,6 @@ IF(${VOID_ENABLE_OPENGL})
 
     SET(PRIVATE_LIBRARIES
         ${PRIVATE_LIBRARIES}
-        glad
     )
 
     ADD_DEFINITIONS("-DVOID_ENABLE_OPENGL")
