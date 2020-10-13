@@ -6,7 +6,7 @@
 #include <VoidEngine/Math/Color.hpp>
 #include <VoidEngine/Math/Linear.hpp>
 #include <VoidEngine/Memory/Allocator.hpp>
-#include <VoidEngine/Misc/GetSet.hpp>
+#include <VoidEngine/Misc/HookedValue.hpp>
 #include <VoidEngine/Misc/Singleton.hpp>
 
 namespace VOID_NS {
@@ -20,15 +20,15 @@ namespace VOID_NS {
         /**
          *  Application settings.
          */
-        GetSet<string>          Title;
-        GetSet<Vector2u>        Size;
-        GetSet<Vector2i>        Position;
-        GetSet<Color>           BackgroundColor;
-        GetSet<f32>             FixedUpdateInterval;
-        GetSet<bool>            Fullscreen;
-        GetSet<bool>            Resizable;
-        GetSet<MultiSampling>   Sampling;
-        GetSet<SwapInterval>    Buffering;
+        Hooked<string>          Title;
+        Hooked<Vector2u>        Size;
+        Hooked<Vector2i>        Position;
+        Hooked<Color>           BackgroundColor;
+        Hooked<f32>             FixedUpdateInterval;
+        Hooked<bool>            Fullscreen;
+        Hooked<bool>            Resizable;
+        Hooked<MultiSampling>   Sampling;
+        Hooked<SwapInterval>    Buffering;
 
         /**
          *  Sets the current application of the engine.

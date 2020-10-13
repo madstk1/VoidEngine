@@ -2,7 +2,7 @@
 
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/ECS/Entity.hpp>
-#include <VoidEngine/Misc/Delegate.hpp>
+#include <VoidEngine/Misc/Hook.hpp>
 #include <VoidEngine/Misc/Vector.hpp>
 #include <VoidEngine/Misc/Singleton.hpp>
 
@@ -63,12 +63,12 @@ namespace VOID_NS {
          *  NOTE: The passed entity will only be the base entity class.
          *        If the created entity is derived, the base will be passed.
          */
-        Delegate<Entity *> OnEntityCreation;
+        Hook<Entity *> OnEntityCreation;
 
         /**
          *  Runs every time an entity is destroyed.
          */
-        Delegate<Entity *> OnEntityDestruction;
+        Hook<Entity *> OnEntityDestruction;
 
         /**
          *  Returns all the current world objects, as entities.

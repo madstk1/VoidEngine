@@ -10,12 +10,12 @@ namespace VOID_NS {
      *  This is a more streamlined version of a callback.
      */
     template<typename ... A>
-    class Delegate {
+    class Hook {
     public:
         typedef std::function<void(A...)> func;
 
-        Delegate() {}
-        virtual ~Delegate() = default;
+        Hook() {}
+        virtual ~Hook() = default;
 
         /**
          *  Append callback to the delegate.

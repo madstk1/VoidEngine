@@ -1,7 +1,7 @@
 #pragma once
 
 #include <VoidEngine/Core/Common.hpp>
-#include <VoidEngine/Misc/Delegate.hpp>
+#include <VoidEngine/Misc/Hook.hpp>
 
 namespace VOID_NS {
     /**
@@ -11,21 +11,21 @@ namespace VOID_NS {
      *  callbacks in reponse, with the new value.
      */
     template<typename T, typename ... Args>
-    class GetSet {
+    class Hooked {
     public:
         /**
          *  Callback delegates.
          *  These are run everytime the value is changed.
          */
-        Delegate<T> OnChange;
+        Hook<T> OnChange;
 
         /**
          *  Create GetSet, with constructor arguments for the underlying type.
          */
-        GetSet(Args ... a) {
+        Hooked(Args ... a) {
             value = T(std::forward<Args>(a)...);
         }
-        virtual ~GetSet() = default;
+        virtual ~Hooked() = default;
 
         /**
          *  Return the current value.

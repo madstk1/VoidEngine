@@ -3,7 +3,7 @@
 #include <VoidEngine/Core/Common.hpp>
 #include <VoidEngine/Debug/Log.hpp>
 #include <VoidEngine/Math/Linear.hpp>
-#include <VoidEngine/Misc/Delegate.hpp>
+#include <VoidEngine/Misc/Hook.hpp>
 #include <VoidEngine/Input/Keycodes.hpp>
 
 namespace VOID_NS {
@@ -12,12 +12,12 @@ namespace VOID_NS {
         /**
          *  Executed every time a new key is pressed down.
          */
-        static Delegate<Keycode> OnKeyDown;
+        static Hook<Keycode> OnKeyDown;
 
         /**
          *  Executed every time a new key is released.
          */
-        static Delegate<Keycode> OnKeyUp;
+        static Hook<Keycode> OnKeyUp;
 
         /**
          *  Returns the current state of a key.
